@@ -2,14 +2,14 @@
   (:require [compojure.core :refer [GET POST defroutes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults api-defaults]]
-            [ring.util.response :refer [response]]
+            [ring.util.response :refer [created response]]
             [hiccup.core :refer [html]]
             [ring.middleware.json :as json]
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.reload :refer [wrap-reload]]
             [environ.core :refer [env]]
-            [conference-rating.db-handler :refer [add-conference]]
+            [conference-rating.db-handler :as db]
             ))
 
 (def home-page
@@ -39,12 +39,16 @@
     [{:conference-name "Conference 1" :id "1"}
      {:conference-name "Conference 2" :id "2"}]))
 
+(defn add-conference []
+  (let [add-result (db/add-conference)
+        id         (.toHexString (:_id add-result))]
+    (created (str "/api/conferences/" id))))
+
 (defroutes routes
            (GET "/" [] home-page)
            (GET "/api/conferences" [] (get-conferences))
            (GET "/api/conferences/:id" [id] (get-conference id))
-           (POST "/api/conferences/" [] (do (add-conference)
-                                            (response {})))
+           (POST "/api/conferences/" [] (add-conference))
            (resources "/")
            (not-found "Not Found"))
 
