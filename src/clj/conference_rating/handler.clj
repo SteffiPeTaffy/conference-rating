@@ -32,11 +32,9 @@
      (include-js "https://code.jquery.com/jquery-2.1.4.min.js")
      (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")]]))
 
-(defn get-conference [conference-id]
+(defn get-conference [conference-id db]
   (response
-    {:conference-name "Some Conference"
-     :conference-description (str "Some Conference Description with id " conference-id)
-     :id conference-id}))
+    (db/get-conference conference-id db)))
 
 (defn get-conference-ratings [conference-id]
   (response
@@ -61,7 +59,7 @@
   (routes
    (GET "/" [] home-page)
    (GET "/api/conferences" [] (get-conferences db))
-   (GET "/api/conferences/:id" [id] (get-conference id))
+   (GET "/api/conferences/:id" [id] (get-conference id db))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
    (POST "/api/conferences/:id/ratings" [id :as request] (do
                                   (println "req " request)

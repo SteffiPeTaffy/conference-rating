@@ -29,10 +29,9 @@
   (let [list (mc/find-maps db "conferences")]
     (map clear-id list)))
 
-(defn get-item-name [db coll name]
-  {})
-;(let [item]
-;  (mc/find db coll {:name name} item)
-;  item))
+(defn get-conference [id db]
+  (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
+    (println item)
+    (clear-id item)))
 
 

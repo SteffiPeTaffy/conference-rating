@@ -14,12 +14,6 @@
 (deftest acceptance-test
   (testing "should have an index-page"
     (is (= 200 (:status ((app (create-mock-db)) (request :get "/"))))))
-  (testing "should return a conference for an id as json"
-    (is (= 200 (:status ((app (create-mock-db)) (request :get "/api/conferences/foo")))))
-    (is (= {:conference-name "Some Conference"
-            :conference-description "Some Conference Description with id foo"
-            :id "foo"}
-           (json-body-for (create-mock-db) (request :get "/api/conferences/foo")))))
   (testing "should return all ratings of a conference as json"
     (is (= 200 (:status ((app (create-mock-db)) (request :get "/api/conferences/foo/ratings")))))
     (is (= [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
@@ -31,8 +25,11 @@
                                    (body (json/write-str {:name "some name" :description "some description"}))
                                    (header :content-type "application/json")))]
         (is (= 201 (:status response)))
-        (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/")))
+        (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/"))
+        (let [conference-response (json-body-for db (request :get (get-in response [:headers "Location"])))]
+          (is (= "some description" (:description conference-response)))
+          (is (= "some name" (:name conference-response))))
       (let [conferences (json-body-for db (request :get "/api/conferences"))]
         (is (= 1 (count conferences)))
         (is (= "some description" (:description (first conferences))))
-        (is (= "some name" (:name (first conferences))))))))
+        (is (= "some name" (:name (first conferences)))))))))
