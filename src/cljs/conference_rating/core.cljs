@@ -12,7 +12,7 @@
 
 (defn home-page []
   [:div [:h2 "Welcome to conference-rating"]
-   [:div [:a {:href "#/conference/foo"} "go to foo conference"]]])
+   [:div [:a {:href "#/conferences/foo"} "go to foo conference"]]])
 
 (defn current-page []
   [:div [(session/get :current-page)]])
@@ -24,9 +24,9 @@
 (secretary/defroute "/" []
   (session/put! :current-page #'home-page))
 
-(secretary/defroute "/conference/:id" [id]
-                    (session/put! :current-page #'conference/conference-page)
-                    (session/put! :conference-id id))
+(secretary/defroute "/conferences/:id" [id]
+                    (conference/load-conference id)
+                    (session/put! :current-page #'conference/conference-page))
 
 ;; -------------------------
 ;; History
