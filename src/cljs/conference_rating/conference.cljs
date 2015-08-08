@@ -53,6 +53,8 @@
    [:div {:class "form-group"}
     [:input {:type "text" :placeholder "author" :class "form-control" :field :text :id :author}]]
    [:div {:class "form-group"}
+    [:input {:type "number" :placeholder "stars" :class "form-control" :min 1 :max 5 :field :range :id :stars}]]
+   [:div {:class "form-group"}
     [:textarea {:placeholder "comment" :class "form-control" :rows "5" :field :textarea :id :comment}]]])
 
 (defn create-rating [form-data]
@@ -70,9 +72,11 @@
    [:div {:class "jumbotron"}
     [:h1(:conference-name conference)]
     [:p (:conference-description conference)]]
-   [:div
-    [forms/bind-fields add-rating-template doc]
-    [:button {:class "btn btn-primary" :on-click #(create-rating doc)} "add rating"]]
+   [:div {:class "panel panel-default"}
+    [:div {:class "panel-heading"} "rate this conference now!"]
+    [:div {:class "panel-body"}
+      [forms/bind-fields add-rating-template doc]
+      [:button {:class "btn btn-primary" :on-click #(create-rating doc)} "add rating"]]]
    [:div (display-ratings conference-ratings)]]))
 
 (defn conference-page []
