@@ -5,7 +5,7 @@
 
 (deftest get-conference-test
   (testing "that it returns a conference"
-    (is (= {:conference-name "Some Conference" :id "some-id"}
+    (is (= {:conference-name "Some Conference" :conference-description "Some Conference Description" :id "some-id"}
            (:body (get-conference "some-id"))))))
 
 (deftest acceptance-test
@@ -13,5 +13,5 @@
     (is (= 200 (:status (app (request :get "/"))))))
   (testing "should return a conference for an id as json"
     (is (= 200 (:status (app (request :get "/api/conferences/foo")))))
-    (is (= "{\"conference-name\":\"Some Conference\",\"id\":\"foo\"}"
+    (is (= "{\"conference-name\":\"Some Conference\",\"conference-description\":\"Some Conference Description\",\"id\":\"foo\"}"
            (:body (app (request :get "/api/conferences/foo")))))))
