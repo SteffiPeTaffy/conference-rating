@@ -32,8 +32,14 @@
      :conference-description "Some Conference Description"
      :id conference-id}))
 
+(defn get-conferences []
+  (response
+    [{:conference-name "Conference 1" :id "1"}
+     {:conference-name "Conference 2" :id "2"}]))
+
 (defroutes routes
            (GET "/" [] home-page)
+           (GET "/api/conferences" [] (get-conferences))
            (GET "/api/conferences/:id" [id] (get-conference id))
            (resources "/")
            (not-found "Not Found"))
