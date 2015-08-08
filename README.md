@@ -1,5 +1,9 @@
 # Conference-Tracking
 
+## Status
+[![Build Status](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master/build_image)](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master)
+
+
 ## Development
 
 * `lein run` starts server ([http://localhost:3000](http://localhost:3000))
