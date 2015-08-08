@@ -25,6 +25,9 @@
                     (conference/load-conferences)
                     (session/put! :current-page #'conference/conferences-page))
 
+(secretary/defroute "/add-conference" []
+                    (session/put! :current-page #'conference/add-conference-page))
+
 (secretary/defroute "/conferences/:id" [id]
                     (conference/load-conference id)
                     (conference/load-conference-ratings id)

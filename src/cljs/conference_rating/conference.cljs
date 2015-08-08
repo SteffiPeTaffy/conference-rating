@@ -1,5 +1,6 @@
 (ns conference-rating.conference
   (:require [reagent.core :as reagent :refer [atom]]
+            [reagent-forms.core :as forms]
             [reagent.session :as session]
             [ajax.core :as ajax]
             [secretary.core :as secretary :include-macros true]
@@ -75,3 +76,29 @@
     (if (not (nil? conference-list))
       (display-conference-list conference-list)
       (display-loading))))
+
+
+(defn row [label input]
+  [:div.row
+   [:div.col-md-2 [:label label]]
+   [:div.col-md-5 input]])
+
+(def conference-form-template
+  [:div
+   (row "Name" [:input {:field :text :id :name}])
+   (row "Description" [:textarea {:field :textarea :id :description}])])
+
+(defn create-conference [form-data]
+  (ajax/POST "/api/conferences/" {:params @form-data
+                                  :format :json
+                                  :handler #(js/alert "success")
+                                  :error-handler #(js/alert (str "could not create conference" %1))})
+  (println @form-data))
+
+(defn add-conference-page []
+  (let [doc (atom {})]
+    [:div
+     [:h2 "Add conference"]
+     [:div
+      [forms/bind-fields conference-form-template doc]
+      [:div [:button {:on-click #(create-conference doc)} "Create"]]]]))
