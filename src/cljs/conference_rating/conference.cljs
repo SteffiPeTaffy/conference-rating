@@ -59,7 +59,7 @@
 
 (defn create-rating [form-data]
   (let [conference @displayed-conference]
-  (ajax/POST (str "/api/conferences/" (:id conference) "/ratings") {:params @form-data
+  (ajax/POST (str "/api/conferences/" (:_id conference) "/ratings") {:params @form-data
                                                                     :format :json
                                                                     :handler #(js/alert "success")
                                                                     :error-handler #(js/alert (str "could not create rating" %1))}))
@@ -70,8 +70,8 @@
         doc (atom {})]
   [:div {:class "container"}
    [:div {:class "jumbotron"}
-    [:h1(:conference-name conference)]
-    [:p (:conference-description conference)]]
+    [:h1(:name conference)]
+    [:p (:description conference)]]
    [:div {:class "panel panel-default"}
     [:div {:class "panel-heading"} "rate this conference now!"]
     [:div {:class "panel-body"}
@@ -86,8 +86,8 @@
       (display-loading))))
 
 (defn display-conference-list-item [conference-list-entry]
-  [:li {:key (:id conference-list-entry)}
-   [:a {:href (str "#/conferences/" (:id conference-list-entry))} (:conference-name conference-list-entry)]])
+  [:li {:key (:_id conference-list-entry)}
+   [:a {:href (str "#/conferences/" (:_id conference-list-entry))} (:name conference-list-entry)]])
 
 (defn display-conference-list [conference-list]
   [:div {:class "container"}
