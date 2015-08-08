@@ -36,10 +36,9 @@
   (response
     (db/get-conference conference-id db)))
 
-(defn get-conference-ratings [conference-id]
+(defn get-conference-ratings [conference-id db]
   (response
-    [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
-     {:rating-author "Jon" :rating-comment "some comment" :rating-stars 4 :id "2"}]))
+    (db/get-ratings conference-id db)))
 
 (defn get-conferences [db]
   (response
@@ -60,7 +59,7 @@
    (GET "/" [] home-page)
    (GET "/api/conferences" [] (get-conferences db))
    (GET "/api/conferences/:id" [id] (get-conference id db))
-   (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
+   (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
    (POST "/api/conferences/:id/ratings" [id :as request] (do
                                   (println "req " request)
                                   (add-rating id (:body request) db)))

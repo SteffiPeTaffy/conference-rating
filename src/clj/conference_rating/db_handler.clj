@@ -35,3 +35,7 @@
     (clear-id item)))
 
 
+(defn get-ratings [conference-id db]
+  (let [rating-list (mc/find-maps db "ratings" {:conference-id conference-id})]
+    (println rating-list)
+    (map clear-id rating-list)))

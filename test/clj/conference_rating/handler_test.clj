@@ -15,10 +15,19 @@
   (testing "should have an index-page"
     (is (= 200 (:status ((app (create-mock-db)) (request :get "/"))))))
   (testing "should return all ratings of a conference as json"
-    (is (= 200 (:status ((app (create-mock-db)) (request :get "/api/conferences/foo/ratings")))))
-    (is (= [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
-            {:rating-author "Jon" :rating-comment "some comment" :rating-stars 4 :id "2"}]
-           (json-body-for (create-mock-db) (request :get "/api/conferences/foo/ratings")))))
+    (let [db (create-mock-db)
+          response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
+                                 (body (json/write-str {:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1" }))
+                                 (header :content-type "application/json")))]
+      (is (= 201 (:status response)))
+      (let [ratings-response ((app db) (request :get "/api/conferences/someConferenceId/ratings"))
+            rating-list (json/read-str (:body ratings-response) :key-fn keyword) ]
+        (is (= 200 (:status ratings-response) ))
+        (is (= 1 (count rating-list)))
+        (is (= "Bob" (:rating-author (first rating-list))))
+        (is (= "some comment" (:rating-comment (first rating-list))))
+        (is (= 5 (:rating-stars (first rating-list)))))))
+
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
       (let [response ((app db) (-> (request :post "/api/conferences/")

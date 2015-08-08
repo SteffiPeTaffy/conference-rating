@@ -43,12 +43,12 @@
   [:div [:h2 "Loading..."]])
 
 (defn display-rating [conference-ratings-entry]
-  [:div {:class "well" :key (:id conference-ratings-entry)}
+  [:div {:class "well" :key (:_id conference-ratings-entry)}
    [:div {:class "media"}
     [:div {:clas "media-body"}
-     [:p {:class "text-right"} (str "By " (:rating-author conference-ratings-entry))]
-     [:p (str (:rating-stars conference-ratings-entry) " out of 5 stars")]
-     [:p (:rating-comment conference-ratings-entry)]]]])
+     [:p {:class "text-right"} (str "By " (:author conference-ratings-entry))]
+     [:p (str (:stars conference-ratings-entry) " out of 5 stars")]
+     [:p (:comment conference-ratings-entry)]]]])
 
 (defn display-ratings [conference-ratings]
   [:div (map display-rating conference-ratings)])
