@@ -7,10 +7,12 @@
 ## Development
 
 * `lein run` starts server ([http://localhost:3000](http://localhost:3000))
-* `lein figwheel` starts cljs autocompiler 
+* `lein figwheel` starts cljs autocompiler
+* `lein less auto` starts the less compiler
+
 * `lein cljsbuild test` to run tests
 
-(you need the first two running for development)
+(you may need the first three running for development)
 
 ## Links
 
