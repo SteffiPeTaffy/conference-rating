@@ -45,8 +45,16 @@
      [:p (str (:rating-stars conference-ratings-entry) " out of 5 stars")]
      [:p (:rating-comment conference-ratings-entry)]]]])
 
-(defn display-conference-ratings [conference-ratings]
+(defn display-ratings [conference-ratings]
   [:div (map display-rating conference-ratings)])
+
+(defn display-add-rating []
+  [:form
+   [:div {:class "form-group"}
+    [:input {:type "text" :placeholder "author" :class "form-control"}]]
+   [:div {:class "form-group"}
+    [:textarea {:placeholder "comment" :class "form-control" :rows "5"}]]
+   [:button {:type "submit" :class "btn btn-primary"} "add rating"]])
 
 (defn display-conference [conference]
   (let [conference-ratings @ratings]
@@ -54,7 +62,8 @@
    [:div {:class "jumbotron"}
     [:h1(:conference-name conference)]
     [:p (:conference-description conference)]]
-   [:div (display-conference-ratings conference-ratings)]]))
+   [:div (display-add-rating)]
+   [:div (display-ratings conference-ratings)]]))
 
 (defn conference-page []
   (let [conference @displayed-conference]
