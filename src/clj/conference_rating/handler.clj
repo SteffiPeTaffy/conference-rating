@@ -1,5 +1,5 @@
 (ns conference-rating.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [compojure.core :refer [GET POST defroutes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults api-defaults]]
             [ring.util.response :refer [response]]
@@ -8,7 +8,9 @@
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.reload :refer [wrap-reload]]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [conference-rating.db-handler :refer [add-conference]]
+            ))
 
 (def home-page
   (html
@@ -41,6 +43,7 @@
            (GET "/" [] home-page)
            (GET "/api/conferences" [] (get-conferences))
            (GET "/api/conferences/:id" [id] (get-conference id))
+           (POST "/api/conferences/" [] (add-conference))
            (resources "/")
            (not-found "Not Found"))
 
