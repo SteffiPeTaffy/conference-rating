@@ -10,8 +10,8 @@
     (:db (mg/connect-via-uri mongolab-uri))
     (mg/get-db (mg/connect {:host "127.0.0.1" :port 27017}) "crdb")))
 
-(defn add-conference []
+(defn add-conference [conference]
   (let [db (connect)
-        document { :_id (ObjectId.) :name "Devoxx" :description "Devoxx is a conference" }]
+        document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
     document))

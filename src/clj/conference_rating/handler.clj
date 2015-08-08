@@ -39,8 +39,8 @@
     [{:conference-name "Conference 1" :id "1"}
      {:conference-name "Conference 2" :id "2"}]))
 
-(defn add-conference []
-  (let [add-result (db/add-conference)
+(defn add-conference [conference]
+  (let [add-result (db/add-conference conference)
         id         (.toHexString (:_id add-result))]
     (created (str "/api/conferences/" id))))
 
@@ -48,7 +48,9 @@
            (GET "/" [] home-page)
            (GET "/api/conferences" [] (get-conferences))
            (GET "/api/conferences/:id" [id] (get-conference id))
-           (POST "/api/conferences/" [] (add-conference))
+           (POST "/api/conferences/" request (do
+                                                 (println "body: " )
+                                                 (add-conference (:body request))))
            (resources "/")
            (not-found "Not Found"))
 
@@ -56,7 +58,7 @@
   (let [handler (-> #'routes
                     (wrap-defaults api-defaults)
                     (json/wrap-json-response)
-                    (json/wrap-json-body))]
+                    (json/wrap-json-body {:keywords? true}))]
     (if (env :dev) (-> handler
                        wrap-exceptions
                        wrap-reload)
