@@ -89,7 +89,7 @@
                                                        "test/vendor/console-polyfill.js"
                                                        "target/test.js"]}}}
 
-             :uberjar {:hooks [leiningen.cljsbuild minify-assets.plugin/hooks]
+             :uberjar {:hooks [leiningen.less leiningen.cljsbuild]
                        :env {:production true}
                        :aot :all
                        :omit-source true
