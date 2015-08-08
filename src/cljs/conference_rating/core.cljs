@@ -17,6 +17,12 @@
   [:div [:h2 "About conference-rating"]
    [:div [:a {:href "#/"} "go to the home page"]]])
 
+(def counter (atom 0))
+
+(defn counting []
+  [:div [:h2 "Some counter"]
+   [:span {:on-click (fn [] (swap! counter inc)) } @counter]])
+
 (defn current-page []
   [:div [(session/get :current-page)]])
 
@@ -29,6 +35,9 @@
 
 (secretary/defroute "/about" []
   (session/put! :current-page #'about-page))
+
+(secretary/defroute "/count" []
+                    (session/put! :current-page #'counting))
 
 ;; -------------------------
 ;; History
