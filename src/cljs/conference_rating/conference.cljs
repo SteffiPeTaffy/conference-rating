@@ -34,6 +34,11 @@
 
 ;; -------------------------
 ;; Views
+(defn form-input [label input]
+  [:div {:class "form-group"}
+   [:label {:for (:id (second input))} label]
+   input])
+
 (defn display-loading []
   [:div [:h2 "Loading..."]])
 
@@ -50,12 +55,9 @@
 
 (def add-rating-template
   [:div
-   [:div {:class "form-group"}
-    [:input {:type "text" :placeholder "author" :class "form-control" :field :text :id :author}]]
-   [:div {:class "form-group"}
-    [:input {:type "number" :placeholder "stars" :class "form-control" :min 1 :max 5 :field :range :id :stars}]]
-   [:div {:class "form-group"}
-    [:textarea {:placeholder "comment" :class "form-control" :rows "5" :field :textarea :id :comment}]]])
+   (form-input "Author" [:input {:type "text" :placeholder "author" :class "form-control" :field :text :id :author}])
+   (form-input "Stars" [:input {:type "number" :placeholder "stars" :class "form-control" :min 1 :max 5 :field :range :id :stars}])
+   (form-input "Comment" [:textarea {:placeholder "comment" :class "form-control" :rows "5" :field :textarea :id :comment}])])
 
 (defn create-rating [form-data]
   (let [conference @displayed-conference]
@@ -104,15 +106,10 @@
       (display-loading))))
 
 
-(defn row [label input]
-  [:div.row
-   [:div.col-md-2 [:label label]]
-   [:div.col-md-5 input]])
-
 (def conference-form-template
   [:div
-   (row "Name" [:input {:field :text :id :name}])
-   (row "Description" [:textarea {:field :textarea :id :description}])])
+   (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
+   (form-input "Description" [:textarea {:field :textarea :rows 5 :id :description :class "form-control" :placeholder "More information about the conference"}])])
 
 (defn create-conference [form-data]
   (ajax/POST "/api/conferences/" {:params @form-data
@@ -123,8 +120,9 @@
 
 (defn add-conference-page []
   (let [doc (atom {})]
-    [:div
-     [:h2 "Add conference"]
-     [:div
-      [forms/bind-fields conference-form-template doc]
-      [:div [:button {:on-click #(create-conference doc)} "Create"]]]]))
+    [:div {:class "container"}
+     [:div {:class "panel panel-default"}
+      [:div {:class "panel-heading"} "Add conference"]
+      [:div {:class "panel-body"}
+       [forms/bind-fields conference-form-template doc]
+       [:div [:button {:class "btn btn-primary":on-click #(create-conference doc)} "Create"]]]]]))
