@@ -22,9 +22,6 @@
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (session/put! :current-page #'home-page))
-
-(secretary/defroute "/conferences" []
                     (conference/load-conferences)
                     (session/put! :current-page #'conference/conferences-page))
 
