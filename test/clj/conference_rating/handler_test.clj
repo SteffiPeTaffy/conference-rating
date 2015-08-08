@@ -15,6 +15,11 @@
             :conference-description "Some Conference Description with id foo"
             :id "foo"}
            (json-body-for (request :get "/api/conferences/foo")))))
+  (testing "should return all ratings of a conference as json"
+    (is (= 200 (:status (app (request :get "/api/conferences/foo/ratings")))))
+    (is (= [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
+            {:rating-author "Jon" :rating-comment "some comment" :rating-stars 4 :id "2"}]
+           (json-body-for (request :get "/api/conferences/foo/ratings")))))
   (testing "should return a list of conferences as json"
     (is (= 200 (:status (app (request :get "/api/conferences")))))
     (is (= [{:conference-name "Conference 1" :id "1"}

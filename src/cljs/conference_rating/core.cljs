@@ -27,6 +27,7 @@
 
 (secretary/defroute "/conferences/:id" [id]
                     (conference/load-conference id)
+                    (conference/load-conference-ratings id)
                     (session/put! :current-page #'conference/conference-page))
 
 ;; -------------------------
