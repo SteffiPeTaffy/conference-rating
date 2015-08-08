@@ -7,6 +7,7 @@
   :source-paths ["src/clj" "src/cljs"]
 
   :dependencies [[org.clojure/clojure "1.7.0"]
+                 [ch.qos.logback/logback-classic "1.1.1"]
                  [ring-server "0.4.0"]
                  [cljsjs/react "0.13.3-1"]
                  [reagent "0.5.0"]
@@ -59,6 +60,7 @@
 
                    :dependencies [[ring/ring-mock "0.2.0"]
                                   [ring/ring-devel "1.4.0"]
+                                  [com.github.fakemongo/fongo "2.0.1"]
                                   [lein-figwheel "0.3.7"]
                                   [org.clojure/tools.nrepl "0.2.10"]
                                   [pjstadig/humane-test-output "0.7.0"]]

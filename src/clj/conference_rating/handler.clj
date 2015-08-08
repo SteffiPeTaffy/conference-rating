@@ -1,5 +1,5 @@
 (ns conference-rating.handler
-  (:require [compojure.core :refer [GET POST defroutes]]
+  (:require [compojure.core :refer [GET POST defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults api-defaults]]
             [ring.util.response :refer [created response]]
@@ -48,24 +48,25 @@
     [{:conference-name "Conference 1" :id "1"}
      {:conference-name "Conference 2" :id "2"}]))
 
-(defn add-conference [conference]
-  (let [add-result (db/add-conference conference)
+(defn add-conference [conference db]
+  (let [add-result (db/add-conference conference db)
         id         (.toHexString (:_id add-result))]
     (created (str "/api/conferences/" id))))
 
-(defroutes routes
-           (GET "/" [] home-page)
-           (GET "/api/conferences" [] (get-conferences))
-           (GET "/api/conferences/:id" [id] (get-conference id))
-           (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
-           (POST "/api/conferences/" request (do
-                                                 (println "body: " )
-                                                 (add-conference (:body request))))
-           (resources "/")
-           (not-found "Not Found"))
+(defn create-routes [db]
+  (routes
+   (GET "/" [] home-page)
+   (GET "/api/conferences" [] (get-conferences))
+   (GET "/api/conferences/:id" [id] (get-conference id))
+   (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
+   (POST "/api/conferences/" request (do
+                                         (println "req " request)
+                                         (add-conference (:body (:params request)) db)))
+   (resources "/")
+   (not-found "Not Found")))
 
-(def app
-  (let [handler (-> #'routes
+(defn app [db]
+  (let [handler (-> (create-routes db)
                     (wrap-defaults api-defaults)
                     (json/wrap-json-response)
                     (json/wrap-json-body {:keywords? true}))]
