@@ -69,7 +69,10 @@
 (defn display-conference-list [conference-list]
   [:div {:class "container"}
    [:h1 "Conferences"]
-   [:ul (map display-conference-list-item conference-list)]])
+   [:ul (map display-conference-list-item conference-list)]
+   [:h2 "Actions"]
+   [:ul
+    [:li [:a {:href "#/add-conference"} "Add conference"]]]])
 
 (defn conferences-page []
   (let [conference-list @conferences]
