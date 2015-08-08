@@ -15,8 +15,7 @@
     (ajax/GET (str "/api/conferences/" id) {:handler #(reset! displayed-conference %1)
                                             :error-handler #(js/alert (str "conference not found" %1))
                                             :response-format :json
-                                            :keywords? true}))
-    )
+                                            :keywords? true})))
 
 
 ;; -------------------------
@@ -25,5 +24,6 @@
   (load-conference (session/get :conference-id))
   (let [conference @displayed-conference]
     (if (not (nil? conference))
-      [:div [:h2 (:conference-name conference)]]
+      [:div [:h2 (:conference-name conference)]
+       [:p (:conference-description conference)]]
       [:div [:h2 "Loading..."]])))

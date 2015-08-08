@@ -29,6 +29,7 @@
 (defn get-conference [conference-id]
   (response
     {:conference-name "Some Conference"
+     :conference-description "Some Conference Description"
      :id conference-id}))
 
 (defroutes routes
