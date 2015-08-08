@@ -48,21 +48,31 @@
 (defn display-ratings [conference-ratings]
   [:div (map display-rating conference-ratings)])
 
-(defn display-add-rating []
-  [:form
+(def add-rating-template
+  [:div
    [:div {:class "form-group"}
-    [:input {:type "text" :placeholder "author" :class "form-control"}]]
+    [:input {:type "text" :placeholder "author" :class "form-control" :field :text :id :author}]]
    [:div {:class "form-group"}
-    [:textarea {:placeholder "comment" :class "form-control" :rows "5"}]]
-   [:button {:type "submit" :class "btn btn-primary"} "add rating"]])
+    [:textarea {:placeholder "comment" :class "form-control" :rows "5" :field :textarea :id :comment}]]])
+
+(defn create-rating [form-data]
+  (let [conference @displayed-conference]
+  (ajax/POST (str "/api/conferences/" (:id conference) "/ratings") {:params @form-data
+                                                                    :format :json
+                                                                    :handler #(js/alert "success")
+                                                                    :error-handler #(js/alert (str "could not create rating" %1))}))
+    (println @form-data))
 
 (defn display-conference [conference]
-  (let [conference-ratings @ratings]
+  (let [conference-ratings @ratings
+        doc (atom {})]
   [:div {:class "container"}
    [:div {:class "jumbotron"}
     [:h1(:conference-name conference)]
     [:p (:conference-description conference)]]
-   [:div (display-add-rating)]
+   [:div
+    [forms/bind-fields add-rating-template doc]
+    [:button {:class "btn btn-primary" :on-click #(create-rating doc)} "add rating"]]
    [:div (display-ratings conference-ratings)]]))
 
 (defn conference-page []

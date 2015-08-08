@@ -14,3 +14,10 @@
   (let [document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
     document))
+
+(defn add-rating [conference-id rating db]
+  (let [document (assoc rating :_id (ObjectId.)
+                               :conference-id conference-id)]
+    (mc/insert db "ratings" document)
+    document))
+

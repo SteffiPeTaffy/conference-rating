@@ -53,12 +53,20 @@
         id         (.toHexString (:_id add-result))]
     (created (str "/api/conferences/" id))))
 
+(defn add-rating [conference-id rating db]
+  (let [add-result (db/add-rating conference-id rating db)
+        id         (.toHexString (:_id add-result))]
+    (created (str "/api/conferences/" conference-id "/ratings/" id))))
+
 (defn create-routes [db]
   (routes
    (GET "/" [] home-page)
    (GET "/api/conferences" [] (get-conferences))
    (GET "/api/conferences/:id" [id] (get-conference id))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
+   (POST "/api/conferences/:id/ratings" [id :as request] (do
+                                  (println "req " request)
+                                  (add-rating id (:body request) db)))
    (POST "/api/conferences/" request (do
                                          (println "req " request)
                                          (add-conference (:body (:params request)) db)))
