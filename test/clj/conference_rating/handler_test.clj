@@ -25,14 +25,14 @@
     (is (= [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
             {:rating-author "Jon" :rating-comment "some comment" :rating-stars 4 :id "2"}]
            (json-body-for (create-mock-db) (request :get "/api/conferences/foo/ratings")))))
-  (testing "should return a list of conferences as json"
-    (is (= 200 (:status ((app (create-mock-db)) (request :get "/api/conferences")))))
-    (is (= [{:conference-name "Conference 1" :id "1"}
-            {:conference-name "Conference 2" :id "2"}] (json-body-for (create-mock-db) (request :get "/api/conferences")))))
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
       (let [response ((app db) (-> (request :post "/api/conferences/")
                                    (body (json/write-str {:name "some name" :description "some description"}))
                                    (header :content-type "application/json")))]
         (is (= 201 (:status response)))
-        (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/"))))))
+        (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/")))
+      (let [conferences (json-body-for db (request :get "/api/conferences"))]
+        (is (= 1 (count conferences)))
+        (is (= "some description" (:description (first conferences))))
+        (is (= "some name" (:name (first conferences))))))))

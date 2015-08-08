@@ -21,3 +21,18 @@
     (mc/insert db "ratings" document)
     document))
 
+
+(defn clear-id [doc]
+  (assoc doc :_id (.toHexString (:_id doc))))
+
+(defn get-conferences-list [db]
+  (let [list (mc/find-maps db "conferences")]
+    (map clear-id list)))
+
+(defn get-item-name [db coll name]
+  {})
+;(let [item]
+;  (mc/find db coll {:name name} item)
+;  item))
+
+

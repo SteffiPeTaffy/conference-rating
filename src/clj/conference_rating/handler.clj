@@ -43,10 +43,9 @@
     [{:rating-author "Bob" :rating-comment "some comment" :rating-stars 5 :id "1"}
      {:rating-author "Jon" :rating-comment "some comment" :rating-stars 4 :id "2"}]))
 
-(defn get-conferences []
+(defn get-conferences [db]
   (response
-    [{:conference-name "Conference 1" :id "1"}
-     {:conference-name "Conference 2" :id "2"}]))
+    (db/get-conferences-list db)))
 
 (defn add-conference [conference db]
   (let [add-result (db/add-conference conference db)
@@ -61,7 +60,7 @@
 (defn create-routes [db]
   (routes
    (GET "/" [] home-page)
-   (GET "/api/conferences" [] (get-conferences))
+   (GET "/api/conferences" [] (get-conferences db))
    (GET "/api/conferences/:id" [id] (get-conference id))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id))
    (POST "/api/conferences/:id/ratings" [id :as request] (do
@@ -69,7 +68,7 @@
                                   (add-rating id (:body request) db)))
    (POST "/api/conferences/" request (do
                                          (println "req " request)
-                                         (add-conference (:body (:params request)) db)))
+                                         (add-conference (:body request) db)))
    (resources "/")
    (not-found "Not Found")))
 
