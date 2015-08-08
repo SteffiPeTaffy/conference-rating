@@ -12,7 +12,7 @@
   (testing "should return a conference for an id as json"
     (is (= 200 (:status (app (request :get "/api/conferences/foo")))))
     (is (= {:conference-name "Some Conference"
-            :conference-description "Some Conference Description"
+            :conference-description "Some Conference Description with id foo"
             :id "foo"}
            (json-body-for (request :get "/api/conferences/foo")))))
   (testing "should return a list of conferences as json"

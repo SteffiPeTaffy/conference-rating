@@ -29,7 +29,7 @@
 (defn get-conference [conference-id]
   (response
     {:conference-name "Some Conference"
-     :conference-description "Some Conference Description"
+     :conference-description (str "Some Conference Description with id " conference-id)
      :id conference-id}))
 
 (defn get-conferences []

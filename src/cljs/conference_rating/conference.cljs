@@ -34,7 +34,8 @@
       [:div [:h2 "Loading..."]])))
 
 (defn conference-item [conference-list-entry]
-  [:li {:key (:id conference-list-entry)} (:conference-name conference-list-entry)])
+  [:li {:key (:id conference-list-entry)}
+   [:a {:href (str "#/conferences/" (:id conference-list-entry))} (:conference-name conference-list-entry)]])
 
 (defn conference-items [conference-list]
   [:ul (map conference-item conference-list)])
