@@ -43,7 +43,8 @@
            (GET "/" [] home-page)
            (GET "/api/conferences" [] (get-conferences))
            (GET "/api/conferences/:id" [id] (get-conference id))
-           (POST "/api/conferences/" [] (add-conference))
+           (POST "/api/conferences/" [] (do (add-conference)
+                                            (response {})))
            (resources "/")
            (not-found "Not Found"))
 
