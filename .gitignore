@@ -1,2 +1,7 @@
 .idea
 *.iml
+.lein-env
+figwheel_server.log
+resources/public/js
+target
+resources/public/css
