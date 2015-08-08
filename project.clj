@@ -12,6 +12,7 @@
                  [reagent "0.5.0"]
                  [reagent-forms "0.5.5"]
                  [reagent-utils "0.1.5"]
+                 [cljs-ajax "0.3.14"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
                  [ring/ring-json "0.4.0"]

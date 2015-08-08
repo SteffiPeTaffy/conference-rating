@@ -3,7 +3,8 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
-              [goog.history.EventType :as EventType])
+              [goog.history.EventType :as EventType]
+              [conference-rating.conference :as conference])
     (:import goog.History))
 
 ;; -------------------------
@@ -38,6 +39,10 @@
 
 (secretary/defroute "/count" []
                     (session/put! :current-page #'counting))
+
+(secretary/defroute "/conference/:id" [id]
+                    (session/put! :current-page #'conference/conference-page)
+                    (session/put! :conference-id id))
 
 ;; -------------------------
 ;; History
