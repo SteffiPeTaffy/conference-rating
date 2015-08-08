@@ -7,7 +7,7 @@
 
 (defn- connect []
   (if mongolab-uri
-    (second (mg/connect-via-uri {:uri mongolab-uri }))
+    (second (mg/connect-via-uri mongolab-uri))
     (mg/get-db (mg/connect {:host "127.0.0.1" :port 27017}) "crdb")))
 
 (defn add-conference []
