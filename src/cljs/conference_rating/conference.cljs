@@ -2,7 +2,13 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent-forms.core :as forms]
             [ajax.core :as ajax]
-            [conference-rating.history :as history]))
+            [conference-rating.history :as history]
+            [secretary.core :as secretary :include-macros true]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType]
+            [conference-rating.panel :as panel]
+            [conference-rating.add-rating :as add-rating]
+            [conference-rating.form :as form]))
 
 (defonce displayed-conference (atom nil))
 (defonce conferences (atom nil))
@@ -50,32 +56,14 @@
 (defn display-ratings [conference-ratings]
   [:div (map display-rating conference-ratings)])
 
-(def add-rating-template
-  [:div
-   (form-input "Author" [:input {:type "text" :placeholder "author" :class "form-control" :field :text :id :author}])
-   (form-input "Stars" [:input {:type "number" :placeholder "stars" :class "form-control" :min 1 :max 5 :field :range :id :stars}])
-   (form-input "Comment" [:textarea {:placeholder "comment" :class "form-control" :rows "5" :field :textarea :id :comment}])])
-
-(defn create-rating [form-data]
-  (let [conference @displayed-conference]
-  (ajax/POST (str "/api/conferences/" (:_id conference) "/ratings") {:params @form-data
-                                                                    :format :json
-                                                                    :handler #(js/alert "success")
-                                                                    :error-handler #(js/alert (str "could not create rating" %1))}))
-    (println @form-data))
 
 (defn display-conference [conference]
-  (let [conference-ratings @ratings
-        doc (atom {})]
+  (let [conference-ratings @ratings]
   [:div {:class "container"}
    [:div {:class "jumbotron"}
     [:h1(:name conference)]
     [:p (:description conference)]]
-   [:div {:class "panel panel-default"}
-    [:div {:class "panel-heading"} "rate this conference now!"]
-    [:div {:class "panel-body"}
-      [forms/bind-fields add-rating-template doc]
-      [:button {:class "btn btn-primary" :on-click #(create-rating doc)} "add rating"]]]
+   (add-rating/add-rating (:_id conference))
    [:div (display-ratings conference-ratings)]]))
 
 (defn conference-page []
