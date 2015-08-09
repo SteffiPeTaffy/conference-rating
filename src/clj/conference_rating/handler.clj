@@ -46,13 +46,13 @@
 
 (defn add-conference [conference db]
   (let [add-result (db/add-conference conference db)
-        id         (.toHexString (:_id add-result))]
-    (created (str "/api/conferences/" id))))
+        id         (:_id add-result)]
+    (created (str "/api/conferences/" id) add-result)))
 
 (defn add-rating [conference-id rating db]
   (let [add-result (db/add-rating conference-id rating db)
-        id         (.toHexString (:_id add-result))]
-    (created (str "/api/conferences/" conference-id "/ratings/" id))))
+        id         (:_id add-result)]
+    (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
 
 (defn create-routes [db]
   (routes

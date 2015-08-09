@@ -5,6 +5,9 @@
 
 (def mongolab-uri (System/getenv "MONGOLAB_URI"))
 
+(defn clear-id [doc]
+  (assoc doc :_id (.toHexString (:_id doc))))
+
 (defn connect []
   (if mongolab-uri
     (:db (mg/connect-via-uri mongolab-uri))
@@ -13,17 +16,13 @@
 (defn add-conference [conference db]
   (let [document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
-    document))
+    (clear-id document)))
 
 (defn add-rating [conference-id rating db]
   (let [document (assoc rating :_id (ObjectId.)
                                :conference-id conference-id)]
     (mc/insert db "ratings" document)
-    document))
-
-
-(defn clear-id [doc]
-  (assoc doc :_id (.toHexString (:_id doc))))
+    (clear-id document)))
 
 (defn get-conferences-list [db]
   (let [list (mc/find-maps db "conferences")]
