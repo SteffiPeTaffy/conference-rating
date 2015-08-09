@@ -45,7 +45,7 @@
     (db/get-conferences-list db)))
 
 (defn add-conference [conference db]
-  (let [add-result (db/add-Fconference conference db)
+  (let [add-result (db/add-conference conference db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 
