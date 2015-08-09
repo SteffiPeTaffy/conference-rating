@@ -28,9 +28,9 @@
       [:p "please run "
        [:b "lein figwheel"]
        " in order to start the compiler"]]
-     (include-js "js/app.js")
      (include-js "https://code.jquery.com/jquery-2.1.4.min.js")
-     (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")]]))
+     (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+     (include-js "js/app.js")]]))
 
 (defn get-conference [conference-id db]
   (response
@@ -45,7 +45,7 @@
     (db/get-conferences-list db)))
 
 (defn add-conference [conference db]
-  (let [add-result (db/add-conference conference db)
+  (let [add-result (db/add-Fconference conference db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 

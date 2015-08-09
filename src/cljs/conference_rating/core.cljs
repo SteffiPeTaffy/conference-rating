@@ -1,11 +1,12 @@
 (ns conference-rating.core
-    (:require [reagent.core :as reagent :refer [atom]]
-              [reagent.session :as session]
-              [secretary.core :as secretary :include-macros true]
-              [goog.events :as events]
-              [goog.history.EventType :as EventType]
-              [conference-rating.history :as history]
-              [conference-rating.conference :as conference])
+  (:require [reagent.core :as reagent :refer [atom]]
+            [reagent.session :as session]
+            [secretary.core :as secretary :include-macros true]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType]
+            [conference-rating.history :as history]
+            [conference-rating.home :as conference]
+            [conference-rating.conference.add-conference :as add-conference])
     (:import goog.History))
 
 ;; -------------------------
@@ -24,7 +25,7 @@
                     (session/put! :current-page #'conference/conferences-page))
 
 (secretary/defroute "/add-conference" []
-                    (session/put! :current-page #'conference/add-conference-page))
+                    (session/put! :current-page #'add-conference/add-conference-page))
 
 (secretary/defroute "/conferences/:id" [id]
                     (conference/load-conference id)
