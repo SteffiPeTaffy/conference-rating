@@ -1,15 +1,28 @@
 @import "variables.less";
 
+
 .btn-primary, .btn-primary:focus, .btn-primary:hover {
   background-color: @primary;
   border-color: @primary;
   color: @light;
+  background-image: none;
+  text-shadow: none;
+  box-shadow:none;
+  transition: all .25s;
 }
+
+.btn-primary:hover {
+  background-color: @primary-hover-color;
+}
+
+
 .btn-sm {
-  font-size: 10px;
   line-height: 1.5;
+  border-radius: 0;
+  border: 0;
 }
 .btn {
   padding: 5px 10px;
   border-radius: 0;
+  font-size: @font-size-base;
 }

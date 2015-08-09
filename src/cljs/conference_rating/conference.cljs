@@ -94,7 +94,7 @@
     [:p "10.09.2015 - 13.09.2015"]]
    [:div {:class "panel-body"}
     [:div {:class "text-lg-right"}
-     [:button {:class "btn-sm btn-primary"} "add rating"]]
+     [:button {:class "btn btn-sm btn-primary"} "add rating"]]
     [:p {:class "text-muted"} (:description conference-list-entry)]
     [:a {:href (str "#/conferences/" (:_id conference-list-entry))} "go to conference overview"]]])
 
