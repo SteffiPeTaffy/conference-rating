@@ -29,4 +29,4 @@
       [:div {:class "panel-heading"} "Add conference"]
       [:div {:class "panel-body"}
        [forms/bind-fields conference-form-template doc]
-       [:div [:button {:class "btn btn-primary":on-click #(create-conference doc)} "Create"]]]]]))
+       [:div [:button {:class "btn btn-primary" :on-click #(create-conference doc)} "Create"]]]]]))
