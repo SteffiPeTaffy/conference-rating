@@ -124,8 +124,7 @@
                                   :keywords? true
                                   :handler #(let [conference-id (:_id %)]
                                              (history/redirect-to (str "/conferences/" conference-id)))
-                                  :error-handler #(js/alert (str "could not create conference" %1))})
-  (println @form-data))
+                                  :error-handler #(js/alert (str "could not create conference" %1))}))
 
 (defn add-conference-page []
   (let [doc (atom {})]
