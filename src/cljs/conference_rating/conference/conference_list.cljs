@@ -1,4 +1,5 @@
-(ns conference-rating.conference.conference-list)
+(ns conference-rating.conference.conference-list
+ (:require [conference-rating.panel :as panel]))
 
 (defn display-conference-list-item [conference-list-entry]
   [:div {:key (:_id conference-list-entry) :class "panel"}
@@ -15,6 +16,7 @@
   [:div {:class "container"}
    [:h1 "Conferences"]
    [:div (map display-conference-list-item conference-list)]
+   [:div (panel/range-panel 55 "Okay" "Hello Banana was happy :)")]
    [:h2 "Actions"]
    [:ul
     [:li [:a {:href "#/add-conference"} "Add conference"]]]])
