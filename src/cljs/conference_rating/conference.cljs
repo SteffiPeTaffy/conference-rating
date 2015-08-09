@@ -116,6 +116,8 @@
 (def conference-form-template
   [:div
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
+   (form-input "Date" [:input {:field :text :id :date :class "form-control" :placeholder "Date of the conference"}])
+   (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page"}])
    (form-input "Description" [:textarea {:field :textarea :rows 5 :id :description :class "form-control" :placeholder "More information about the conference"}])])
 
 (defn create-conference [form-data]
