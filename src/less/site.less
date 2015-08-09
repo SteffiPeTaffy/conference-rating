@@ -1,17 +1,15 @@
+@import "variables.less";
+@import "panel.less";
+@import "button.less";
+
 body {
-  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
-  max-width: 600px;
-  margin: 0 auto;
+  font-family: @font-family-base;
+  font-size: @font-size-base;
   padding-top: 72px;
   -webkit-font-smoothing: antialiased;
-  font-size: 1.125em;
-  color: #333;
-  line-height: 1.5em;
+  color: @body-color;
 }
 
-h1, h2, h3 {
-  color: #000;
-}
 h1 {
   font-size: 2.5em
 }
@@ -26,9 +24,26 @@ h3 {
 
 a {
   text-decoration: none;
-  color: #09f;
+  color: @link-color;
 }
 
 a:hover {
   text-decoration: underline;
+  color: @link-hover-color;
+}
+
+.bg-purple {
+  background-color: @purple ;
+}
+
+.bg-body {
+  background-color: @body-bg ;
+}
+
+.cl-light {
+  color: @light;
+}
+
+.text-lg-right {
+  text-align: right;
 }

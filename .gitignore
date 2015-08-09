@@ -8,3 +8,4 @@ resources/public/css
 .lein-repl-history
 .nrepl-port
 data
+src/less/nifty
