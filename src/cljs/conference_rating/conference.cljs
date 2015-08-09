@@ -1,11 +1,8 @@
 (ns conference-rating.conference
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent-forms.core :as forms]
-            [reagent.session :as session]
             [ajax.core :as ajax]
-            [secretary.core :as secretary :include-macros true]
-            [goog.events :as events]
-            [goog.history.EventType :as EventType]))
+            [conference-rating.history :as history]))
 
 (defonce displayed-conference (atom nil))
 (defonce conferences (atom nil))
@@ -123,7 +120,10 @@
 (defn create-conference [form-data]
   (ajax/POST "/api/conferences/" {:params @form-data
                                   :format :json
-                                  :handler #(js/alert "success")
+                                  :response-format :json
+                                  :keywords? true
+                                  :handler #(let [conference-id (:_id %)]
+                                             (history/redirect-to (str "/conferences/" conference-id)))
                                   :error-handler #(js/alert (str "could not create conference" %1))})
   (println @form-data))
 

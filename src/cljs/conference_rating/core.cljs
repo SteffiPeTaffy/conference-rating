@@ -4,6 +4,7 @@
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
               [goog.history.EventType :as EventType]
+              [conference-rating.history :as history]
               [conference-rating.conference :as conference])
     (:import goog.History))
 
@@ -17,9 +18,6 @@
 (defn current-page []
   [:div [(session/get :current-page)]])
 
-;; -------------------------
-;; Routes
-(secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
                     (conference/load-conferences)
@@ -34,21 +32,10 @@
                     (session/put! :current-page #'conference/conference-page))
 
 ;; -------------------------
-;; History
-;; must be called after routes have been defined
-(defn hook-browser-navigation! []
-  (doto (History.)
-    (events/listen
-     EventType/NAVIGATE
-     (fn [event]
-       (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
-
-;; -------------------------
 ;; Initialize app
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
-  (hook-browser-navigation!)
+  (history/hook-browser-navigation!)
   (mount-root))
