@@ -1,26 +1,42 @@
 @import "variables.less";
 
-.progress {
-  height: 6px;
-  border-radius: 0;
-  margin: 0;
-
-  }
 .progress-xs {
   height: 6px;
   margin-bottom: 0px;
   border-radius: 0;
-  background-color: @gray;
 }
 
+.range-panel.bg-mint{
+  .progress-xs {
+    background-color: lighten(@mint, 15%);
+  }
+}
 
-.progessbar {
+.range-panel.bg-pink{
+  .progress-xs {
+    background-color: lighten(@pink, 15%);
+  }
+}
+
+.range-panel.bg-purple{
+  .progress-xs {
+    background-color: lighten(@purple, 15%);
+  }
+}
+
+.range-panel.bg-green{
+  .progress-xs {
+    background-color: lighten(@success, 15%);
+  }
+}
+
+.progressbar {
   float: left;
   box-shadow: none;
   line-height: 2px;
   height: 100%;
-  }
+}
 
 .progressbar-light {
-   background-color: @light;
- }
+  background-color:  @light;
+}

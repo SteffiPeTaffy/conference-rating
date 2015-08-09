@@ -52,7 +52,6 @@
   (let [conference-ratings @ratings]
   [:div {:class "container"}
    (conference/display-conference-overview conference)
-   (add-rating/add-rating (:_id conference))
    [:div (display-ratings conference-ratings)]]))
 
 (defn conference-page []

@@ -54,7 +54,7 @@
 
 (defn add-rating [conference-id]
   (let [doc (atom {})]
-    [:div {:class "add-rating-container"}
+    [:div {:class "container"}
      [forms/bind-fields add-rating-template doc]
      [:button {:class "btn btn-primary" :on-click #(create-rating doc conference-id)} "add rating"]]))
 

@@ -1,15 +1,16 @@
 @import "variables.less";
 @import "panel.less";
 @import "button.less";
-@import "progressbar.less";
 @import "media.less";
-@import "conferences_container.less";
+@import "conferences.less";
+@import "badge.less";
+@import "progressbar.less";
 
 
 body {
   font-family: @font-family-base;
   font-size: @font-size-base;
-  padding-top: 72px;
+  margin-top: 25px;
   -webkit-font-smoothing: antialiased;
   color: @body-color;
 }
@@ -36,6 +37,10 @@ a:hover {
   color: @link-hover-color;
 }
 
+.bg-blue {
+  background-color: @info;
+}
+
 .bg-purple {
   background-color: @purple ;
 }
@@ -44,12 +49,36 @@ a:hover {
   background-color: @mint;
 }
 
+.bg-pink {
+  background-color: @pink;
+}
+
+.bg-green {
+  background-color: @success;
+}
+
+.bg-dark {
+  background-color: @dark;
+}
+
+.bg-yellow {
+  background-color: @warning;
+}
+
 .bg-body {
   background-color: @body-bg;
 }
 
+.bg-light {
+  background-color: @light;
+}
+
 .cl-light {
   color: @light;
+}
+
+.cl-blue {
+  color: @info;
 }
 
 .text-lg-right {
@@ -58,6 +87,10 @@ a:hover {
 
 .text-lg-left {
   text-align: left;
+}
+
+.text-lg-center {
+  text-align: center;
 }
 
 .container .jumbotron {

@@ -15,16 +15,39 @@
 (defn light-panel [heading-label body]
   (coloured-panel heading-label body "" ""))
 
-(defn range-panel [percentage name comment]
-  [:div {:class "panel bg-mint"}
+(defn range-panel [percentage name comment panel-classes icon]
+  [:div {:class (str "panel range-panel " panel-classes)}
    [:div {:class "media-container"}
     [:div {:class "media-left"}
-     [:div {:class "media-container icon-wrap"}
-      [:span {:class "glyphicon glyphicon-star"}]]]
+     [:div {:class "media-container icon-wrap icon-md"}
+      [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body range-label"} (str percentage "%")]
      [:div {:class "text-uppercase"} name]]]
    [:div {:class "progress-xs"}
-    [:div {:style {:width (str percentage "%")} :class "progessbar progressbar-light" }]]
+    [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light" }]]
    [:div {:class "media-container media-body text-lg-right"}
     [:span {:class "text-semi"} comment]]])
+
+(defn icon-panel [icon number label color]
+  [:div {:class "panel"}
+   [:div {:class (str "panel-body text-lg-center " color)}
+    [:div {:class "media-container"}
+     [:div {:class "media-center"}
+      [:div {:class "media-container icon-wrap icon-lg"}
+       [:span {:class (str "glyphicon " icon)}]]]
+     [:div {:class "media-body"}
+      [:h3 number]
+      [:h3 label]]]]])
+
+(defn info-panel [icon title body-information footer-information]
+  [:div {:class (str "panel bg-blue cl-light info-panel")}
+   [:div {:class "panel-heading text-lg-left"}
+    [:div {:class "media-container"}
+     [:div {:class "media-left"}
+      [:div {:class "media-container icon-wrap icon-md"}
+       [:span {:class (str "glyphicon " icon)}]]]
+     [:div {:class "media-body"}
+      [:h3 title]]]]
+   [:div {:class "panel-body text-lg-left"} body-information]
+   [:div {:class "panel-footer text-lg-left"} footer-information]])

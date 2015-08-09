@@ -6,7 +6,8 @@
             [goog.history.EventType :as EventType]
             [conference-rating.history :as history]
             [conference-rating.home :as conference]
-            [conference-rating.conference.add-conference :as add-conference])
+            [conference-rating.conference.add-conference :as add-conference]
+            [conference-rating.add-rating :as add-rating])
     (:import goog.History))
 
 ;; -------------------------
@@ -31,6 +32,10 @@
                     (conference/load-conference id)
                     (conference/load-conference-ratings id)
                     (session/put! :current-page #'conference/conference-page))
+
+(secretary/defroute "/conferences/:id/add-rating" [id]
+                    (conference/load-conference id)
+                    (session/put! :current-page #'add-rating/add-rating))
 
 ;; -------------------------
 ;; Initialize app
