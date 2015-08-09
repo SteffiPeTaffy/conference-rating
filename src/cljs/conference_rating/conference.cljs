@@ -7,9 +7,9 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]))
 
-(def displayed-conference (atom nil))
-(def conferences (atom nil))
-(def ratings (atom nil))
+(defonce displayed-conference (atom nil))
+(defonce conferences (atom nil))
+(defonce ratings (atom nil))
 
 ;; -------------------------
 ;; Requests
