@@ -1,5 +1,16 @@
 @import "variables.less";
 
+.btn {
+  padding: 5px 10px;
+  border-radius: 0;
+  font-size: @font-size-base;
+}
+
+.btn-green {
+  background-color: @success;
+  border-color: @success;
+  color: @light;
+}
 
 .btn-primary, .btn-primary:focus, .btn-primary:hover {
   background-color: @primary;
@@ -21,8 +32,12 @@
   border: 0;
 }
 
-.btn {
-  padding: 5px 10px;
+.btn-lg {
+  padding: 10px 15px;
+  font-size: @font-size-lg;
+  font-weight: @font-semibold;
+  line-height: 2.5;
   border-radius: 0;
-  font-size: @font-size-base;
+  border: 0;
 }
+

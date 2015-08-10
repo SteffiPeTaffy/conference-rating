@@ -10,7 +10,6 @@
 body {
   font-family: @font-family-base;
   font-size: @font-size-base;
-  margin-top: 25px;
   -webkit-font-smoothing: antialiased;
   color: @body-color;
 }
@@ -81,6 +80,10 @@ a:hover {
   color: @info;
 }
 
+.cl-yellow {
+  color: @warning;
+}
+
 .text-lg-right {
   text-align: right;
 }
@@ -113,4 +116,71 @@ a:hover {
   font-weight: 600;
   font-size: 85%;
 }
+
+.navbar-inverse {
+  border-radius: 0;
+  background-color: @dark;
+  border-color: @dark;
+  background-image: none;
+
+  .navbar-brand, .navbar-brand:hover {
+    float: left;
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    font-weight: @font-semibold;
+    line-height: 20px;
+    color: @light;
+
+    a {
+      color: @light;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    
+    .glyphicon {
+      margin-left: 15px;
+    }
+  }
+
+  &.intro {
+    border: 0;
+    top: 50px;
+    margin-bottom: 80px;
+    background-image: url("https://67fb162d391b3c725e9d-210fd98f9f4ad5bac2f98cc8e61aaae5.ssl.cf2.rackcdn.com/images/events-banner-desktop.jpg");
+    background-size: 100%;
+    
+    .overlay-yellow {
+      background: rgba(235, 170, 75, 0.7);
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .intro-header-title {
+      float: none;
+      text-align: center;
+      height: 250px;
+      font-size: 24px;
+      font-weight: normal;
+      line-height: 20px;
+      color: @light;
+      padding-top: 40px;
+    }
+
+    .intro-action-container {
+      padding-left: 25px;
+      padding-bottom: 20px;
+
+      .intro-action-btn {
+        background-color: darken(@warning, 30%);
+      }
+      .intro-action-btn:hover {
+        background-color: darken(@warning, 35%);
+      }
+    }
+  }
+}
+
+
+
 
