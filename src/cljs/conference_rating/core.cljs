@@ -34,7 +34,7 @@
                     (session/put! :current-page #'conference/conference-page))
 
 (secretary/defroute "/conferences/:id/add-rating" [id]
-                    (conference/load-conference id)
+                    (session/put! :conference-id-to-rate id)
                     (session/put! :current-page #'add-rating/add-rating))
 
 ;; -------------------------

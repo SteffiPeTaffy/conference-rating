@@ -2,7 +2,8 @@
   (:require [reagent-forms.core :as forms]
             [ajax.core :as ajax]
             [conference-rating.panel :as panel]
-            [conference-rating.form :as form]))
+            [conference-rating.form :as form]
+            [reagent.session :as session]))
 
 (defn create-rating [form-data conference-id]
     (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params @form-data
@@ -52,9 +53,9 @@
                       (form/radiobutton-group "Community"))])]])
 
 
-(defn add-rating [conference-id]
+(defn add-rating []
   (let [doc (atom {})]
     [:div {:class "container"}
      [forms/bind-fields add-rating-template doc]
-     [:button {:class "btn btn-primary" :on-click #(create-rating doc conference-id)} "add rating"]]))
+     [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]))
 
