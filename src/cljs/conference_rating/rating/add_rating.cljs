@@ -3,13 +3,14 @@
             [ajax.core :as ajax]
             [conference-rating.panel :as panel]
             [conference-rating.form :as form]
-            [reagent.session :as session]))
+            [reagent.session :as session]
+            [conference-rating.history :as history]))
 
 (defn create-rating [form-data conference-id]
-    (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params @form-data
-                                                                       :format :json
-                                                                       :handler #(js/alert "success")
-                                                                       :error-handler #(js/alert (str "could not create rating" %1))})
+    (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        @form-data
+                                                                   :format        :json
+                                                                   :handler       (history/redirect-to (str "/conferences/" conference-id))
+                                                                   :error-handler #(js/alert (str "could not create rating" %1))})
   (println @form-data))
 
 
