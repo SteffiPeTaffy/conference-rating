@@ -5,6 +5,7 @@
 @import "conferences.less";
 @import "badge.less";
 @import "progressbar.less";
+@import "header.less";
 
 
 body {
@@ -84,6 +85,10 @@ a:hover {
   color: @warning;
 }
 
+.cl-dark {
+  color: @dark
+}
+
 .text-lg-right {
   text-align: right;
 }
@@ -117,68 +122,45 @@ a:hover {
   font-size: 85%;
 }
 
-.navbar-inverse {
-  border-radius: 0;
-  background-color: @dark;
-  border-color: @dark;
-  background-image: none;
+.content-container {
+  padding-right: 30px;
+  padding-left: 30px;
+}
 
-  .navbar-brand, .navbar-brand:hover {
-    float: left;
-    height: 50px;
-    padding: 15px 15px;
-    font-size: 18px;
-    font-weight: @font-semibold;
-    line-height: 20px;
-    color: @light;
+.bg-dev {
+  background-color: @dev;
+}
 
-    a {
-      color: @light;
-      margin-left: 15px;
-      text-decoration: none;
-    }
-    
-    .glyphicon {
-      margin-left: 15px;
-    }
-  }
+.bg-devops {
+  background-color: @devops;
+}
 
-  &.intro {
-    border: 0;
-    top: 50px;
-    margin-bottom: 80px;
-    background-image: url("https://67fb162d391b3c725e9d-210fd98f9f4ad5bac2f98cc8e61aaae5.ssl.cf2.rackcdn.com/images/events-banner-desktop.jpg");
-    background-size: 100%;
-    
-    .overlay-yellow {
-      background: rgba(235, 170, 75, 0.7);
-      overflow: hidden;
-      z-index: 2;
-    }
+.bg-ux {
+  background-color: @ux;
+}
 
-    .intro-header-title {
-      float: none;
-      text-align: center;
-      height: 250px;
-      font-size: 24px;
-      font-weight: normal;
-      line-height: 20px;
-      color: @light;
-      padding-top: 40px;
-    }
+.bg-qa {
+  background-color: @qa;
+}
 
-    .intro-action-container {
-      padding-left: 25px;
-      padding-bottom: 20px;
+.bg-ba {
+  background-color: @ba;
+}
 
-      .intro-action-btn {
-        background-color: darken(@warning, 30%);
-      }
-      .intro-action-btn:hover {
-        background-color: darken(@warning, 35%);
-      }
-    }
-  }
+.bg-pm {
+  background-color: @pm;
+}
+
+.bg-sales {
+  background-color: @devops;
+}
+
+.bg-recruiting {
+  background-color: @sales;
+}
+
+.bg-other {
+  background-color: @other;
 }
 
 

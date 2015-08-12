@@ -6,12 +6,6 @@
   font-size: @font-size-base;
 }
 
-.btn-green {
-  background-color: @success;
-  border-color: @success;
-  color: @light;
-}
-
 .btn-primary, .btn-primary:focus, .btn-primary:hover {
   background-color: @primary;
   border-color: @primary;
@@ -32,6 +26,15 @@
   border: 0;
 }
 
+.btn-md {
+  padding: 7px 12px;
+  font-size: @font-size-md;
+  font-weight: @font-semibold;
+  line-height: 2.0;
+  border-radius: 0;
+  border: 0;
+}
+
 .btn-lg {
   padding: 10px 15px;
   font-size: @font-size-lg;
@@ -39,5 +42,15 @@
   line-height: 2.5;
   border-radius: 0;
   border: 0;
+}
+
+.btn-orange {
+  background-color: @warning;
+  border-color: @warning;
+  color: @light;
+}
+.btn-orange:hover {
+  background-color: darken(@warning, 5%);
+  color: @light;
 }
 

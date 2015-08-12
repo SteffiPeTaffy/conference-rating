@@ -1,0 +1,57 @@
+@import "variables";
+
+.navbar-inverse {
+  border-radius: 0;
+  background-color: @dark;
+  border-color: @dark;
+  background-image: none;
+
+  .navbar-brand, .navbar-brand:hover {
+    float: left;
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    font-weight: @font-semibold;
+    line-height: 20px;
+    color: @light;
+
+    a {
+      color: @light;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+
+    .glyphicon {
+      margin-left: 15px;
+    }
+  }
+
+  &.search-bar {
+    margin-top: 50px;
+    padding-top: 55px;
+    background-color: @body-bg;
+    border: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+.add-conference-btn-container {
+  border-top: 1px solid lighten(@dark, 35%);
+  padding-top: 25px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.legend-bar {
+  text-align: right;
+
+  .legend {
+    padding: 5px;
+    margin-left: 10px;
+    text-align: right;
+    color: @light;
+  }
+}
