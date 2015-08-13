@@ -56,7 +56,6 @@
 
 (defn create-routes [db]
   (routes
-   (GET "/" [] home-page)
    (GET "/api/conferences" [] (get-conferences db))
    (GET "/api/conferences/:id" [id] (get-conference id db))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
@@ -67,6 +66,7 @@
                                          (println "req " request)
                                          (add-conference (:body request) db)))
    (resources "/")
+   (GET "/" [] home-page)
    (not-found "Not Found")))
 
 (defn app [db]
