@@ -15,6 +15,13 @@
 (defn light-panel [heading-label body]
   (coloured-panel heading-label body "" ""))
 
+(defn mini-panel-recommendations [number year]
+ (mini-panel number "glyphicon-star" year "bg-gray"))
+
+(defn mini-panel-voices [number year]
+ (mini-panel number "glyphicon-bullhorn" year "bg-yellow"))
+
+
 (defn range-panel [percentage name comment panel-classes icon]
   [:div {:class (str "panel range-panel " panel-classes)}
    [:div {:class "media-container"}
