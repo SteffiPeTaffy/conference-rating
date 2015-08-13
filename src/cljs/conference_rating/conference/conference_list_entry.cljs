@@ -3,7 +3,7 @@
 
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 2
-                        :recommendations 2
+                        :recommendations 1
                         :overall {:avg 4 :count 2}
                         :talks {:avg 4 :count 2}
                         :venue {:avg 2.5 :count 2}
@@ -76,12 +76,6 @@
      (roles (perc count (:recruting rolesMap)) "bg-recruting")
      (roles (perc count (:other rolesMap)) "bg-other")]))
 
-(defn ratings-recommendations [recommendations]
-  [:div {:class "text-lg-right"} recommendations])
-
-(defn ratings-ratings [number-of-ratings]
-  [:div {:class "text-lg-right"} number-of-ratings])
-
 (defn display-conference-list-item [simple-conference]
   (let [conference (merge simple-conference aggregated-ratings)]
     [:div {:key (:_id conference) :class "col-lg-4 conference-item-container"}
@@ -91,10 +85,10 @@
         (series-tag (:series-tag conference))
         (title (:title conference))
         (conference-dates (:from-date conference) (:to-date conference))]
-       [:div {:class "col-md-2 conference-rating-column"}
-        (ratings-recommendations (get-in conference [:aggregated-ratings :recommendations]))]
-       [:div {:class "col-md-2 conference-rating-column"}
-        (ratings-ratings (get-in conference [:aggregated-ratings :number-of-ratings]))]]
+       [:div {:class "col-md-2"}
+        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)]
+       [:div {:class "col-md-2"}
+        (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]]
       [:div {:class "bottom-line"}]]
      [:div {:class "panel-body  bg-light"}
       [:div {:class "row"}
