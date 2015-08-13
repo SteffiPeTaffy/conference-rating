@@ -1,26 +1,6 @@
 (ns conference-rating.conference.conference-list-entry
   (:require [conference-rating.panel :as panel]))
 
-(def ratings
-  [{:rating {:recommended true
-             :tags ["inspiring", "entertaining", "learning", "potential-hires", "potential-clients"]
-             :roles ["DEV", "DEVOPS", "UX", "QA", "BA", "PM", "SALES", "RECRUITING", "OTHER"]
-             :overall 5
-             :talks 5
-             :venue 3
-             :community 4
-             :comment "this was an awesome conference!"
-             :author "Steffi"}}
-   {:rating {:recommended true
-             :tags ["inspiring", "entertaining", "learning"]
-             :roles ["DEV", "DEVOPS", "UX"]
-             :overall 3
-             :talks 3
-             :venue 2
-             :community 5
-             :comment "this was a good conference!"
-             :author "Flo"}}])
-
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 2
                         :recommendations 2
@@ -35,7 +15,7 @@
                                 :ba 1
                                 :pm 1
                                 :sales 1
-                                :recruiting 1
+                                :recruting 1
                                 :other 1}
                         :tags {
                                :inspiring 2
@@ -67,22 +47,34 @@
   [:a {:href link :class "conference-link"} link])
 
 (defn overall-rating [overall-rating]
-  [:div {:class "conference-overall-rating"} (panel/range-panel (:avg overall-rating) "Overall" (str (:count overall-rating) " ratings") "bg-dark-lightened" "glyphicon-thumbs-up")])
+  (let [overall-rating-percentage (* (/ (:avg overall-rating) 5) 100)]
+    [:div {:class "conference-overall-rating"} (panel/range-panel overall-rating-percentage (:avg overall-rating) "Overall" (str (:count overall-rating) " ratings") "bg-dark-lightened" "glyphicon-thumbs-up")]))
 
 (defn add-rating-button [id]
   [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-sm btn-orange glyphicon glyphicon-pencil voice-btn" :href (str "#/conferences/" id "/add-rating")} "rate"]])
+   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "give it your voice"]])
 
 
 (defn roles [percentage bg-color]
   [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light " bg-color)}])
 
+(defn perc [total value]
+  (* 100 (/ value total)))
 
-(defn roles-bar [ratings]
-  [:div {:class "progress-xs"}
-   (roles 72 "bg-dev")
-   (roles 23 "bg-devops")
-   (roles 5 "bg-ux")])
+(defn roles-bar [rolesMap]
+  (let [count (->> rolesMap
+                  (vals)
+                  (reduce +))]
+    [:div {:class "progress-xs"}
+     (roles (perc count (:dev rolesMap)) "bg-dev")
+     (roles (perc count (:devops rolesMap)) "bg-devops")
+     (roles (perc count (:ux rolesMap)) "bg-ux")
+     (roles (perc count (:qa rolesMap)) "bg-qa")
+     (roles (perc count (:ba rolesMap)) "bg-ba")
+     (roles (perc count (:pm rolesMap)) "bg-pm")
+     (roles (perc count (:sales rolesMap)) "bg-sales")
+     (roles (perc count (:recruting rolesMap)) "bg-recruting")
+     (roles (perc count (:other rolesMap)) "bg-other")]))
 
 (defn ratings-recommendations [recommendations]
   [:div {:class "text-lg-right"} recommendations])
@@ -116,32 +108,4 @@
       [:div {:class "row"}
        [:div {:class "col-md-12"}
         (roles-bar (get-in conference [:aggregated-ratings :roles]))]]]]))
-
-(defn display-conference-list-item [conference-list-entry]
-  [:div {:key (:_id conference-list-entry) :class "col-lg-4 conference-item-container"}
-   [:div {:class "panel panel-heading bg-light cl-dark"}
-    [:div {:class "row conference-row"}
-     [:div {:class "col-md-6"}
-      [:div {:class "series-tag-container"}[:span {:class "series-tag"} "DEVOXX"]]
-      [:h4 (:name conference-list-entry)]
-      [:p "10.09.2015 - 13.09.2015"]]
-     [:div {:class "col-md-6 conference-rating-column"}
-      [:div {:class "text-lg-right"} "banana"]]]
-    [:div {:class "bottom-line"}]]
-   [:div {:class "panel-body  bg-light"}
-    [:div {:class "row"}
-     [:div {:class "col-md-8"}
-      [:p {:class "text-muted"} (:description conference-list-entry)]
-      [:a {:href (str "#/conferences/" (:_id conference-list-entry))} "go to conference overview"]]
-     [:div {:class "col-md-4 conference-overall-rating-conatiner"}
-      [:div {:class "conference-overall-rating"} (panel/range-panel 83 "Overall" "12 ratings" "bg-dark-lightened" "glyphicon-thumbs-up")]
-      [:div {:class "text-lg-right"}
-       [:a {:class "btn btn-sm btn-orange glyphicon glyphicon-pencil voice-btn" :href (str "#/conferences/" (:_id conference-list-entry) "/add-rating")} "rate"]]]]]
-   [:div {:class "panel-footer"}
-    [:div {:class "row"}
-     [:div {:class "col-md-12"}
-      [:div {:class "progress-xs"}
-       (progress 72 "bg-dev")
-       (progress 23 "bg-devops")
-       (progress 5 "bg-ux")]]]]])
 

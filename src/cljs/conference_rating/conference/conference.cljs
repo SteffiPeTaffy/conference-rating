@@ -52,11 +52,11 @@
     (conference-recommendations)
     [:div {:class "row"}
      [:div {:class "col-sm-6 col-lg-6"}
-      [:div (panel/range-panel 83 "Overall" "12 ratings" "bg-mint" "glyphicon-thumbs-up")]
-      [:div (panel/range-panel 97 "Talks" "5 ratings" "bg-purple" "glyphicon-user")]]
+      [:div (panel/range-panel 83 83 "Overall" "12 ratings" "bg-mint" "glyphicon-thumbs-up")]
+      [:div (panel/range-panel 97 83 "Talks" "5 ratings" "bg-purple" "glyphicon-user")]]
      [:div {:class "col-sm-6 col-lg-6"}
-      [:div (panel/range-panel 67 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
-      [:div (panel/range-panel 35 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
+      [:div (panel/range-panel 67 83 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
+      [:div (panel/range-panel 35 83 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
     (conference-average-attendee)]])
 
 

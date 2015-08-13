@@ -27,7 +27,7 @@
      (legend "BA" "bg-ba")
      (legend "PM" "bg-pm")
      (legend "SALES" "bg-sales")
-     (legend "RECRUITING" "bg-recruiting")
+     (legend "RECRUITING" "bg-recruting")
      (legend "OTHER" "bg-other")]]]])
 
 (defn add-conference-bar []

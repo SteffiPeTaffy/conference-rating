@@ -21,15 +21,14 @@
 (defn mini-panel-voices [number year]
  (mini-panel number "glyphicon-bullhorn" year "bg-yellow"))
 
-
-(defn range-panel [percentage name comment panel-classes icon]
+(defn range-panel [percentage absolute name comment panel-classes icon]
   [:div {:class (str "panel range-panel " panel-classes)}
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap icon-md"}
       [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
-     [:h3 {:class "media-body range-label"} (str percentage "%")]
+     [:h3 {:class "media-body range-label"} (str absolute " out of 5")]
      [:div {:class "text-uppercase"} name]]]
    [:div {:class "progress-xs"}
     [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light"}]]
