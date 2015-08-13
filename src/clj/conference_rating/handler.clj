@@ -69,7 +69,7 @@
    (resources "/")
    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                   clojure.java.io/resource
-                                                  slurp))
+                                                  slurp)))
    (GET "/" [] home-page)
    (not-found "Not Found")))
 

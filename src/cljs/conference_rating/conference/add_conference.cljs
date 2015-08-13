@@ -12,6 +12,7 @@
 (def conference-form-template
   [:div
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
+   (form-input "Series" [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
    (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])
    (form-input "To" [:div {:field :datepicker :id :to-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])
    (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page"}])
