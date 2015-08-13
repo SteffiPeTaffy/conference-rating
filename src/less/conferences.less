@@ -1,5 +1,7 @@
 @import "variables.less";
 
+
+// CONFERENCE ON CONFERENCE PAGE
 .conferences-container {
 
   .add-conference-container {
@@ -9,4 +11,70 @@
 
 .conference-information-container{
   padding: 15px;
+}
+
+
+
+// CONFERENCE LIST ENTRY ON HOME PAGE
+.conference-item-container {
+  margin-bottom: 15px;
+
+  .panel-heading {
+    padding-bottom: 20px;
+  }
+
+  .panel-body {
+    padding-top: 0;
+  }
+
+  .bottom-line {
+    border-bottom: 1px solid @gray
+  }
+
+  .conference-rating-column {
+    margin-top: 5px;
+  }
+
+  .series-tag-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    .series-tag {
+      background-color: lighten(@dark, 15%);
+      text-transform: uppercase;
+      color: @light;
+      padding: 5px;
+      width: 100%;
+      height: 17px;
+    }
+
+    .series-tag-hidden {
+      visibility: hidden;
+    }
+  }
+
+  .voice-btn {
+    width: 100%;
+  }
+
+  .conference-overall-rating-conatiner {
+    padding: 0 15px 0 15px;
+
+    .conference-overall-rating {
+      margin-bottom: 10px;
+    }
+  }
+  .panel-footer {
+    padding: 0;
+    border: 0;
+    background-color: @light;
+  }
+
+  .conference-description {
+    text-overflow: ellipsis;
+    height: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px;
+  }
 }
