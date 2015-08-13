@@ -51,3 +51,14 @@
       [:h3 title]]]]
    [:div {:class "panel-body text-lg-left"} body-information]
    [:div {:class "panel-footer text-lg-left"} footer-information]])
+
+(defn mini-panel [number icon year color]
+ (if number
+  [:div {:class (str "panel mini-panel " color )}
+  [:div {:class "media-container"}
+   [:div {:class "media-left"}
+    [:div {:class "media-container icon-wrap glyphicon-mini"}
+     [:span {:class (str "glyphicon " icon)}]]]
+   [:div {:class "media-body"}
+    [:h3 {:class "media-body text-lg-center"} (str number)]
+    (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]]))

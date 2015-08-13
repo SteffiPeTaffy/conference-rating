@@ -9,7 +9,7 @@
    [:div {:class "panel panel-heading bg-light cl-dark"}
     [:div {:class "row conference-row"}
      [:div {:class "col-md-6"}
-      [:div {:class "series-tag-container"}[:span {:class "series-tag"} "DEVOXX"]]
+      [:div {:class "series-tag-container"}[:span {:class "series-tag"} "DEVOXX"][:span {:class "panel"}(panel/mini-panel (- 17 5) "glyphicon-asterisk" nil "bg-yellow" )][:span {:class "panel"}(panel/mini-panel 101 "glyphicon-road" 2020 "bg-mint")]]
       [:h4 (:name conference-list-entry)]
       [:p "10.09.2015 - 13.09.2015"]]
      [:div {:class "col-md-6 conference-rating-column"}
