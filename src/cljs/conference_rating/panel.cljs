@@ -25,7 +25,7 @@
      [:h3 {:class "media-body range-label"} (str percentage "%")]
      [:div {:class "text-uppercase"} name]]]
    [:div {:class "progress-xs"}
-    [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light" }]]
+    [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light"}]]
    [:div {:class "media-container media-body text-lg-right"}
     [:span {:class "text-semi"} comment]]])
 
