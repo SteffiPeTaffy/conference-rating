@@ -1,5 +1,6 @@
 (ns conference-rating.add-rating
   (:require [reagent-forms.core :as forms]
+            [reagent.core :refer [atom]]
             [ajax.core :as ajax]
             [conference-rating.panel :as panel]
             [conference-rating.form :as form]
