@@ -21,6 +21,7 @@
              :content "width=device-width, initial-scale=1"}]
      (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
      (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css")
+     (include-css "css/reagent-forms.css")
      (include-css "css/site.css")]
     [:body {:class "bg-body"}
      [:div#app
@@ -66,6 +67,9 @@
                                          (println "req " request)
                                          (add-conference (:body request) db)))
    (resources "/")
+   (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
+                                                  clojure.java.io/resource
+                                                  slurp))
    (GET "/" [] home-page)
    (not-found "Not Found")))
 
