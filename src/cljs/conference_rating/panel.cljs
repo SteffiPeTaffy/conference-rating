@@ -17,8 +17,8 @@
      [:div {:class "media-container icon-wrap glyphicon-mini"}
       [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
-     [:h3 {:class "media-body text-lg-center"} (str number)]
-     (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]]))
+     [:h3 {:class "media-body text-lg-center"} (str number)]]]
+     [:div {:class "media-container media-body text-lg-center"} (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]))
 
 (defn mini-panel-recommendations [number year]
  (mini-panel number "glyphicon-star" year "bg-dark-lightened"))
