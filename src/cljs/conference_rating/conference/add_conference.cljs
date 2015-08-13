@@ -1,6 +1,8 @@
 (ns conference-rating.conference.add-conference
   (:require [conference-rating.history :as history]
             [ajax.core :as ajax]
+            [cljs-time.core :as t]
+            [cljs-time.format :as tf]
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]))
 
@@ -16,16 +18,29 @@
    (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])
    (form-input "To" [:div {:field :datepicker :id :to-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])
    (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page"}])
-   (form-input "Description" [:textarea {:field "textarea" :rows 5 :id :description :class "form-control" :placeholder "More information about the conference"}])])
+   (form-input "Description" [:textarea {:field :textarea :rows 5 :id :description :class "form-control" :placeholder "More information about the conference"}])])
 
-(defn create-conference [form-data]
-  (ajax/POST "/api/conferences/" {:params          @form-data
+(def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
+
+(defn form-date-to-datestr [form-date]
+  (tf/unparse built-in-formatter
+    (t/date-time (:year form-date) (:month form-date) (:day form-date))))
+
+(defn create-conference [data-atom]
+  (let [data    @data-atom
+        payload {:from        (form-date-to-datestr (:from-date data))
+                 :to          (form-date-to-datestr (:to-date   data))
+                 :name        (:name data)
+                 :series      (:series data)
+                 :link        (:link data)
+                 :description (:description data)}]
+  (ajax/POST "/api/conferences/" {:params          payload
                                   :format          :json
                                   :response-format :json
                                   :keywords?       true
                                   :handler         #(let [conference-id (:_id %)]
                                                      (history/redirect-to (str "/conferences/" conference-id)))
-                                  :error-handler   #(js/alert (str "could not create conference" %1))}))
+                                  :error-handler   #(js/alert (str "could not create conference" %1))})))
 (defn add-conference-page []
   (let [doc (atom {})]
     [:div {:class "container"}
