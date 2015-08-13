@@ -60,12 +60,8 @@
    (GET "/api/conferences" [] (get-conferences db))
    (GET "/api/conferences/:id" [id] (get-conference id db))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
-   (POST "/api/conferences/:id/ratings" [id :as request] (do
-                                  (println "req " request)
-                                  (add-rating id (:body request) db)))
-   (POST "/api/conferences/" request (do
-                                         (println "req " request)
-                                         (add-conference (:body request) db)))
+   (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
+   (POST "/api/conferences/" request (add-conference (:body request) db))
    (resources "/")
    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                   clojure.java.io/resource
