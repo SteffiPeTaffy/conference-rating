@@ -1,17 +1,8 @@
-(ns conference-rating.home
-  (:require [reagent.core :as reagent :refer [atom]]
-            [reagent-forms.core :as forms]
+(ns conference-rating.home.home
+  (:require [reagent.core :refer [atom]]
             [ajax.core :as ajax]
-            [conference-rating.history :as history]
-            [secretary.core :as secretary :include-macros true]
-            [goog.events :as events]
-            [goog.history.EventType :as EventType]
-            [conference-rating.panel :as panel]
-            [conference-rating.add-rating :as add-rating]
-            [conference-rating.form :as form]
-            [conference-rating.rating :as rating]
-            [conference-rating.conference :as conference]
-            [conference-rating.conference.add-conference :as add-conference]
+            [conference-rating.rating.rating  :as rating]
+            [conference-rating.conference.conference :as conference]
             [conference-rating.conference.conference-list :as conference-list]))
 
 (defonce displayed-conference (atom nil))

@@ -1,4 +1,4 @@
-(ns conference-rating.conference
+(ns conference-rating.conference.conference
   (:require [conference-rating.panel :as panel]))
 
 (defn badge [label classes]

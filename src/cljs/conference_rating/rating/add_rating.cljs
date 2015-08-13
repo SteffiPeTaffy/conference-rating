@@ -1,4 +1,4 @@
-(ns conference-rating.add-rating
+(ns conference-rating.rating.add-rating
   (:require [reagent-forms.core :as forms]
             [reagent.core :refer [atom]]
             [ajax.core :as ajax]

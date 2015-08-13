@@ -2,12 +2,10 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
             [secretary.core :as secretary :include-macros true]
-            [goog.events :as events]
-            [goog.history.EventType :as EventType]
             [conference-rating.history :as history]
-            [conference-rating.home :as conference]
             [conference-rating.conference.add-conference :as add-conference]
-            [conference-rating.add-rating :as add-rating])
+            [conference-rating.home.home :as conference]
+            [conference-rating.rating.add-rating :as add-rating])
     (:import goog.History))
 
 ;; -------------------------

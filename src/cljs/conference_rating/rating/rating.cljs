@@ -1,4 +1,4 @@
-(ns conference-rating.rating
+(ns conference-rating.rating.rating
   (:require [conference-rating.panel :as panel]))
 
 
