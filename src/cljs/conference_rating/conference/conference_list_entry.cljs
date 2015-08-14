@@ -83,8 +83,9 @@
       [:div {:class "row conference-row"}
        [:div {:class "col-md-8"}
         (series-tag (:series-tag conference))
-        (title (:title conference))
-        (conference-dates (:from-date conference) (:to-date conference))]
+        [:a {:href (str "#/conferences/" (:_id conference))}
+         (title (:name conference))
+         (conference-dates (:from conference) (:to conference))]]
        [:div {:class "col-md-2"}
         (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) 2010)]
        [:div {:class "col-md-2"}

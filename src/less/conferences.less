@@ -20,15 +20,26 @@
   margin-bottom: 15px;
 
   .panel-heading {
-    padding-bottom: 20px;
+
+    a:hover {
+      text-decoration: none;
+    }
   }
 
   .panel-body {
     padding-top: 0;
+    
+    .row {
+      height: 135px;
+    }
   }
 
   .bottom-line {
-    border-bottom: 1px solid @gray
+    border-bottom: 1px solid @gray;
+
+    .row {
+      padding-bottom: 15px;
+    }
   }
 
   .conference-rating-column {
@@ -71,10 +82,11 @@
   }
 
   .conference-description {
-    text-overflow: ellipsis;
-    height: 135px;
-    white-space: nowrap;
     overflow: hidden;
-    padding: 10px;
   }
+}
+
+// NEW CONFERENCE FORM CONTAINER
+.add-conference-container {
+  margin-top: 80px;
 }
