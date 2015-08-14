@@ -33,7 +33,7 @@
      [:div {:class "media-container icon-wrap icon-md"}
       [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
-     [:h3 {:class "media-body range-label"} (str absolute " out of 5")]
+     [:h3 {:class "media-body range-label"} (str absolute " / 5")]
      [:div {:class "text-uppercase"} name]]]
    [:div {:class "progress-xs"}
     [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light"}]]
