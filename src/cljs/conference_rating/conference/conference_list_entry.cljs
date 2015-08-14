@@ -88,8 +88,8 @@
          (title (:name conference))
          (conference-dates (:from conference) (:to conference))]]
        [:div {:class "col-lg-4 col-md-4 col-sm-6 recommendations-votes-panel"}
-        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]))
-        (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]))]]
+        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
+        (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]]
       [:div {:class "bottom-line"}]]
      [:div {:class "panel-body  bg-light"}
       [:div {:class "row"}
