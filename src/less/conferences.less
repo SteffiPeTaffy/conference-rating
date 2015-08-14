@@ -24,14 +24,14 @@
     a:hover {
       text-decoration: none;
     }
+
+    .recommendations-votes-panel {
+      padding-bottom: 10px;
+    }
   }
 
   .panel-body {
     padding-top: 0;
-    
-    .row {
-      height: 135px;
-    }
   }
 
   .bottom-line {
@@ -84,9 +84,27 @@
   .conference-description {
     overflow: hidden;
   }
-}
 
-// NEW CONFERENCE FORM CONTAINER
-.add-conference-container {
-  margin-top: 80px;
+
+  .mini-panel {
+    width: 45%;
+    display: inline-block;
+
+    .media-container:nth-child(1) {
+      padding-bottom: 2px;
+    }
+
+    .media-container:nth-child(2) {
+      padding: 2px;
+      padding-bottom: 4px;
+    }
+
+    .media-left {
+      padding-right: 0px;
+    }
+  }
+
+  .mini-panel:nth-child(2) {
+    float: right;
+  }
 }

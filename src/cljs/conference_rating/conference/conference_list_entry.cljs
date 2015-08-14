@@ -78,25 +78,24 @@
 
 (defn display-conference-list-item [simple-conference]
   (let [conference (merge simple-conference aggregated-ratings)]
-    [:div {:key (:_id conference) :class "col-lg-4 conference-item-container"}
+    [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
      [:div {:class "panel panel-heading bg-light cl-dark"}
       [:div {:class "row conference-row"}
-       [:div {:class "col-md-8"}
+       [:div {:class "col-lg-8 col-md-8 col-sm-6"}
         (series-tag (:series-tag conference))
         [:a {:href (str "#/conferences/" (:_id conference))}
          (title (:name conference))
          (conference-dates (:from conference) (:to conference))]]
-       [:div {:class "col-md-2"}
-        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) 2010)]
-       [:div {:class "col-md-2"}
+       [:div {:class "col-lg-4 col-md-4 col-sm-6 recommendations-votes-panel"}
+        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) 2010)
         (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) 2222)]]
       [:div {:class "bottom-line"}]]
      [:div {:class "panel-body  bg-light"}
       [:div {:class "row"}
-       [:div {:class "col-md-8"}
+       [:div {:class "col-lg-8 col-md-8 col-sm-7"}
         (description (:description conference))
         (link (:link conference))]
-       [:div {:class "col-md-4 conference-overall-rating-conatiner"}
+       [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-conatiner"}
         (overall-rating (get-in conference [:aggregated-ratings :overall]))
         (add-rating-button (:_id conference))]]]
      [:div {:class "panel-footer"}

@@ -5,7 +5,8 @@
             [conference-rating.panel :as panel]
             [conference-rating.form :as form]
             [reagent.session :as session]
-            [conference-rating.history :as history]))
+            [conference-rating.history :as history]
+            [conference-rating.header :as header]))
 
 (defn create-rating [form-data conference-id]
     (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        @form-data
@@ -57,7 +58,9 @@
 
 (defn add-rating []
   (let [doc (atom {})]
-    [:div {:class "container"}
-     [forms/bind-fields add-rating-template doc]
-     [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]))
+    [:div
+     (header/nav-bar)
+     [:div {:class "container-fluid content-container pad-top"}
+      [forms/bind-fields add-rating-template doc]
+      [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]))
 

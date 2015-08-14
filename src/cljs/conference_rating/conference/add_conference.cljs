@@ -47,8 +47,8 @@
   (let [doc (atom {})]
     [:div
      (header/nav-bar)
-     [:div {:class "container-fluid content-container"}
-      [:div {:class "panel panel-default add-conference-container"}
+     [:div {:class "container-fluid content-container pad-top"}
+      [:div {:class "panel panel-default"}
        [:div {:class "panel-heading"} "Add conference"]
        [:div {:class "panel-body"}
         [forms/bind-fields conference-form-template doc]
