@@ -57,7 +57,7 @@
 
 (defn roles [percentage bg-color role-name]
   [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light " bg-color)}
-   [:p role-name]])
+   (if (> percentage  15) [:p role-name])])
 
 (defn perc [total value]
   (* 100 (/ value total)))
