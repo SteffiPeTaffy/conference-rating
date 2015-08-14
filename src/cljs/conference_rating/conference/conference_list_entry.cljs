@@ -55,8 +55,9 @@
    [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "give it your voice"]])
 
 
-(defn roles [percentage bg-color]
-  [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light " bg-color)}])
+(defn roles [percentage bg-color role-name]
+  [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light " bg-color)}
+   [:p role-name]])
 
 (defn perc [total value]
   (* 100 (/ value total)))
@@ -65,16 +66,16 @@
   (let [count (->> rolesMap
                   (vals)
                   (reduce +))]
-    [:div {:class "progress-xs"}
-     (roles (perc count (:dev rolesMap)) "bg-dev")
-     (roles (perc count (:devops rolesMap)) "bg-devops")
-     (roles (perc count (:ux rolesMap)) "bg-ux")
-     (roles (perc count (:qa rolesMap)) "bg-qa")
-     (roles (perc count (:ba rolesMap)) "bg-ba")
-     (roles (perc count (:pm rolesMap)) "bg-pm")
-     (roles (perc count (:sales rolesMap)) "bg-sales")
-     (roles (perc count (:recruting rolesMap)) "bg-recruting")
-     (roles (perc count (:other rolesMap)) "bg-other")]))
+    [:div {:class "progress-md"}
+     (roles (perc count (:dev rolesMap)) "bg-dev" "DEV")
+     (roles (perc count (:devops rolesMap)) "bg-devops" "DEV OPS")
+     (roles (perc count (:ux rolesMap)) "bg-ux" "UX")
+     (roles (perc count (:qa rolesMap)) "bg-qa" "QA")
+     (roles (perc count (:ba rolesMap)) "bg-ba" "BA")
+     (roles (perc count (:pm rolesMap)) "bg-pm" "PM")
+     (roles (perc count (:sales rolesMap)) "bg-sales" "SALES")
+     (roles (perc count (:recruting rolesMap)) "bg-recruting" "RECRUITING")
+     (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
 (defn display-conference-list-item [simple-conference]
   (let [conference (merge simple-conference aggregated-ratings)]
