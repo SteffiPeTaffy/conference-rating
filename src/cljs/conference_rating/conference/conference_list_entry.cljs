@@ -36,15 +36,15 @@
 
 (defn conference-dates [from-date to-date]
   (cond
-    (and from-date from-date) [:p (str from-date " - " to-date)]
-    from-date [:p from-date]
-    :else [:p "TBD"]))
+    (and from-date from-date) [:p {:class "conference-dates"} (str from-date " - " to-date)]
+    from-date [:p {:class "conference-dates"} from-date]
+    :else [:p {:class "conference-dates"} "TBD"]))
 
 (defn description [description]
   [:p {:class "text-muted conference-description"} description])
 
 (defn link [link]
-  [:a {:href link :class "conference-link"} link])
+  [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
 
 (defn overall-rating [overall-rating]
   (let [overall-rating-percentage (* (/ (:avg overall-rating) 5) 100)]
@@ -82,7 +82,7 @@
      [:div {:class "panel panel-heading bg-light cl-dark"}
       [:div {:class "row conference-row"}
        [:div {:class "col-lg-8 col-md-8 col-sm-6"}
-        (series-tag (:series-tag conference))
+        (series-tag (:series conference))
         [:a {:href (str "#/conferences/" (:_id conference))}
          (title (:name conference))
          (conference-dates (:from conference) (:to conference))]]

@@ -24,9 +24,9 @@
 
 (def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
 
-(defn form-date-to-datestr [form-date]
+(defn form-date-to-datestr [date]
   (tf/unparse built-in-formatter
-    (t/date-time (:year form-date) (:month form-date) (:day form-date))))
+    (t/date-time (:year date) (:month date) (:day date))))
 
 (defn create-conference [data-atom]
   (let [data    @data-atom
