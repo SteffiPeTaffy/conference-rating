@@ -48,8 +48,10 @@
     [:div
      (header/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
-      [:div {:class "panel panel-default"}
-       [:div {:class "panel-heading"} "Add conference"]
-       [:div {:class "panel-body"}
-        [forms/bind-fields conference-form-template doc]
-        [:div [:button {:class "btn btn-primary" :on-click #(create-conference doc)} "Create"]]]]]]))
+      [:div {:class "row"}
+       [:div {:class "col-lg-2"}]
+       [:div {:class "col-lg-8"}
+        [:div {:class "add-conference-form-container bg-light"}
+         [forms/bind-fields conference-form-template doc]
+         [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(create-conference doc)} "Create"]]]
+       [:div {:class "col-lg-2"}]]]]))
