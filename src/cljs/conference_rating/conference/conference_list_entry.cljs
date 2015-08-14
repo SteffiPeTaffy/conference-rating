@@ -52,7 +52,7 @@
 
 (defn add-rating-button [id]
   [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "serie it your voice"]])
+   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "give it your voice"]])
 
 
 (defn roles [percentage bg-color role-name]
