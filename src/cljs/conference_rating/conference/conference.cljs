@@ -8,11 +8,25 @@
 (defn conference-badges-row [& badges]
   [:div {:class "badge-row"} badges])
 
+(defn conference-dates [from-date to-date]
+  (cond
+    (and from-date from-date) [:p {:class "conference-dates"} (str from-date " - " to-date)]
+    from-date [:p {:class "conference-dates"} from-date]
+    :else [:p {:class "conference-dates"} "TBD"]))
+
+(defn series-tag [series]
+  [:div {:class "series-tag-container"}[:span {:class "series-tag"} series]])
+
+(defn link [link]
+  [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
+
 (defn conference-information [conference]
   [:div {:class "row conference-information-container bg-light cl-dark"}
+    (series-tag (:series conference))
     [:h1(:name conference)]
-    [:p "15 September 2015"]
-    [:h3 (:description conference)]])
+    (conference-dates (:from conference) (:to conference))
+    [:h4 (:description conference)]
+    (link (:link conference))])
 
 (defn conference-recommendations []
    (panel/icon-panel "glyphicon-star" 17 "would go again" "bg-yellow cl-light"))
