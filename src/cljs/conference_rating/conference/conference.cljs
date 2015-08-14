@@ -42,7 +42,7 @@
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-primary glyphicon glyphicon-pencil" :href (str "#/conferences/" conference-id "/add-rating")} "rate"]])
+   [:a {:class "btn btn-md btn-orange voice-btn" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
 (defn display-conference-overview [conference]
   [:div
