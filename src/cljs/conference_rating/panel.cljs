@@ -24,7 +24,7 @@
  (mini-panel number "glyphicon-star" year "bg-dark-lightened"))
 
 (defn mini-panel-voices [number year]
- (mini-panel number "glyphicon-bullhorn" year "bg-yellow"))
+ (mini-panel number "glyphicon-bullhorn" year "bg-yellow-lightened"))
 
 (defn range-panel [percentage absolute name comment panel-classes icon]
   [:div {:class (str "panel range-panel " panel-classes)}
