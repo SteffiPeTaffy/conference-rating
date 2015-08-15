@@ -14,8 +14,9 @@
     from-date [:p {:class "conference-dates"} from-date]
     :else [:p {:class "conference-dates"} "TBD"]))
 
-(defn series-tag [series]
-  [:div {:class "series-tag-container"}[:span {:class "series-tag"} series]])
+(defn series-tag [series-tag]
+  (if (not (nil? series-tag))
+    [:div {:class "series-tag-container"}[:span {:class "series-tag"} series-tag]]))
 
 (defn link [link]
   [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
@@ -55,24 +56,24 @@
    (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee) (conference-badges))])
 
 (defn add-rating-button [conference-id]
-  [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-md btn-orange voice-btn" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
+  [:div {:class "text-lg-right voice-btn-container"}
+   [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
 (defn display-conference-overview [conference]
   [:div
    (header/nav-bar)
-   [:div {:class "container-fluid content-container pad-top"}
+   [:div {:class "container-fluid content-container pad-top conference-container"}
     [:div {:class "row"}
-     [:div {:class "col-lg-8"}
+     [:div {:class "col-lg-8 col-md-8"}
       (conference-information conference)
       (add-rating-button (:_id conference))]
-     [:div {:class "col-lg-4"}
+     [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
       (conference-recommendations)
       [:div {:class "row"}
-       [:div {:class "col-sm-6 col-lg-6"}
+       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
         [:div (panel/range-panel 83 83 "Overall" "12 ratings" "bg-mint" "glyphicon-thumbs-up")]
         [:div (panel/range-panel 97 83 "Talks" "5 ratings" "bg-purple" "glyphicon-user")]]
-       [:div {:class "col-sm-6 col-lg-6"}
+       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
         [:div (panel/range-panel 67 83 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
         [:div (panel/range-panel 35 83 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
       (conference-average-attendee)]]]])

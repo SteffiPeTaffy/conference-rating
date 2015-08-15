@@ -2,16 +2,24 @@
 
 
 // CONFERENCE ON CONFERENCE PAGE
-.conferences-container {
+.conference-container {
 
-  .add-conference-container {
+  .conference-information-container{
     padding: 15px;
+  }
+
+  .voice-btn-container {
+    padding: 15px 0 15px 0;
+  }
+
+  .aggregated-ratings-container {
+
+    .panel {
+      margin-bottom: 15px;
+    }
   }
 }
 
-.conference-information-container{
-  padding: 15px;
-}
 
 
 
@@ -64,8 +72,19 @@
   }
 
   .conference-description {
+    display: block; /* Fallback for non-webkit */
+    display: -webkit-box;
+    max-width: 400px;
+    height: 12*1.5*11; /* Fallback for non-webkit */
+    margin: 0 auto;
+    font-size: 12px;
+    line-height: 1.5;
+    -webkit-line-clamp: 11;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 135px;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+
   }
   
   .conference-link {
