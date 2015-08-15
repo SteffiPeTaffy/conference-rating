@@ -31,7 +31,7 @@
 
 (defn title [name]
   (if (not (nil? name))
-    [:h4 name]
+    [:h4 {:class "conference-title"} name]
     [:h4 "untitled conference"]))
 
 (defn conference-dates [from-date to-date]
@@ -82,12 +82,12 @@
     [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
      [:div {:class "panel panel-heading bg-light cl-dark"}
       [:div {:class "row conference-row"}
-       [:div {:class "col-lg-8 col-md-8 col-sm-6"}
+       [:div {:class "col-lg-8 col-md-8 col-sm-8 col-xs-8"}
         (series-tag (:series conference))
         [:a {:href (str "#/conferences/" (:_id conference))}
          (title (:name conference))
          (conference-dates (:from conference) (:to conference))]]
-       [:div {:class "col-lg-4 col-md-4 col-sm-6 recommendations-votes-panel"}
+       [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
         (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
         (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]]
       [:div {:class "bottom-line"}]]
