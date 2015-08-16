@@ -94,7 +94,7 @@
      (tag-checkbox "CLIENTS" "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
 
 (defn experience-checkbox [id input-label]
- [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
+ [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
   [:p {:class "text-lg-center"} input-label]
   [:input {:type "checkbox" :id id}]
   [:label {:for id}
@@ -105,12 +105,18 @@
    [:span "I found this conference suitable for ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]
-    (experience-checkbox "ROOKIE" "Rookies")
+    (experience-checkbox "ROOKIE" "Rookie")
     (experience-checkbox "BEGINNER" "Beginner")
-    (experience-checkbox "INTERMEDIATE" "Intermediats")
+    (experience-checkbox "INTERMEDIATE" "Intermediate")
     (experience-checkbox "ADVANCED" "Advanced")
-    (experience-checkbox "EXPERT" "Experts")
+    (experience-checkbox "EXPERT" "Expert")
     [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]]])
+
+(defn comment-panel []
+  [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
+   [:span "I want to say ..."]
+   [:div {:class "form-group"}
+    [:textarea {:placeholder "comment" :class "form-control" :rows 10}]]])
 
 (def add-rating-template
    [:div
@@ -119,8 +125,7 @@
       (recommendation-panel)
       (roles-panel)
       (experience-panel)
-      (panel/light-panel "I want to say" [:div {:class "form-group"}
-                                          [:textarea {:placeholder "comment" :class "form-control" :rows 5}]])]
+      (comment-panel)]
      [:div {:class "col-lg-4 col-md-6 col-sm-6"}
       (rating-panel "glyphicon-thumbs-up" "Overall" "bg-mint cl-light")
       (rating-panel "glyphicon-user" "Talks" "bg-purple cl-light")
@@ -138,6 +143,6 @@
        [:div {:class "col-lg-1 col-md-1"}]
        [:div {:class "col-lg-10 col-md-10"}
         [forms/bind-fields add-rating-template doc]
-        [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]
+        [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]
        [:div {:class "col-lg-1 col-md-1"}]]]]))
 
