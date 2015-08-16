@@ -116,7 +116,8 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I want to say ..."]
    [:div {:class "form-group"}
-    [:textarea {:placeholder "comment" :class "form-control" :rows 10}]]])
+    [:input {:type "text" :placeholder "name" :class "form-control"}]
+    [:textarea {:placeholder "comment" :class "form-control" :rows 16}]]])
 
 (def add-rating-template
    [:div

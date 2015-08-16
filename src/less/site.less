@@ -137,6 +137,7 @@ a:hover {
 .content-container {
   padding-right: 30px;
   padding-left: 30px;
+  padding-bottom: 70px;
 }
 
 .bg-dev {
@@ -179,6 +180,46 @@ a:hover {
   margin-top: 80px;
 }
 
+.form-group {
+
+  .form-control {
+    background-color: @light;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition:none;
+    -o-transition: none;
+    transition: none;
+  }
+
+  .form-control:focus {
+    border-color: @orange;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .datepicker-wrapper {
+
+    .input-group-addon {
+      background-color: @gray;
+      border-radius: 0;
+    }
+
+    .datepicker.dp-dropdown {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0;
+    }
+
+    .datepicker td {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0;
+    }
+  }
+
+}
 
 
 
