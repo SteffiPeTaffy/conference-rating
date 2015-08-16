@@ -93,6 +93,24 @@
      (tag-checkbox "HIRES" "good to meet potential hires" "The speakers where showmasters and the after party was amazing.")
      (tag-checkbox "CLIENTS" "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
 
+(defn experience-checkbox [id input-label]
+ [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
+  [:p {:class "text-lg-center"} input-label]
+  [:input {:type "checkbox" :id id}]
+  [:label {:for id}
+   [:span {:class "checkbox"}]]])
+
+(defn experience-panel []
+  [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
+   [:span "I found this conference suitable for ..."]
+   [:div {:class "row"}
+    [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]
+    (experience-checkbox "ROOKIE" "Rookies")
+    (experience-checkbox "BEGINNER" "Beginner")
+    (experience-checkbox "INTERMEDIATE" "Intermediats")
+    (experience-checkbox "ADVANCED" "Advanced")
+    (experience-checkbox "EXPERT" "Experts")
+    [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]]])
 
 (def add-rating-template
    [:div
@@ -100,6 +118,7 @@
      [:div {:class "col-lg-8 col-md-6 col-sm-6"}
       (recommendation-panel)
       (roles-panel)
+      (experience-panel)
       (panel/light-panel "I want to say" [:div {:class "form-group"}
                                           [:textarea {:placeholder "comment" :class "form-control" :rows 5}]])]
      [:div {:class "col-lg-4 col-md-6 col-sm-6"}
@@ -119,8 +138,6 @@
        [:div {:class "col-lg-1 col-md-1"}]
        [:div {:class "col-lg-10 col-md-10"}
         [forms/bind-fields add-rating-template doc]
-        [:div {:class "row"}
-         [:div {:class "col-lg-12 col-md-12 col-sm-12"}
-          [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]]
+        [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]
        [:div {:class "col-lg-1 col-md-1"}]]]]))
 
