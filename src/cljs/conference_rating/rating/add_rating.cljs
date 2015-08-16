@@ -15,45 +15,99 @@
                                                                    :error-handler #(js/alert (str "could not create rating" %1))})
   (println @form-data))
 
+(defn recommendation-panel []
+  [:div {:class "panel rating-panel-container bg-orange cl-light"}
+   [:span
+    [:i {:class "glyphicon glyphicon-star"}]
+    [:span "I would go again!"]]
+   [:div
+    [:input {:type "checkbox" :id "recommendation-checkbox-id"}]
+    [:label {:for "recommendation-checkbox-id"}
+     [:span {:class "checkbox checkbox-lg"}]]]])
+
+(defn rating-panel-radio-input [id group-name input-label]
+  [:div
+   [:p {:class "text-lg-center"} input-label]
+   [:input {:type "radio" :id id :name group-name}]
+   [:label {:for id}
+    [:span {:class "radio"}]]])
+
+(defn rating-panel [icon panel-label panel-classes]
+  [:div {:class (str "panel rating-panel-container " panel-classes)}
+   [:span
+    [:i {:class (str "glyphicon " icon)}]
+    [:span panel-label]]
+   [:div {:class "row"}
+    [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
+     (rating-panel-radio-input (str panel-label "-1") panel-label "meh")]
+    [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
+     (rating-panel-radio-input (str panel-label "-2") panel-label "okay")]
+    [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
+     (rating-panel-radio-input (str panel-label "-3") panel-label"good")]
+    [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
+     (rating-panel-radio-input (str panel-label "-4") panel-label "awesome")]]])
+
+(defn role-checkbox [id input-label input-label-description]
+  [:div {:class "col-lg-4 col-md-6 col-sm-6 col-xs-12"}
+   [:div {:class "row role-checkbox-container"}
+    [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
+     [:input {:type "checkbox" :id id}]
+     [:label {:for id}
+      [:span {:class "checkbox"}]]]
+    [:div {:class "col-lg-10 col-md-10 col-sm-10 col-xs-10"}
+     [:p {:class "text-lg-left role-label"} input-label]
+     [:p {:class "text-lg-left role-description"} input-label-description]]]])
+
+(defn roles-panel []
+  [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
+   [:span "This conference might be interesting for"]
+   [:div {:class "row"}
+     (role-checkbox "DEV" "Devs" "technical interests")
+     (role-checkbox "DEVOPS" "Dev Ops" "devops interests")
+     (role-checkbox "UX" "Ux" "ux interests")
+     (role-checkbox "QA" "QAs" "qa interests")
+     (role-checkbox "BA" "BAs" "ba interests")
+     (role-checkbox "PM" "PMs" "doing PM stuff all day long")
+     (role-checkbox "SALES" "Sales" "doing sales stuff all day long")
+     (role-checkbox "RECRUITING" "Recruiters" "doing recruiting stuff all day long")
+     (role-checkbox "OTHER" "Others" "doing other stuff all day long")]])
+
+(defn tag-checkbox [id input-label input-label-description]
+  [:div {:class "row role-checkbox-container"}
+   [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
+    [:input {:type "checkbox" :id id}]
+    [:label {:for id}
+     [:span {:class "checkbox"}]]]
+   [:div {:class "col-lg-10 col-md-10 col-sm-10 col-xs-10"}
+    [:p {:class "text-lg-left role-label"} input-label]
+    [:p {:class "text-lg-left role-description"} input-label-description]]])
+
+(defn tags-panel []
+  [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
+   [:span "I found this conference ..."]
+   [:div {:class "row"}
+    [:div {:class "col-lg-12 col-md-12 col-sm-12 col-xs-12"}
+     (tag-checkbox "INSPIRING" "inspriring" "This conference had an impact one me.")
+     (tag-checkbox "INFORMATIVE" "informative" "I learned a lot during the workshops, sessions and talks.")
+     (tag-checkbox "ENTERTAINING" "entertaining" "The speakers where showmasters and the after party was amazing.")
+     (tag-checkbox "HIRES" "good to meet potential hires" "The speakers where showmasters and the after party was amazing.")
+     (tag-checkbox "CLIENTS" "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
+
 
 (def add-rating-template
-   [:div {:class "row"}
-     [:div {:class "col-lg-4"}
-      (panel/light-panel "Awesome" (form/form-block
-                               [:div {:class "form-group"}
-                                [:label {:class "form-checkbox form-icon btn btn-success active form-text"}
-                                 [:input {:type "checkbox" }] "I would go again!"]]))
-      (panel/light-panel "My name is" [:div {:class "form-group"}
-                                 [:input {:type "text" :placeholder "author" :class "form-control"}]])
+   [:div
+    [:div {:class "row"}
+     [:div {:class "col-lg-8 col-md-6 col-sm-6"}
+      (recommendation-panel)
+      (roles-panel)
       (panel/light-panel "I want to say" [:div {:class "form-group"}
-                                  [:textarea {:placeholder "author" :class "form-control" :rows 5}]]) ]
-     [:div {:class "col-lg-4"}
-      (panel/light-panel "This was"
-                   (form/form-block
-                     (form/checkbox "I found it inspiring")
-                     (form/checkbox "I found it entertainning")
-                     (form/checkbox "I learned a lot")
-                     (form/checkbox "I met potential hires")
-                     (form/checkbox "I met potential clients")))
-
-      (panel/light-panel "This is interesting for"
-                   (form/form-block
-                     (form/checkbox "Devs")
-                     (form/checkbox "QAs")
-                     (form/checkbox "BAs")
-                     (form/checkbox "Sales")
-                     (form/checkbox "Recruiting")))]
-     [:div {:class "col-lg-4"}
-      (panel/light-panel "How was it"
-                   [:div
-                    (form/form-block
-                      (form/radiobutton-group "Overall"))
-                    (form/form-block
-                     (form/radiobutton-group "Talks"))
-                    (form/form-block
-                      (form/radiobutton-group "Venue"))
-                    (form/form-block
-                      (form/radiobutton-group "Community"))])]])
+                                          [:textarea {:placeholder "comment" :class "form-control" :rows 5}]])]
+     [:div {:class "col-lg-4 col-md-6 col-sm-6"}
+      (rating-panel "glyphicon-thumbs-up" "Overall" "bg-mint cl-light")
+      (rating-panel "glyphicon-user" "Talks" "bg-purple cl-light")
+      (rating-panel "glyphicon-home" "Venue" "bg-pink cl-light")
+      (rating-panel "glyphicon-glass" "Networking" "bg-green cl-light")
+      (tags-panel)]]])
 
 
 (defn add-rating []
@@ -61,6 +115,12 @@
     [:div
      (header/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
-      [forms/bind-fields add-rating-template doc]
-      [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]))
+      [:div {:class "row add-rating-container"}
+       [:div {:class "col-lg-1 col-md-1"}]
+       [:div {:class "col-lg-10 col-md-10"}
+        [forms/bind-fields add-rating-template doc]
+        [:div {:class "row"}
+         [:div {:class "col-lg-12 col-md-12 col-sm-12"}
+          [:button {:class "btn btn-primary" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]]
+       [:div {:class "col-lg-1 col-md-1"}]]]]))
 

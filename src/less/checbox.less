@@ -1,0 +1,81 @@
+@import "variables.less";
+
+
+/* hide checkbox and radio inputs from modern browsers */
+input[type='checkbox'] {
+  display: none;
+}
+
+/* set default styles for the checkboxes and radio buttons */
+.checkbox {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin: 0 10% 0 auto;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.checkbox-lg {
+  width: 70px;
+  height: 70px;
+  margin-top: 15px;
+}
+
+
+input[type='checkbox'] + label span.checkbox {
+  background: @light;
+}
+
+input[type='checkbox'] + label span.checkbox:after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 7px;
+  width: 7px;
+  height: 16px;
+  background: @checkbox-radio-unchecked;
+  z-index: 1;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+  border-radius: 2px;
+}
+
+input[type='checkbox'] + label span.checkbox-lg:after {
+  top: 35px;
+  left: 18px;
+  width: 14px;
+  height: 27px;
+}
+
+input[type='checkbox']:checked + label span.checkbox:after {
+  background: @checkbox-radio-checked;
+}
+
+input[type='checkbox'] + label span.checkbox:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 7px;
+  width: 7px;
+  height: 22px;
+  background: @checkbox-radio-unchecked;
+  z-index: 1;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+input[type='checkbox'] + label span.checkbox-lg:before {
+  top: 18px;
+  right: 18px;
+  width: 14px;
+  height: 40px;;
+}
+
+input[type='checkbox']:checked + label span.checkbox:before {
+  background: @checkbox-radio-checked;
+}

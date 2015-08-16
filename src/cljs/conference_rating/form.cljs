@@ -1,20 +1,21 @@
 (ns conference-rating.form)
 
 (defn checkbox [label]
-  [:div {:class "checkbox" :key label}
-   [:label {:class "form-checkbox form-normal form-primary active form-text"}
-    [:input {:type "checkbox"} label]]]
-  )
+  [:div label
+   [:input {:type "checkbox" :id (str label "-checkbox-id")}]
+   [:label {:for (str label "-checkbox-id")}
+    [:span {:class "checkbox"}]]])
 
 (defn radiobutton [label group-name]
-  [:label {:class "form-radio form-normal form-text"}
-   [:input {:type "radio" :name group-name} label]]
-  )
+  [:div label
+   [:input {:type "radio" :id (str label "-radio-id") :name group-name}]
+   [:label {:for (str label "-radio-id")}
+    [:span {:class "radio"}]]])
 
 (defn radiobutton-group [label]
   [:div {:key label}
     [:p label]
-    [:div {:class "radio"}
+    [:div
       (radiobutton 1 label)
       (radiobutton 2 label)
       (radiobutton 3 label)

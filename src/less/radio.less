@@ -1,0 +1,31 @@
+@import "variables.less";
+
+input[type='radio'] {
+  display: none;
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin: 0 10% 0 auto;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type='radio'] + label span.radio {
+  background: @light;
+  border-radius: 30px;
+}
+
+input[type='radio']:checked + label span.radio:after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background: @checkbox-radio-checked;
+  z-index: 1;
+  border-radius: 30px;
+}
