@@ -9,10 +9,10 @@
             [conference-rating.header :as header]))
 
 (defn create-rating [form-data conference-id]
-    (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        @form-data
-                                                                   :format        :json
-                                                                   :handler       (history/redirect-to (str "/conferences/" conference-id))
-                                                                   :error-handler #(js/alert (str "could not create rating" %1))})
+  (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        @form-data
+                                                                 :format        :json
+                                                                 :handler       (history/redirect-to (str "/conferences/" conference-id))
+                                                                 :error-handler #(js/alert (str "could not create rating" %1))})
   (println @form-data))
 
 (defn recommendation-panel []
@@ -21,8 +21,8 @@
     [:i {:class "glyphicon glyphicon-star"}]
     [:span "I would go again!"]]
    [:div
-    [:input {:type "checkbox" :id "recommendation-checkbox-id"}]
-    [:label {:for "recommendation-checkbox-id"}
+    [:input {:field :checkbox :type "checkbox" :id :recommended}]
+    [:label {:for :recommended}
      [:span {:class "checkbox checkbox-lg"}]]]])
 
 (defn rating-panel-radio-input [id group-name input-label]
@@ -51,7 +51,7 @@
   [:div {:class "col-lg-4 col-md-6 col-sm-6 col-xs-12"}
    [:div {:class "row role-checkbox-container"}
     [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
-     [:input {:type "checkbox" :id id}]
+     [:input {:field :checkbox :type "checkbox" :id id}]
      [:label {:for id}
       [:span {:class "checkbox"}]]]
     [:div {:class "col-lg-10 col-md-10 col-sm-10 col-xs-10"}
@@ -62,15 +62,15 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "This conference might be interesting for"]
    [:div {:class "row"}
-     (role-checkbox "DEV" "Devs" "technical interests")
-     (role-checkbox "DEVOPS" "Dev Ops" "devops interests")
-     (role-checkbox "UX" "Ux" "ux interests")
-     (role-checkbox "QA" "QAs" "qa interests")
-     (role-checkbox "BA" "BAs" "ba interests")
-     (role-checkbox "PM" "PMs" "doing PM stuff all day long")
-     (role-checkbox "SALES" "Sales" "doing sales stuff all day long")
-     (role-checkbox "RECRUITING" "Recruiters" "doing recruiting stuff all day long")
-     (role-checkbox "OTHER" "Others" "doing other stuff all day long")]])
+     (role-checkbox :roles.dev "Devs" "technical interests")
+     (role-checkbox :roles.devops "Dev Ops" "devops interests")
+     (role-checkbox :roles.ux "Ux" "ux interests")
+     (role-checkbox :roles.qa "QAs" "qa interests")
+     (role-checkbox :roles.ba "BAs" "ba interests")
+     (role-checkbox :roles.pm "PMs" "doing PM stuff all day long")
+     (role-checkbox :roles.sales "Sales" "doing sales stuff all day long")
+     (role-checkbox :roles.recruiting "Recruiters" "doing recruiting stuff all day long")
+     (role-checkbox :roles.other "Others" "doing other stuff all day long")]])
 
 (defn tag-checkbox [id input-label input-label-description]
   [:div {:class "row role-checkbox-container"}
@@ -105,19 +105,19 @@
    [:span "I found this conference suitable for ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]
-    (experience-checkbox "ROOKIE" "Rookie")
-    (experience-checkbox "BEGINNER" "Beginner")
-    (experience-checkbox "INTERMEDIATE" "Intermediate")
-    (experience-checkbox "ADVANCED" "Advanced")
-    (experience-checkbox "EXPERT" "Expert")
+    (experience-checkbox :experience.rookie "Rookie")
+    (experience-checkbox :experience.beginner "Beginner")
+    (experience-checkbox :experience.intermediate "Intermediate")
+    (experience-checkbox :experience.advanced "Advanced")
+    (experience-checkbox :experience.expert "Expert")
     [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]]])
 
 (defn comment-panel []
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I want to say ..."]
    [:div {:class "form-group"}
-    [:input {:type "text" :placeholder "name" :class "form-control"}]
-    [:textarea {:placeholder "comment" :class "form-control" :rows 16}]]])
+    [:input {:field :text :id :comment.name :type "text" :placeholder "name" :class "form-control"}]
+    [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 16}]]])
 
 (def add-rating-template
    [:div
@@ -136,7 +136,23 @@
 
 
 (defn add-rating []
-  (let [doc (atom {})]
+  (let [doc (atom {:recommended false
+                   :roles {:dev         false
+                           :devops      false
+                           :qa          false
+                           :ux          false
+                           :pm          false
+                           :ba          false
+                           :sales       false
+                           :recruiting  false
+                           :other       false}
+                   :experience {:rookie       false
+                                :beginner     false
+                                :intermediate false
+                                :advanced     false
+                                :expert       false}
+                   :comment {:name ""
+                             :comment ""}})]
     [:div
      (header/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
