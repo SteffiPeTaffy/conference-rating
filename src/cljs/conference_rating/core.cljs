@@ -4,9 +4,9 @@
             [secretary.core :as secretary :include-macros true]
             [conference-rating.history :as history]
             [conference-rating.conference.add-conference :as add-conference]
-            [conference-rating.home.home :as conference]
             [conference-rating.backend :as backend]
-            [conference-rating.rating.add-rating :as add-rating])
+            [conference-rating.rating.add-rating :as add-rating]
+            [conference-rating.home.home :as home])
     (:import goog.History))
 
 ;; -------------------------
@@ -17,16 +17,16 @@
 
 
 (secretary/defroute "/" []
-                    (backend/load-conferences)
-                    (session/put! :current-page #'conference/conferences-page))
+                    (backend/load-conferences #(reset! home/displayed-conferences %1))
+                    (session/put! :current-page #'home/conferences-page))
 
 (secretary/defroute "/add-conference" []
                     (session/put! :current-page #'add-conference/add-conference-page))
 
 (secretary/defroute "/conferences/:id" [id]
-                    (backend/load-conference id)
-                    (backend/load-conference-ratings id)
-                    (session/put! :current-page #'conference/conference-page))
+                    (backend/load-conference id #(reset! home/displayed-conference %1))
+                    (backend/load-conference-ratings id #(reset! home/ratings %1))
+                    (session/put! :current-page #'home/conference-page))
 
 (secretary/defroute "/conferences/:id/add-rating" [id]
                     (session/put! :conference-id-to-rate id)

@@ -5,7 +5,7 @@
             [conference-rating.conference.conference-list :as conference-list]))
 
 (defonce displayed-conference (atom nil))
-(defonce conferences (atom nil))
+(defonce displayed-conferences (atom nil))
 (defonce ratings (atom nil))
 
 ;; -------------------------
@@ -25,7 +25,7 @@
       (display-loading))))
 
 (defn conferences-page []
-  (let [conference-list @conferences]
+  (let [conference-list @displayed-conferences]
     (if (not (nil? conference-list))
       (conference-list/display-conference-list conference-list)
       (display-loading))))
