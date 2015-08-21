@@ -7,3 +7,7 @@
   (->> m
        (filter value-true?)
        (map key)))
+
+
+(defn display-loading []
+  [:div [:h2 "Loading..."]])

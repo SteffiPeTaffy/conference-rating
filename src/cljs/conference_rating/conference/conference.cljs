@@ -1,7 +1,9 @@
 (ns conference-rating.conference.conference
   (:require [conference-rating.panel :as panel]
+            [reagent.core :as reagent :refer [atom]]
             [conference-rating.header :as header]
-            [conference-rating.rating.rating :as rating]))
+            [conference-rating.rating.rating :as rating]
+            [conference-rating.util :as util]))
 
 (def list-of-ratings
   [{:recommended true
@@ -138,4 +140,15 @@
      [:div {:class "col-lg-12 col-md-12"}
       (rating/display-ratings list-of-ratings)]]]]))
 
+(defonce displayed-conference (atom nil))
+(defonce ratings (atom nil))
 
+(defn- display-conference [conference]
+  [:div {:class "container"}
+   (display-conference-overview conference)])
+
+(defn conference-page []
+  (let [conference @displayed-conference]
+    (if (not (nil? conference))
+      (display-conference conference)
+      (util/display-loading))))

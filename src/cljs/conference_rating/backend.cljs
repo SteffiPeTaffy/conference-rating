@@ -1,6 +1,5 @@
 (ns conference-rating.backend
-  (:require [ajax.core :as ajax]
-            [conference-rating.home.home :as home]))
+  (:require [ajax.core :as ajax]))
 
 (defn load-conference [id success-handler]
   (ajax/GET (str "/api/conferences/" id) {:handler success-handler
