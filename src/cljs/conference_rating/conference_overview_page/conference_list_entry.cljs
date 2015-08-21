@@ -1,4 +1,4 @@
-(ns conference-rating.conference.conference-list-entry
+(ns conference-rating.conference-overview-page.conference-list-entry
   (:require [conference-rating.panel :as panel]))
 
 (def aggregated-ratings
