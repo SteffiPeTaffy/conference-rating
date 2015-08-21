@@ -106,8 +106,7 @@
     (if (> count 0) [badge (str label " " count) "badge-light-blue"])))
 
 (defn conference-badges [simple-conference]
-  (let [dev-count (aggregated-ratings-for-role simple-conference :dev)]
-  [:div
+   [:div
    (conference-badges-row (selection-of-role-elements simple-conference :dev "DEV")
                           (selection-of-role-elements simple-conference :devops "DEVOPS")
                           (selection-of-role-elements simple-conference :ux "UX")
@@ -121,7 +120,7 @@
                           (badge "learnings" "badge-light-primary")
                           (badge "Network" "badge-light-primary")
                           (badge "Hires" "badge-light-primary")
-                          (badge "Clients" "badge-light-primary"))]))
+                          (badge "Clients" "badge-light-primary"))])
 
 (defn conference-average-attendee [simple-conference]
   [:div
