@@ -1,4 +1,4 @@
-(ns conference-rating.conference-overview-page.rating)
+(ns conference-rating.conference-detail-page.rating)
 
 (defn display-rating [rating]
    [:div {:class "row bg-light"}

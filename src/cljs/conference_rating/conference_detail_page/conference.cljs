@@ -1,8 +1,8 @@
-(ns conference-rating.conference-overview-page.conference
+(ns conference-rating.conference-detail-page.conference
   (:require [conference-rating.view-utils.panel :as panel]
             [reagent.core :as reagent :refer [atom]]
             [conference-rating.view-utils.header :as header]
-            [conference-rating.conference-overview-page.rating :as rating]
+            [conference-rating.conference-detail-page.rating :as rating]
             [conference-rating.util :as util]))
 
 (def list-of-ratings
