@@ -5,6 +5,7 @@
             [conference-rating.history :as history]
             [conference-rating.conference.add-conference :as add-conference]
             [conference-rating.home.home :as conference]
+            [conference-rating.backend :as backend]
             [conference-rating.rating.add-rating :as add-rating])
     (:import goog.History))
 
@@ -16,15 +17,15 @@
 
 
 (secretary/defroute "/" []
-                    (conference/load-conferences)
+                    (backend/load-conferences)
                     (session/put! :current-page #'conference/conferences-page))
 
 (secretary/defroute "/add-conference" []
                     (session/put! :current-page #'add-conference/add-conference-page))
 
 (secretary/defroute "/conferences/:id" [id]
-                    (conference/load-conference id)
-                    (conference/load-conference-ratings id)
+                    (backend/load-conference id)
+                    (backend/load-conference-ratings id)
                     (session/put! :current-page #'conference/conference-page))
 
 (secretary/defroute "/conferences/:id/add-rating" [id]
