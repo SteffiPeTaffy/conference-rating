@@ -17,6 +17,12 @@
                                 :sales 1
                                 :recruting 1
                                 :other 1}
+                        :experience {
+                                     :rookie 1
+                                     :beginner 3
+                                     :intermediate 12
+                                     :advanced 5
+                                     :expert 0}
                         :tags {
                                :inspiring 2
                                :entertaining 2

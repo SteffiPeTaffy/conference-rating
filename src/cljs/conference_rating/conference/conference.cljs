@@ -2,6 +2,51 @@
   (:require [conference-rating.panel :as panel]
             [conference-rating.header :as header]))
 
+
+
+(def single-rating
+  {:recommended true
+   :roles       [:dev :devops :qa :ux :pm :ba :sales :recruiting :other]
+   :experience  [:rookie :beginner :intermediate :advanced :expert]
+   :tags [:inspiring :informative :entertaining :potential-hires :potential-clients]
+   :overall 4
+   :talks 4
+   :venue 3
+   :networking 2
+   :comment     {:name    "Constantin Bader"
+                 :comment "This conference was super awesome!"}})
+
+(def aggregated-ratings
+  {:aggregated-ratings {:number-of-ratings 16
+                        :recommendations 14
+                        :overall {:avg 4 :count 2}
+                        :talks {:avg 4 :count 2}
+                        :venue {:avg 2.5 :count 2}
+                        :community {:avg 4.5 :count 2}
+                        :roles {
+                                :dev 11
+                                :devops 2
+                                :ux 1
+                                :qa 0
+                                :ba 0
+                                :pm 0
+                                :sales 0
+                                :recruting 1
+                                :other 1}
+                        :experience {
+                                     :rookie 1
+                                     :beginner 3
+                                     :intermediate 12
+                                     :advanced 5
+                                     :expert 0}
+                        :tags {
+                               :inspiring 2
+                               :entertaining 2
+                               :learning 2
+                               :potential-hires 1
+                               :potential-clients 1}}})
+
+
 (defn badge [label classes]
   [:span {:class (str "badge " classes)} label])
 
@@ -29,9 +74,10 @@
     [:h4 (:description conference)]
     (link (:link conference))])
 
-(defn conference-recommendations []
-   (panel/icon-panel "glyphicon-star" 17 "would go again" "bg-yellow cl-light"))
+(defn conference-recommendations [numberOfRecommendations]
+   (panel/icon-panel "glyphicon-star" numberOfRecommendations "would go again" "bg-yellow cl-light"))
 
+;;TODO show sentence for experience level, too
 (defn average-attendee []
   [:div
    [:p "I am a Dev or QA"]
@@ -40,6 +86,7 @@
    [:p "I want to eatch out for potential clients"]
    [:p "I want to watch out for potential hires"]])
 
+;;TODO show badges for experience level (in navy lue), too
 (defn conference-badges []
   [:div
    (conference-badges-row (badge "DEV" "badge-light-blue")
@@ -59,8 +106,9 @@
   [:div {:class "text-lg-right voice-btn-container"}
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
-(defn display-conference-overview [conference]
-  [:div
+(defn display-conference-overview [simple-conference]
+  (let [conference (merge simple-conference aggregated-ratings)]
+    [:div
    (header/nav-bar)
    [:div {:class "container-fluid content-container pad-top conference-container"}
     [:div {:class "row"}
@@ -68,7 +116,7 @@
       (conference-information conference)
       (add-rating-button (:_id conference))]
      [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
-      (conference-recommendations)
+      (conference-recommendations (get-in conference [:aggregated-ratings :recommendations]))
       [:div {:class "row"}
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
         [:div (panel/range-panel 83 83 "Overall" "12 ratings" "bg-mint" "glyphicon-thumbs-up")]
@@ -76,6 +124,6 @@
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
         [:div (panel/range-panel 67 83 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
         [:div (panel/range-panel 35 83 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
-      (conference-average-attendee)]]]])
+      (conference-average-attendee)]]]]))
 
 

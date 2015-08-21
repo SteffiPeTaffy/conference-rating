@@ -117,7 +117,7 @@
    [:span "I want to say ..."]
    [:div {:class "form-group"}
     [:input {:field :text :id :comment.name :type "text" :placeholder "name" :class "form-control"}]
-    [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 16}]]])
+    [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 13}]]])
 
 (def add-rating-template
    [:div
@@ -160,6 +160,6 @@
        [:div {:class "col-lg-1 col-md-1"}]
        [:div {:class "col-lg-10 col-md-10"}
         [forms/bind-fields add-rating-template doc]
-        [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]
+        [:div {:class "text-lg-right"} [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]
        [:div {:class "col-lg-1 col-md-1"}]]]]))
 
