@@ -23,6 +23,7 @@
   (let [count (role aggregated-ratings)]
     (if (> count 0) [badge (str label " " count) "badge-light-blue"])))
 
+
 (defn conference-badges [aggregated-ratings]
   [:div
    (conference-badges-row (selection-of-role-elements aggregated-ratings :dev "DEV")
