@@ -99,17 +99,17 @@
 
 ;;TODO show badges for experience level (in navy lue), too
 
-  (defn conference-badges [simple-conference]
-    (let [dev-count (get-in simple-conference [:aggregated-ratings :roles :dev])]
-    [:div
-     (conference-badges-row (if (> dev-count 0) [badge (str "DEV " dev-count) "badge-light-blue"])
-                            (badge "QA" "badge-light-blue")
-                            (badge "BA" "badge-light-blue"))
-     (conference-badges-row (badge "Inspiring" "badge-light-primary")
-                            (badge "learnings" "badge-light-primary")
-                            (badge "Network" "badge-light-primary")
-                            (badge "Hires" "badge-light-primary")
-                            (badge "Clients" "badge-light-primary"))]))
+(defn conference-badges [simple-conference]
+  (let [dev-count (get-in simple-conference [:aggregated-ratings :roles :dev])]
+  [:div
+   (conference-badges-row (if (> dev-count 0) [badge (str "DEV " dev-count) "badge-light-blue"])
+                          (badge "QA" "badge-light-blue")
+                          (badge "BA" "badge-light-blue"))
+   (conference-badges-row (badge "Inspiring" "badge-light-primary")
+                          (badge "learnings" "badge-light-primary")
+                          (badge "Network" "badge-light-primary")
+                          (badge "Hires" "badge-light-primary")
+                          (badge "Clients" "badge-light-primary"))]))
 
 (defn conference-average-attendee [simple-conference]
   [:div
