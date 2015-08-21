@@ -1,4 +1,4 @@
-(ns conference-rating.header)
+(ns conference-rating.view-utils.header)
 
 
 (defn nav-bar []

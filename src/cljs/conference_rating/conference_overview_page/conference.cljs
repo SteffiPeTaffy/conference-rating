@@ -1,7 +1,7 @@
 (ns conference-rating.conference-overview-page.conference
-  (:require [conference-rating.panel :as panel]
+  (:require [conference-rating.view-utils.panel :as panel]
             [reagent.core :as reagent :refer [atom]]
-            [conference-rating.header :as header]
+            [conference-rating.view-utils.header :as header]
             [conference-rating.conference-overview-page.rating :as rating]
             [conference-rating.util :as util]))
 

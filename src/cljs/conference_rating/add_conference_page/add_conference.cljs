@@ -5,7 +5,7 @@
             [cljs-time.format :as tf]
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]
-            [conference-rating.header :as header]))
+            [conference-rating.view-utils.header :as header]))
 
 (defn form-input [label input]
   [:div {:class "form-group"}

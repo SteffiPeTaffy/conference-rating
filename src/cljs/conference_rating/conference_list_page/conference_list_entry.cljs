@@ -1,5 +1,5 @@
 (ns conference-rating.conference-list-page.conference-list-entry
-  (:require [conference-rating.panel :as panel]))
+  (:require [conference-rating.view-utils.panel :as panel]))
 
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 2

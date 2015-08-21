@@ -2,12 +2,10 @@
   (:require [reagent-forms.core :as forms]
             [reagent.core :refer [atom]]
             [ajax.core :as ajax]
-            [conference-rating.panel :as panel]
-            [conference-rating.form :as form]
             [reagent.session :as session]
             [conference-rating.history :as history]
             [conference-rating.util :as util]
-            [conference-rating.header :as header]))
+            [conference-rating.view-utils.header :as header]))
 
 (defn- convert-to-tag-list [m k]
   (assoc m k (util/checkboxes-to-tag-list (get m k))))

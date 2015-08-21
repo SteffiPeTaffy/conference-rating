@@ -1,4 +1,4 @@
-(ns conference-rating.panel)
+(ns conference-rating.view-utils.panel)
 
 (defn coloured-panel [heading-label body heading-classes body-classes]
   [:div {:class "panel"}
