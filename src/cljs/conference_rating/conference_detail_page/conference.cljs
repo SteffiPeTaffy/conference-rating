@@ -29,11 +29,11 @@
 
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 16
-                        :recommendations 14
-                        :overall {:avg 4 :count 2}
-                        :talks {:avg 4 :count 2}
-                        :venue {:avg 2.5 :count 2}
-                        :community {:avg 4.5 :count 2}
+                        :recommendations 1445
+                        :overall {:avg 4 :count 8}
+                        :talks {:avg 0.1 :count 7}
+                        :venue {:avg 3 :count 6}
+                        :community {:avg 2.5 :count 5}
                         :roles {
                                 :dev 11
                                 :devops 2
@@ -62,7 +62,7 @@
   [:span {:class (str "badge " classes)} label])
 
 (defn conference-badges-row [& badges]
-  [:div {:class "badge-row"} badges])
+  [:div {:class "badge-row"} badges ])
 
 (defn conference-dates [from-date to-date]
   (cond
@@ -98,27 +98,41 @@
    [:p "I want to watch out for potential hires"]])
 
 ;;TODO show badges for experience level (in navy lue), too
-(defn conference-badges []
-  [:div
-   (conference-badges-row (badge "DEV" "badge-light-blue")
-                          (badge "QA" "badge-light-blue")
-                          (badge "BA" "badge-light-blue"))
-   (conference-badges-row (badge "Inspiring" "badge-light-primary")
-                          (badge "learnings" "badge-light-primary")
-                          (badge "Network" "badge-light-primary")
-                          (badge "Hires" "badge-light-primary")
-                          (badge "Clients" "badge-light-primary"))])
 
-(defn conference-average-attendee []
+  (defn conference-badges [simple-conference]
+    (let [dev-count (get-in simple-conference [:aggregated-ratings :roles :dev])]
+    [:div
+     (conference-badges-row (if (> dev-count 0) [badge (str "DEV " dev-count) "badge-light-blue"])
+                            (badge "QA" "badge-light-blue")
+                            (badge "BA" "badge-light-blue"))
+     (conference-badges-row (badge "Inspiring" "badge-light-primary")
+                            (badge "learnings" "badge-light-primary")
+                            (badge "Network" "badge-light-primary")
+                            (badge "Hires" "badge-light-primary")
+                            (badge "Clients" "badge-light-primary"))]))
+
+(defn conference-average-attendee [simple-conference]
   [:div
-   (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee) (conference-badges))])
+   (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee) (conference-badges simple-conference))])
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right voice-btn-container"}
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
 (defn display-conference-overview [simple-conference]
-  (let [conference (merge simple-conference aggregated-ratings)]
+  (let [conference (merge simple-conference aggregated-ratings)
+        overall-avg (get-in conference [:aggregated-ratings :overall :avg])
+        overall-avg-percentage (* (/ overall-avg 4) 100)
+        overall-ratings-str (str (get-in conference [:aggregated-ratings :overall :count]) " ratings")
+        talks-avg (get-in conference [:aggregated-ratings :talks :avg])
+        talks-avg-percentage (* (/ talks-avg 4) 100)
+        talks-ratings-str (str (get-in conference [:aggregated-ratings :talks :count]) " ratings")
+        venue-avg (get-in conference [:aggregated-ratings :venue :avg])
+        venue-avg-percentage (* (/ venue-avg 4) 100)
+        venue-ratings-str (str (get-in conference [:aggregated-ratings :venue :count]) " ratings")
+        networking-avg (get-in conference [:aggregated-ratings :community :avg])
+        networking-avg-percentage (* (/ networking-avg 4) 100)
+        networking-ratings-str (str (get-in conference [:aggregated-ratings :community :count]) " ratings")]
     [:div
    (header/nav-bar)
    [:div {:class "container-fluid content-container pad-top conference-container"}
@@ -130,15 +144,15 @@
       (conference-recommendations (get-in conference [:aggregated-ratings :recommendations]))
       [:div {:class "row"}
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-        [:div (panel/range-panel 83 83 "Overall" "12 ratings" "bg-mint" "glyphicon-thumbs-up")]
-        [:div (panel/range-panel 97 83 "Talks" "5 ratings" "bg-purple" "glyphicon-user")]]
+        [:div (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")]
+        [:div (panel/range-panel talks-avg-percentage talks-avg "Talks" talks-ratings-str "bg-purple" "glyphicon-user")]]
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-        [:div (panel/range-panel 67 83 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
-        [:div (panel/range-panel 35 83 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
-      (conference-average-attendee)]]
+        [:div (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")]
+        [:div (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]]
+      (conference-average-attendee conference)]]
     [:div {:class "row"}
-     [:div {:class "col-lg-12 col-md-12"}
-      (rating/display-ratings list-of-ratings)]]]]))
+       [:div {:class "col-lg-12 col-md-12"}
+         (rating/display-ratings list-of-ratings)]]]]))
 
 (defonce displayed-conference (atom nil))
 (defonce ratings (atom nil))

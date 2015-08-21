@@ -53,7 +53,7 @@
   [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
 
 (defn overall-rating [overall-rating]
-  (let [overall-rating-percentage (* (/ (:avg overall-rating) 5) 100)]
+  (let [overall-rating-percentage (* (/ (:avg overall-rating) 4) 100)]
     [:div {:class "conference-overall-rating"} (panel/range-panel overall-rating-percentage (:avg overall-rating) "Overall" (str (:count overall-rating) " ratings") "bg-dark-lightened" "glyphicon-thumbs-up")]))
 
 (defn add-rating-button [id]
