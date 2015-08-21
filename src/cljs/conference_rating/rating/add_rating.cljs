@@ -6,14 +6,21 @@
             [conference-rating.form :as form]
             [reagent.session :as session]
             [conference-rating.history :as history]
+            [conference-rating.util :as util]
             [conference-rating.header :as header]))
 
+(defn- convert-to-tag-list [m k]
+  (assoc m k (util/checkboxes-to-tag-list (get m k))))
+
 (defn create-rating [form-data conference-id]
-  (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        @form-data
-                                                                 :format        :json
-                                                                 :handler       (history/redirect-to (str "/conferences/" conference-id))
-                                                                 :error-handler #(js/alert (str "could not create rating" %1))})
-  (println @form-data))
+  (let [processed-data (-> @form-data
+                           (convert-to-tag-list :roles)
+                           (convert-to-tag-list :experience)
+                           (convert-to-tag-list :tags))]
+    (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        processed-data
+                                                                   :format        :json
+                                                                   :handler       (history/redirect-to (str "/conferences/" conference-id))
+                                                                   :error-handler #(js/alert (str "could not create rating" %1))})))
 
 (defn recommendation-panel []
   [:div {:class "panel rating-panel-container bg-orange cl-light"}
@@ -96,7 +103,7 @@
 (defn experience-checkbox [id input-label]
  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
   [:p {:class "text-lg-center"} input-label]
-  [:input {:type "checkbox" :id id}]
+  [:input {:field :checkbox :type "checkbox" :id id}]
   [:label {:for id}
    [:span {:class "checkbox"}]]])
 
