@@ -1,20 +1,29 @@
 (ns conference-rating.conference.conference
   (:require [conference-rating.panel :as panel]
-            [conference-rating.header :as header]))
+            [conference-rating.header :as header]
+            [conference-rating.rating.rating :as rating]))
 
-
-
-(def single-rating
-  {:recommended true
-   :roles       [:dev :devops :qa :ux :pm :ba :sales :recruiting :other]
-   :experience  [:rookie :beginner :intermediate :advanced :expert]
-   :tags [:inspiring :informative :entertaining :potential-hires :potential-clients]
-   :overall 4
-   :talks 4
-   :venue 3
-   :networking 2
-   :comment     {:name    "Constantin Bader"
-                 :comment "This conference was super awesome!"}})
+(def list-of-ratings
+  [{:recommended true
+    :roles       [:dev :devops :other]
+    :experience  [:rookie :beginner :intermediate]
+    :tags [:inspiring :informative]
+    :overall 4
+    :talks 4
+    :venue 3
+    :networking 2
+    :comment     {:name    "Constantin Bader"
+                  :comment "This conference was super awesome!"}}
+   {:recommended true
+    :roles       [:dev :devops]
+    :experience  [:intermediate :advanced]
+    :tags [:inspiring :informative :entertaining]
+    :overall 3
+    :talks 4
+    :venue 2
+    :networking 1
+    :comment     {:name    "Florian Sellmayr"
+                  :comment "This conference was mehh and awesome at the same time!"}}])
 
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 16
@@ -124,6 +133,9 @@
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
         [:div (panel/range-panel 67 83 "Venue" "3 ratings" "bg-pink" "glyphicon-home")]
         [:div (panel/range-panel 35 83 "Networking" "5 ratings" "bg-green" "glyphicon-glass")]]]
-      (conference-average-attendee)]]]]))
+      (conference-average-attendee)]]
+    [:div {:class "row"}
+     [:div {:class "col-lg-12 col-md-12"}
+      (rating/display-ratings list-of-ratings)]]]]))
 
 

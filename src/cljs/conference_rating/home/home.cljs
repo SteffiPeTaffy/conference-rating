@@ -36,14 +36,9 @@
 (defn display-loading []
   [:div [:h2 "Loading..."]])
 
-(defn display-ratings [conference-ratings]
-  [:div (map rating/display-rating conference-ratings)])
-
 (defn display-conference [conference]
-  (let [conference-ratings @ratings]
   [:div {:class "container"}
-   (conference/display-conference-overview conference)
-   [:div (display-ratings conference-ratings)]]))
+   (conference/display-conference-overview conference)])
 
 (defn conference-page []
   (let [conference @displayed-conference]
