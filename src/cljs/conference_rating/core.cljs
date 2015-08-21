@@ -3,11 +3,11 @@
             [reagent.session :as session]
             [secretary.core :as secretary :include-macros true]
             [conference-rating.history :as history]
-            [conference-rating.conference-overview-page.add-conference :as add-conference]
+            [conference-rating.add-conference-page.add-conference :as add-conference]
             [conference-rating.backend :as backend]
             [conference-rating.conference-overview-page.conference :as conference]
             [conference-rating.rating.add-rating :as add-rating]
-            [conference-rating.conference-overview-page.conference-list :as conference-list])
+            [conference-rating.conference-list-page.conference-list :as conference-list])
     (:import goog.History))
 
 ;; -------------------------

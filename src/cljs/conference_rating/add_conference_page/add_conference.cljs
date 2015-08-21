@@ -1,4 +1,4 @@
-(ns conference-rating.conference-overview-page.add-conference
+(ns conference-rating.add-conference-page.add-conference
   (:require [conference-rating.history :as history]
             [ajax.core :as ajax]
             [cljs-time.core :as t]
