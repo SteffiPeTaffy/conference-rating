@@ -5,7 +5,8 @@
             [cljs-time.format :as tf]
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]
-            [conference-rating.view-utils.header :as header]))
+            [conference-rating.view-utils.header :as header]
+            [conference-rating.util :as util]))
 
 (defn form-input [label input]
   [:div {:class "form-group"}
@@ -22,16 +23,10 @@
    (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page"}])
    (form-input "Description" [:textarea {:field :textarea :rows 5 :id :description :class "form-control" :placeholder "More information about the conference"}])])
 
-(def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
-
-(defn form-date-to-datestr [date]
-  (tf/unparse built-in-formatter
-    (t/date-time (:year date) (:month date) (:day date))))
-
 (defn create-conference [data-atom]
   (let [data    @data-atom
-        payload {:from        (form-date-to-datestr (:from-date data))
-                 :to          (form-date-to-datestr (:to-date   data))
+        payload {:from        (util/form-date-to-datestr (:from-date data))
+                 :to          (util/form-date-to-datestr (:to-date data))
                  :name        (:name data)
                  :series      (:series data)
                  :link        (:link data)

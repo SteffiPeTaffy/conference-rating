@@ -1,4 +1,6 @@
-(ns conference-rating.util)
+(ns conference-rating.util
+  (:require [cljs-time.core :as t]
+            [cljs-time.format :as tf]))
 
 (defn- value-true? [[_ v]]
   (true? v))
@@ -11,3 +13,20 @@
 
 (defn display-loading []
   [:div [:h2 "Loading..."]])
+
+
+(def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
+
+(defn form-date-to-datestr [date]
+  (tf/unparse built-in-formatter
+              (t/date-time (:year date) (:month date) (:day date))))
+
+(defn format-date [date-str]
+  (let [datetime (tf/parse built-in-formatter date-str)]
+    (tf/unparse (tf/formatter "dd MMMM YYYY") datetime)))
+
+(defn from-to-dates [from-date to-date]
+  (cond
+    (and from-date from-date) [:p {:class "conference-dates"} (str (format-date from-date) " - " (format-date to-date))]
+    from-date [:p {:class "conference-dates"} (format-date from-date)]
+    :else [:p {:class "conference-dates"} "TBD"]))

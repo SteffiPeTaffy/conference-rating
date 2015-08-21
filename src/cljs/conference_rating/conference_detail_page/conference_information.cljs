@@ -1,10 +1,6 @@
-(ns conference-rating.conference-detail-page.conference-information)
+(ns conference-rating.conference-detail-page.conference-information
+  (:require [conference-rating.util :as util]))
 
-(defn conference-dates [from-date to-date]
-  (cond
-    (and from-date from-date) [:p {:class "conference-dates"} (str from-date " - " to-date)]
-    from-date [:p {:class "conference-dates"} from-date]
-    :else [:p {:class "conference-dates"} "TBD"]))
 
 (defn series-tag [series-tag]
   (if (not (nil? series-tag))
@@ -17,6 +13,6 @@
   [:div {:class "row conference-information-container bg-light cl-dark"}
    (series-tag (:series conference))
    [:h1(:name conference)]
-   (conference-dates (:from conference) (:to conference))
+   (util/from-to-dates (:from conference) (:to conference))
    [:h4 (:description conference)]
    (link (:link conference))])

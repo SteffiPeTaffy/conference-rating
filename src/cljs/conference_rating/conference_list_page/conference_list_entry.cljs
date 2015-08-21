@@ -1,5 +1,6 @@
 (ns conference-rating.conference-list-page.conference-list-entry
-  (:require [conference-rating.view-utils.panel :as panel]))
+  (:require [conference-rating.view-utils.panel :as panel]
+            [conference-rating.util :as util]))
 
 (def aggregated-ratings
   {:aggregated-ratings {:number-of-ratings 2
@@ -39,12 +40,6 @@
   (if (not (nil? name))
     [:h4 {:class "conference-title"} name]
     [:h4 "untitled conference"]))
-
-(defn conference-dates [from-date to-date]
-  (cond
-    (and from-date from-date) [:p {:class "conference-dates"} (str from-date " - " to-date)]
-    from-date [:p {:class "conference-dates"} from-date]
-    :else [:p {:class "conference-dates"} "TBD"]))
 
 (defn description [description]
   [:p {:class "text-muted conference-description"} description])
@@ -92,7 +87,7 @@
         (series-tag (:series conference))
         [:a {:href (str "#/conferences/" (:_id conference))}
          (title (:name conference))
-         (conference-dates (:from conference) (:to conference))]]
+         (util/from-to-dates (:from conference) (:to conference))]]
        [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
         (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
         (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]]
