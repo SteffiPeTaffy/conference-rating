@@ -25,27 +25,27 @@
     [:label {:for :recommended}
      [:span {:class "checkbox checkbox-lg"}]]]])
 
-(defn rating-panel-radio-input [id group-name input-label]
+(defn rating-panel-radio-input [id key input-label value]
   [:div
    [:p {:class "text-lg-center"} input-label]
-   [:input {:type "radio" :id id :name group-name}]
+   [:input {:field :radio :value value :type "radio" :id id :name key}]
    [:label {:for id}
     [:span {:class "radio"}]]])
 
-(defn rating-panel [icon panel-label panel-classes]
+(defn rating-panel [icon data-key panel-label panel-classes]
   [:div {:class (str "panel rating-panel-container " panel-classes)}
    [:span
     [:i {:class (str "glyphicon " icon)}]
     [:span panel-label]]
    [:div {:class "row"}
     [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
-     (rating-panel-radio-input (str panel-label "-1") panel-label "meh")]
+     (rating-panel-radio-input (str panel-label "-1") data-key "meh" 1)]
     [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
-     (rating-panel-radio-input (str panel-label "-2") panel-label "okay")]
+     (rating-panel-radio-input (str panel-label "-2") data-key "okay" 2)]
     [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
-     (rating-panel-radio-input (str panel-label "-3") panel-label"good")]
+     (rating-panel-radio-input (str panel-label "-3") data-key"good" 3)]
     [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
-     (rating-panel-radio-input (str panel-label "-4") panel-label "awesome")]]])
+     (rating-panel-radio-input (str panel-label "-4") data-key "awesome" 4)]]])
 
 (defn role-checkbox [id input-label input-label-description]
   [:div {:class "col-lg-4 col-md-6 col-sm-6 col-xs-12"}
@@ -75,7 +75,7 @@
 (defn tag-checkbox [id input-label input-label-description]
   [:div {:class "row role-checkbox-container"}
    [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
-    [:input {:type "checkbox" :id id}]
+    [:input {:field :checkbox :type "checkbox" :id id}]
     [:label {:for id}
      [:span {:class "checkbox"}]]]
    [:div {:class "col-lg-10 col-md-10 col-sm-10 col-xs-10"}
@@ -87,11 +87,11 @@
    [:span "I found this conference ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-12 col-md-12 col-sm-12 col-xs-12"}
-     (tag-checkbox "INSPIRING" "inspriring" "This conference had an impact one me.")
-     (tag-checkbox "INFORMATIVE" "informative" "I learned a lot during the workshops, sessions and talks.")
-     (tag-checkbox "ENTERTAINING" "entertaining" "The speakers where showmasters and the after party was amazing.")
-     (tag-checkbox "HIRES" "good to meet potential hires" "The speakers where showmasters and the after party was amazing.")
-     (tag-checkbox "CLIENTS" "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
+     (tag-checkbox :tags.inspiring "inspriring" "This conference had an impact one me.")
+     (tag-checkbox :tags.informative "informative" "I learned a lot during the workshops, sessions and talks.")
+     (tag-checkbox :tags.entertaining "entertaining" "The speakers where showmasters and the after party was amazing.")
+     (tag-checkbox :tags.hires "good to meet potential hires" "The speakers where showmasters and the after party was amazing.")
+     (tag-checkbox :tags.clients "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
 
 (defn experience-checkbox [id input-label]
  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
@@ -128,31 +128,40 @@
       (experience-panel)
       (comment-panel)]
      [:div {:class "col-lg-4 col-md-6 col-sm-6"}
-      (rating-panel "glyphicon-thumbs-up" "Overall" "bg-mint cl-light")
-      (rating-panel "glyphicon-user" "Talks" "bg-purple cl-light")
-      (rating-panel "glyphicon-home" "Venue" "bg-pink cl-light")
-      (rating-panel "glyphicon-glass" "Networking" "bg-green cl-light")
+      (rating-panel "glyphicon-thumbs-up" :rating.overall "Overall" "bg-mint cl-light")
+      (rating-panel "glyphicon-user" :rating.talks "Talks" "bg-purple cl-light")
+      (rating-panel "glyphicon-home" :rating.venue "Venue" "bg-pink cl-light")
+      (rating-panel "glyphicon-glass" :rating.networking "Networking" "bg-green cl-light")
       (tags-panel)]]])
 
 
 (defn add-rating []
   (let [doc (atom {:recommended false
-                   :roles {:dev         false
-                           :devops      false
-                           :qa          false
-                           :ux          false
-                           :pm          false
-                           :ba          false
-                           :sales       false
-                           :recruiting  false
-                           :other       false}
-                   :experience {:rookie       false
-                                :beginner     false
-                                :intermediate false
-                                :advanced     false
-                                :expert       false}
-                   :comment {:name ""
-                             :comment ""}})]
+                   :roles       {:dev        false
+                                 :devops     false
+                                 :qa         false
+                                 :ux         false
+                                 :pm         false
+                                 :ba         false
+                                 :sales      false
+                                 :recruiting false
+                                 :other      false}
+                   :experience  {:rookie       false
+                                 :beginner     false
+                                 :intermediate false
+                                 :advanced     false
+                                 :expert       false}
+                   :comment     {:name    ""
+                                 :comment ""}
+                   :rating      {:overall    -1
+                                 :talks      -1
+                                 :venue      -1
+                                 :networking -1}
+                   :tags        {:inspiring    false
+                                 :informative  false
+                                 :entertaining false
+                                 :hires        false
+                                 :clients      false}})]
     [:div
      (header/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
