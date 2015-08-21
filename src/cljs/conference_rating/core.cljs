@@ -5,7 +5,7 @@
             [conference-rating.history :as history]
             [conference-rating.add-conference-page.add-conference :as add-conference]
             [conference-rating.backend :as backend]
-            [conference-rating.conference-detail-page.conference :as conference]
+            [conference-rating.conference-detail-page.conference-detail-page :as conference]
             [conference-rating.rating.add-rating :as add-rating]
             [conference-rating.conference-list-page.conference-list :as conference-list])
     (:import goog.History))

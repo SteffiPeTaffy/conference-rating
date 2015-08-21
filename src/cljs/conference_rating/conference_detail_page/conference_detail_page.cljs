@@ -1,8 +1,8 @@
-(ns conference-rating.conference-detail-page.conference
+(ns conference-rating.conference-detail-page.conference-detail-page
   (:require [conference-rating.view-utils.panel :as panel]
             [reagent.core :as reagent :refer [atom]]
             [conference-rating.view-utils.header :as header]
-            [conference-rating.conference-detail-page.rating :as rating]
+            [conference-rating.conference-detail-page.rating-list :as rating-list]
             [conference-rating.util :as util]))
 
 (def list-of-ratings
@@ -151,8 +151,8 @@
         [:div (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]]
       (conference-average-attendee conference)]]
     [:div {:class "row"}
-       [:div {:class "col-lg-12 col-md-12"}
-         (rating/display-ratings list-of-ratings)]]]]))
+     [:div {:class "col-lg-12 col-md-12"}
+      (rating-list/display-rating-list list-of-ratings)]]]]))
 
 (defonce displayed-conference (atom nil))
 (defonce ratings (atom nil))

@@ -1,4 +1,4 @@
-(ns conference-rating.conference-detail-page.rating)
+(ns conference-rating.conference-detail-page.rating-list)
 
 (defn display-rating [rating]
    [:div {:class "row bg-light"}
@@ -7,5 +7,5 @@
       [:p (get-in rating [:comment :name])]
       [:p (get-in rating [:comment :comment])]]])
 
-(defn display-ratings [conference-ratings]
+(defn display-rating-list [conference-ratings]
   [:div {:class "container-fluid pad-top"} (map display-rating conference-ratings)])
