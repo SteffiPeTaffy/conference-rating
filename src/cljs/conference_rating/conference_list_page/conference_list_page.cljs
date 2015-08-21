@@ -1,4 +1,4 @@
-(ns conference-rating.conference-list-page.conference-list
+(ns conference-rating.conference-list-page.conference-list-page
   (:require [reagent.core :as reagent :refer [atom]]
             [conference-rating.view-utils.header :as header]
             [conference-rating.conference-list-page.conference-list-entry :as list-entry]
