@@ -35,15 +35,15 @@
                         :venue {:avg 3 :count 6}
                         :community {:avg 2.5 :count 5}
                         :roles {
-                                :dev 11
+                                :dev 1
                                 :devops 2
-                                :ux 1
-                                :qa 0
-                                :ba 0
-                                :pm 0
-                                :sales 0
-                                :recruting 1
-                                :other 1}
+                                :ux 3
+                                :qa 4
+                                :ba 5
+                                :pm 6
+                                :sales 7
+                                :recruting 8
+                                :other 9}
                         :experience {
                                      :rookie 1
                                      :beginner 3
@@ -98,13 +98,25 @@
    [:p "I want to watch out for potential hires"]])
 
 ;;TODO show badges for experience level (in navy lue), too
+(defn- aggregated-ratings-for-role [conference role]
+  (get-in conference [:aggregated-ratings :roles role]))
+
+(defn- selection-of-role-elements [conference role label]
+  (let [count (aggregated-ratings-for-role conference role)]
+    (if (> count 0) [badge (str label " " count) "badge-light-blue"])))
 
 (defn conference-badges [simple-conference]
-  (let [dev-count (get-in simple-conference [:aggregated-ratings :roles :dev])]
+  (let [dev-count (aggregated-ratings-for-role simple-conference :dev)]
   [:div
-   (conference-badges-row (if (> dev-count 0) [badge (str "DEV " dev-count) "badge-light-blue"])
-                          (badge "QA" "badge-light-blue")
-                          (badge "BA" "badge-light-blue"))
+   (conference-badges-row (selection-of-role-elements simple-conference :dev "DEV")
+                          (selection-of-role-elements simple-conference :devops "DEVOPS")
+                          (selection-of-role-elements simple-conference :ux "UX")
+                          (selection-of-role-elements simple-conference :qa "QA")
+                          (selection-of-role-elements simple-conference :ba "BA")
+                          (selection-of-role-elements simple-conference :pm "PM")
+                          (selection-of-role-elements simple-conference :sales "Sales")
+                          (selection-of-role-elements simple-conference :recruting "Recruting")
+                          (selection-of-role-elements simple-conference :other "Others"))
    (conference-badges-row (badge "Inspiring" "badge-light-primary")
                           (badge "learnings" "badge-light-primary")
                           (badge "Network" "badge-light-primary")
