@@ -72,7 +72,7 @@
         (conference-information/display-conference-information conference)
         (add-rating-button (:_id conference))]
        [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
-        (aggregated-ratings/display-aggregated-ratings aggregated-ratings)]]
+        (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]]
       [:div {:class "row"}
        [:div {:class "col-lg-12 col-md-12"}
         (rating-list/display-rating-list list-of-ratings)]]]]))
