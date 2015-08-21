@@ -2,7 +2,7 @@
   (:require [conference-rating.panel :as panel]
             [reagent.core :as reagent :refer [atom]]
             [conference-rating.header :as header]
-            [conference-rating.rating.rating :as rating]
+            [conference-rating.conference-overview-page.rating :as rating]
             [conference-rating.util :as util]))
 
 (def list-of-ratings

@@ -1,5 +1,4 @@
-(ns conference-rating.rating.rating
-  (:require [conference-rating.panel :as panel]))
+(ns conference-rating.conference-overview-page.rating)
 
 (defn display-rating [rating]
    [:div {:class "row bg-light"}
