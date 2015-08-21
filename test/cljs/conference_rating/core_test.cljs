@@ -32,8 +32,11 @@
       (do (println "Not found: " res)
           false))))
 
+(defn dummy-page []
+  [:div [:h2 "Welcome to conference-rating"]
+   [:div [:a {:href "#/conferences/foo"} "go to foo conference"]]])
 
-(deftest test-home
-  (with-mounted-component (rc/home-page)
+(deftest test-dummy-page
+  (with-mounted-component (dummy-page)
     (fn [c div]
       (is (found-in #"Welcome to" div)))))

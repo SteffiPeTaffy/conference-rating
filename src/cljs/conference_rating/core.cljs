@@ -11,10 +11,6 @@
 ;; -------------------------
 ;; Views
 
-(defn home-page []
-  [:div [:h2 "Welcome to conference-rating"]
-   [:div [:a {:href "#/conferences/foo"} "go to foo conference"]]])
-
 (defn current-page []
   [:div [(session/get :current-page)]])
 
