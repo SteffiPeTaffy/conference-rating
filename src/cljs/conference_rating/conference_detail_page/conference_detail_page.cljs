@@ -68,13 +68,16 @@
      (header/nav-bar)
      [:div {:class "container-fluid content-container pad-top conference-container"}
       [:div {:class "row"}
-       [:div {:class "col-lg-8 col-md-8"}
+       [:div {:class "col-lg-1 col-md-1"}]
+       [:div {:class "col-lg-6 col-md-6"}
         (conference-information/display-conference-information conference)
         (add-rating-button (:_id conference))]
        [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
-        (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]]
+        (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]
+       [:div {:class "col-lg-1 col-md-1"}]]
       [:div {:class "row"}
-       [:div {:class "col-lg-12 col-md-12"}
+       [:div {:class "col-lg-1 col-md-1"}]
+       [:div {:class "col-lg-10 col-md-10"}
         (rating-list/display-rating-list list-of-ratings)]]]]))
 
 (defonce displayed-conference (atom nil))
