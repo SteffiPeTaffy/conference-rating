@@ -51,10 +51,15 @@
       (let [conferences (json-body-for db (request :get "/api/conferences"))]
         (is (= 1 (count conferences)))
         (is (= "some description" (:description (first conferences))))
-        (is (= "some name" (:name (first conferences)))))))))
+        (is (= "some name" (:name (first conferences))))))))
+  (testing "should fail if incomplete data is written to ratings"
+    (let [db (create-mock-db)
+          response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
+                                 (body (json/write-str {:some "random value"}))
+                                 (header :content-type "application/json")))]
+      (is (= 500 (:status response))))))
 
-
-(deftest backwards-compatibility-test
+  (deftest backwards-compatibility-test
   (testing "that we get valid ratings even if there is crap in the db"
     (let [db (create-mock-db)
           conference-id (ObjectId.)
