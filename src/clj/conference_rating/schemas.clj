@@ -14,28 +14,25 @@
    :talks             RatingSummary
    :venue             RatingSummary
    :community         RatingSummary
-   :roles             {
-                       :dev       Count
-                       :devops    Count
-                       :ux        Count
-                       :qa        Count
-                       :ba        Count
-                       :pm        Count
-                       :sales     Count
-                       :recruting Count
-                       :other     Count}
-   :experience        {
-                       :rookie       Count
+   :roles             {:dev        Count
+                       :devops     Count
+                       :ux         Count
+                       :qa         Count
+                       :ba         Count
+                       :pm         Count
+                       :sales      Count
+                       :recruiting Count
+                       :other      Count}
+   :experience        {:rookie       Count
                        :beginner     Count
                        :intermediate Count
                        :advanced     Count
                        :expert       Count}
-   :tags              {
-                       :inspiring         Count
-                       :entertaining      Count
-                       :learning          Count
-                       :potential-hires   Count
-                       :potential-clients Count}})
+   :tags              {:inspiring    Count
+                       :informative  Count
+                       :entertaining Count
+                       :hires        Count
+                       :clients      Count}})
 
 (def Role (s/enum :dev :devops :qa :ux :pm :ba :sales :recruiting :other))
 (def Experience (s/enum :rookie :beginner :intermediate :advanced :expert))
@@ -56,3 +53,7 @@
                           :venue      RatingValue
                           :networking RatingValue}
    :tags                 [Tags]})
+
+
+(defn possible-values [enum]
+  (:vs enum))

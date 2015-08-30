@@ -14,6 +14,7 @@
                  [reagent-forms "0.5.5"]
                  [reagent-utils "0.1.5"]
                  [cljs-ajax "0.3.14"]
+                 [org.clojure/algo.generic "0.1.2"]
                  [com.andrewmcveigh/cljs-time "0.3.11"]
                  [prismatic/schema "0.4.4"]
                  [ring "1.4.0"]

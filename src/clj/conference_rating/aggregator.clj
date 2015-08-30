@@ -1,35 +1,43 @@
 (ns conference-rating.aggregator
   (:require [schema.core :as s]
-            [conference-rating.schemas :refer [AggregateRatings Rating]]))
+            [conference-rating.schemas :refer [AggregateRatings Rating]]
+            [clojure.algo.generic.functor :refer [fmap]]
+            [conference-rating.schemas :as schemas]))
 
-(s/defn aggregate-ratings :- AggregateRatings
+(defn- aggragate-rating-value [key ratings]
+  (let [rating-values (->> ratings
+                           (map #(get-in % [:rating key]))
+                           (filter #(not= -1 %)))
+        count         (count rating-values)]
+    (if (pos? count)
+      {:count count
+       :avg   (/ (reduce + rating-values) count)}
+      {:count 0
+       :avg   0})))
+
+(defn- count-tags [tag-type key ratings]
+  (let [roles-in-ratings (->> ratings
+                              (map #(get % key))
+                              (flatten)
+                              (group-by identity)
+                              (fmap count))
+        roles (schemas/possible-values tag-type)
+        skeleton (->> roles
+                      (map #(vector % 0))
+                      (into {}))]
+    (merge skeleton roles-in-ratings)))
+
+(s/defn ^:always-validate aggregate-ratings :- AggregateRatings
   [ratings :- [Rating]]
   {:number-of-ratings (count ratings)
-   :recommendations   1445
-   :overall           {:avg 4 :count 8}
-   :talks             {:avg 0.1 :count 7}
-   :venue             {:avg 3 :count 6}
-   :community         {:avg 2.5 :count 5}
-   :roles             {
-                       :dev       1
-                       :devops    2
-                       :ux        3
-                       :qa        4
-                       :ba        5
-                       :pm        6
-                       :sales     7
-                       :recruting 8
-                       :other     9}
-   :experience        {
-                       :rookie       1
-                       :beginner     3
-                       :intermediate 12
-                       :advanced     5
-                       :expert       0}
-   :tags              {
-                       :inspiring         2
-                       :entertaining      2
-                       :learning          2
-                       :potential-hires   1
-                       :potential-clients 1}})
+   :recommendations   (->> ratings
+                           (filter :recommended)
+                           (count))
+   :overall           (aggragate-rating-value :overall ratings)
+   :talks             (aggragate-rating-value :talks ratings)
+   :venue             (aggragate-rating-value :venue ratings)
+   :community         (aggragate-rating-value :networking ratings)
+   :roles             (count-tags schemas/Role :roles ratings)
+   :experience        (count-tags schemas/Experience :experience ratings)
+   :tags              (count-tags schemas/Tags :tags ratings)})
 
