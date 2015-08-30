@@ -3,6 +3,7 @@
             [monger.collection :as mc]
             [schema.core :as s]
             [conference-rating.schemas :as schemas]
+            [schema.utils :as schema-utils]
             [schema.coerce :as coerce])
         (:import org.bson.types.ObjectId))
 
@@ -35,10 +36,16 @@
     (println item)
     (clear-id item)))
 
-(def parse-ratings (coerce/coercer [schemas/Rating] coerce/json-coercion-matcher))
+(defn- only-valid [rating]
+  (let [valid (not (schema-utils/error? rating))]
+    (if-not valid
+      (println "ignoring " rating))
+    valid))
 
-(s/defn get-ratings :- [schemas/Rating] [conference-id db]
+(s/defn ^:always-validate get-ratings :- [schemas/Rating] [conference-id db]
   (let [rating-list     (mc/find-maps db "ratings" {:conference-id conference-id})
-        cleared-ratings (map clear-id rating-list)
-        result          (parse-ratings cleared-ratings)]
-    result))
+        cleared-ratings (->> rating-list
+                             (map clear-id)
+                             (map schemas/coerce-rating)
+                             (filter only-valid))]
+    cleared-ratings))

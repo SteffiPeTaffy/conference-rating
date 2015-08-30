@@ -3,8 +3,10 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [ring.mock.request :refer [request body header]]
             [clojure.data.json :as json]
+            [monger.collection :as mc]
             [conference-rating.testdata :refer [some-rating-with some-rating]])
-  (:import (com.github.fakemongo Fongo)))
+  (:import (com.github.fakemongo Fongo)
+           (org.bson.types ObjectId)))
 
 (use-fixtures :once schema.test/validate-schemas)
 
@@ -50,3 +52,14 @@
         (is (= 1 (count conferences)))
         (is (= "some description" (:description (first conferences))))
         (is (= "some name" (:name (first conferences)))))))))
+
+
+(deftest backwards-compatibility-test
+  (testing "that we get valid ratings even if there is crap in the db"
+    (let [db (create-mock-db)
+          conference-id (ObjectId.)
+          rating-id (ObjectId.)]
+      (mc/insert db "conferences" {:_id conference-id :foo :bar})
+      (mc/insert db "ratings" {:_id rating-id :conference-id conference-id :foo :bar})
+      (let [response ((app db) (request :get (str "/api/conferences/" conference-id)))]
+        (is (= 200 (:status response)))))))

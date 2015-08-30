@@ -1,5 +1,6 @@
 (ns conference-rating.schemas
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s]
+            [schema.coerce :as coerce]))
 
 (def Count s/Int)
 
@@ -57,3 +58,5 @@
 
 (defn possible-values [enum]
   (:vs enum))
+
+(def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
