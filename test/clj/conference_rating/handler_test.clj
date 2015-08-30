@@ -1,10 +1,12 @@
 (ns clj.conference-rating.handler-test
   (:use [conference-rating.handler])
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [ring.mock.request :refer [request body header]]
             [clojure.data.json :as json]
             [conference-rating.testdata :refer [some-rating-with some-rating]])
   (:import (com.github.fakemongo Fongo)))
+
+(use-fixtures :once schema.test/validate-schemas)
 
 (defn json-body-for [db request] (json/read-str (:body ((app db) request)) :key-fn keyword))
 
@@ -20,7 +22,10 @@
           response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
                                  (body (json/write-str
                                          (some-rating-with :comment {:name "Bob" :comment "some comment"}
-                                                           :rating {:overall 5})))
+                                                           :rating {:overall 5
+                                                                    :talks 1
+                                                                    :venue 2
+                                                                    :networking 3})))
                                  (header :content-type "application/json")))]
       (is (= 201 (:status response)))
       (let [ratings-response ((app db) (request :get "/api/conferences/someConferenceId/ratings"))

@@ -11,7 +11,9 @@
             [environ.core :refer [env]]
             [conference-rating.db-handler :as db]
             [conference-rating.aggregator :as aggregator]
-            ))
+            [schema.core :as s]
+            [schema.coerce :as coerce]
+            [conference-rating.schemas :as schemas]))
 
 (def home-page
   (html
@@ -42,7 +44,7 @@
         merged            (assoc conference-info :aggregated-ratings aggregate-ratings)]
     (response merged)))
 
-  (defn get-conference-ratings [conference-id db]
+(defn get-conference-ratings [conference-id db]
   (response
     (db/get-ratings conference-id db)))
 
@@ -50,13 +52,17 @@
   (response
     (db/get-conferences-list db)))
 
-(defn add-conference [conference db]
+(s/defn add-conference [conference db]
   (let [add-result (db/add-conference conference db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 
-(defn add-rating [conference-id rating db]
-  (let [add-result (db/add-rating conference-id rating db)
+(def parse-rating (coerce/coercer schemas/Rating coerce/json-coercion-matcher))
+
+(defn add-rating [conference-id raw-rating db]
+  (let [complete   (assoc raw-rating :conference-id conference-id)
+        rating     (parse-rating complete)
+        add-result (db/add-rating rating db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
 

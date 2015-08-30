@@ -1,6 +1,9 @@
-(ns conference-rating.aggregator)
+(ns conference-rating.aggregator
+  (:require [schema.core :as s]
+            [conference-rating.schemas :refer [AggregateRatings Rating]]))
 
-(defn aggregate-ratings [ratings]
+(s/defn aggregate-ratings :- AggregateRatings
+  [ratings :- [Rating]]
   {:number-of-ratings (count ratings)
    :recommendations   1445
    :overall           {:avg 4 :count 8}
@@ -29,3 +32,4 @@
                        :learning          2
                        :potential-hires   1
                        :potential-clients 1}})
+

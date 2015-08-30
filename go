@@ -15,7 +15,7 @@ goal_serve-styles() {
 }
 
 goal_test() {
-  lein cljsbuild test
+  lein test && lein cljsbuild test
 }
 
 if type -t "goal_$1" &>/dev/null; then

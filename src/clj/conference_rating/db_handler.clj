@@ -1,6 +1,9 @@
 (ns conference-rating.db-handler
-       (:require [monger.core :as mg]
-                 [monger.collection :as mc])
+  (:require [monger.core :as mg]
+            [monger.collection :as mc]
+            [schema.core :as s]
+            [conference-rating.schemas :as schemas]
+            [schema.coerce :as coerce])
         (:import org.bson.types.ObjectId))
 
 (def mongolab-uri (System/getenv "MONGOLAB_URI"))
@@ -18,9 +21,8 @@
     (mc/insert db "conferences" document)
     (clear-id document)))
 
-(defn add-rating [conference-id rating db]
-  (let [document (assoc rating :_id (ObjectId.)
-                               :conference-id conference-id)]
+(s/defn add-rating [rating :- schemas/Rating db]
+  (let [document (assoc rating :_id (ObjectId.))]
     (mc/insert db "ratings" document)
     (clear-id document)))
 
@@ -33,8 +35,10 @@
     (println item)
     (clear-id item)))
 
+(def parse-ratings (coerce/coercer [schemas/Rating] coerce/json-coercion-matcher))
 
-(defn get-ratings [conference-id db]
-  (let [rating-list (mc/find-maps db "ratings" {:conference-id conference-id})]
-    (println rating-list)
-    (map clear-id rating-list)))
+(s/defn get-ratings :- [schemas/Rating] [conference-id db]
+  (let [rating-list     (mc/find-maps db "ratings" {:conference-id conference-id})
+        cleared-ratings (map clear-id rating-list)
+        result          (parse-ratings cleared-ratings)]
+    result))
