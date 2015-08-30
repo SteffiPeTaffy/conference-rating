@@ -27,7 +27,6 @@
         (is (= "Bob" (:rating-author (first rating-list))))
         (is (= "some comment" (:rating-comment (first rating-list))))
         (is (= 5 (:rating-stars (first rating-list)))))))
-
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
       (let [response ((app db) (-> (request :post "/api/conferences/")
@@ -37,7 +36,8 @@
         (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/"))
         (let [conference-response (json-body-for db (request :get (get-in response [:headers "Location"])))]
           (is (= "some description" (:description conference-response)))
-          (is (= "some name" (:name conference-response))))
+          (is (= "some name" (:name conference-response)))
+          (is (map? (:aggregated-ratings conference-response))))
       (let [conferences (json-body-for db (request :get "/api/conferences"))]
         (is (= 1 (count conferences)))
         (is (= "some description" (:description (first conferences))))

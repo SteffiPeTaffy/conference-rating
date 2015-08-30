@@ -62,23 +62,22 @@
   [:div {:class "text-lg-right voice-btn-container"}
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
-(defn display-conference-detail-page [simple-conference]
-  (let [conference (merge simple-conference aggregated-ratings)]
-    [:div
-     (header/nav-bar)
-     [:div {:class "container-fluid content-container pad-top conference-container"}
-      [:div {:class "row"}
-       [:div {:class "col-lg-1 col-md-1"}]
-       [:div {:class "col-lg-6 col-md-6"}
-        (conference-information/display-conference-information conference)
-        (add-rating-button (:_id conference))]
-       [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
-        (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]
-       [:div {:class "col-lg-1 col-md-1"}]]
-      [:div {:class "row"}
-       [:div {:class "col-lg-1 col-md-1"}]
-       [:div {:class "col-lg-10 col-md-10"}
-        (rating-list/display-rating-list list-of-ratings)]]]]))
+(defn display-conference-detail-page [conference]
+  [:div
+   (header/nav-bar)
+   [:div {:class "container-fluid content-container pad-top conference-container"}
+    [:div {:class "row"}
+     [:div {:class "col-lg-1 col-md-1"}]
+     [:div {:class "col-lg-6 col-md-6"}
+      (conference-information/display-conference-information conference)
+      (add-rating-button (:_id conference))]
+     [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
+      (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]
+     [:div {:class "col-lg-1 col-md-1"}]]
+    [:div {:class "row"}
+     [:div {:class "col-lg-1 col-md-1"}]
+     [:div {:class "col-lg-10 col-md-10"}
+      (rating-list/display-rating-list list-of-ratings)]]]])
 
 (defonce displayed-conference (atom nil))
 (defonce ratings (atom nil))

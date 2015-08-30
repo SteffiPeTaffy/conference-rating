@@ -10,6 +10,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [environ.core :refer [env]]
             [conference-rating.db-handler :as db]
+            [conference-rating.aggregator :as aggregator]
             ))
 
 (def home-page
@@ -33,11 +34,15 @@
      (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
      (include-js "js/app.js")]]))
 
-(defn get-conference [conference-id db]
-  (response
-    (db/get-conference conference-id db)))
 
-(defn get-conference-ratings [conference-id db]
+(defn get-conference [conference-id db]
+  (let [conference-info   (db/get-conference conference-id db)
+        ratings           (db/get-ratings conference-id db)
+        aggregate-ratings (aggregator/aggregate-ratings ratings)
+        merged            (assoc conference-info :aggregated-ratings aggregate-ratings)]
+    (response merged)))
+
+  (defn get-conference-ratings [conference-id db]
   (response
     (db/get-ratings conference-id db)))
 
