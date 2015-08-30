@@ -1,7 +1,7 @@
 (ns conference-rating.aggregator)
 
 (defn aggregate-ratings [ratings]
-  {:number-of-ratings 16
+  {:number-of-ratings (count ratings)
    :recommendations   1445
    :overall           {:avg 4 :count 8}
    :talks             {:avg 0.1 :count 7}
