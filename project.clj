@@ -70,6 +70,7 @@
                    :source-paths ["env/dev/clj" "src/clj" "src/cljs" "test/clj" "test/cljs"]
                    :plugins [[lein-figwheel "0.3.7"]
                              [lein-cljsbuild "1.0.6"]
+                             [lein-kibit "0.1.2"]
                              [com.cemerick/clojurescript.test "0.3.3"]
                              [lein-less "1.7.2"]]
 
