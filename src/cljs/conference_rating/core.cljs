@@ -25,7 +25,7 @@
 
 (secretary/defroute "/conferences/:id" [id]
                     (backend/load-conference id #(reset! conference/displayed-conference %1))
-                    (backend/load-conference-ratings id #(reset! conference/ratings %1))
+                    (backend/load-conference-ratings id #(reset! conference/display-ratings %1))
                     (session/put! :current-page #'conference/conference-page))
 
 (secretary/defroute "/conferences/:id/add-rating" [id]
