@@ -67,11 +67,11 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "This conference might be interesting for"]
    [:div {:class "row"}
-     (role-checkbox :roles.dev "Devs" "technical interests")
-     (role-checkbox :roles.devops "Dev Ops" "devops interests")
-     (role-checkbox :roles.ux "Ux" "ux interests")
-     (role-checkbox :roles.qa "QAs" "qa interests")
-     (role-checkbox :roles.ba "BAs" "ba interests")
+     (role-checkbox :roles.dev "Devs" "Technical interests")
+     (role-checkbox :roles.devops "Dev Ops" "DevOps interests")
+     (role-checkbox :roles.ux "UX" "UX interests")
+     (role-checkbox :roles.qa "QAs" "QA interests")
+     (role-checkbox :roles.ba "BAs" "BA interests")
      (role-checkbox :roles.pm "PMs" "doing PM stuff all day long")
      (role-checkbox :roles.sales "Sales" "doing sales stuff all day long")
      (role-checkbox :roles.recruiting "Recruiters" "doing recruiting stuff all day long")
