@@ -42,7 +42,7 @@
     [:h4 "untitled conference"]))
 
 (defn description [description]
-  [:p {:class "text-muted conference-description"} description])
+  [:div {:class "text-muted conference-description"} description])
 
 (defn link [link]
   [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
@@ -94,7 +94,7 @@
    [:div {:class "panel-body  bg-light"}
     [:div {:class "row"}
      [:div {:class "col-lg-8 col-md-8 col-sm-7"}
-      (description (:description conference))
+      (description (util/formatted-text (:description conference)))
       (link (:link conference))]
      [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-conatiner"}
       (overall-rating (get-in conference [:aggregated-ratings :overall]))

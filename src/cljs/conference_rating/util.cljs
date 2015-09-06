@@ -1,6 +1,8 @@
 (ns conference-rating.util
   (:require [cljs-time.core :as t]
-            [cljs-time.format :as tf]))
+            [cljs-time.format :as tf]
+            [clojure.string :as s]
+            [goog.string :as gstring]))
 
 (defn- value-true? [[_ v]]
   (true? v))
@@ -30,3 +32,16 @@
     (and from-date from-date) [:p {:class "conference-dates"} (str (format-date from-date) " - " (format-date to-date))]
     from-date [:p {:class "conference-dates"} (format-date from-date)]
     :else [:p {:class "conference-dates"} "TBD"]))
+
+(defn- add-nbsp [s]
+  (if (= (s/trim s) "")
+    (gstring/unescapeEntities "&nbsp;")
+    s))
+
+(defn- to-paragraph [s]
+  [:p s])
+
+(defn formatted-text [t]
+  (->> (s/split t #"\n")
+       (map add-nbsp)
+       (map to-paragraph)))
