@@ -42,15 +42,18 @@
         ratings           (db/get-ratings conference-id db)
         aggregate-ratings (aggregator/aggregate-ratings ratings)
         merged            (assoc conference-info :aggregated-ratings aggregate-ratings)]
-    (response merged)))
+    merged))
 
 (defn get-conference-ratings [conference-id db]
   (response
     (db/get-ratings conference-id db)))
 
 (defn get-conferences [db]
-  (response
-    (db/get-conferences-list db)))
+  (let [conferences (db/get-conferences-list db)
+        complete-confernces (->> conferences
+                                (map :_id)
+                                (map #(get-conference % db)))]
+    complete-confernces))
 
 (s/defn add-conference [conference db]
   (let [add-result (db/add-conference conference db)
@@ -68,8 +71,8 @@
 
 (defn create-routes [db]
   (routes
-   (GET "/api/conferences" [] (get-conferences db))
-   (GET "/api/conferences/:id" [id] (get-conference id db))
+   (GET "/api/conferences" [] (response (get-conferences db)))
+   (GET "/api/conferences/:id" [id] (response (get-conference id db)))
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
    (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
    (POST "/api/conferences/" request (add-conference (:body request) db))

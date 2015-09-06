@@ -51,7 +51,8 @@
       (let [conferences (json-body-for db (request :get "/api/conferences"))]
         (is (= 1 (count conferences)))
         (is (= "some description" (:description (first conferences))))
-        (is (= "some name" (:name (first conferences))))))))
+        (is (= "some name" (:name (first conferences))))
+        (is (map? (:aggregated-ratings (first conferences))))))))
   (testing "should fail if incomplete data is written to ratings"
     (let [db (create-mock-db)
           response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
