@@ -34,9 +34,6 @@
 (defn perc [total value]
   (* 100 (/ value total)))
 
-(defn is-future-conference? [conference]
-    (t/after? (util/parse-string-to-date(:from conference)) (t/now)))
-
 (defn roles-bar [rolesMap]
   (let [count (->> rolesMap
                   (vals)
@@ -61,7 +58,7 @@
       [:a {:href (str "#/conferences/" (:_id conference))}
        (title (:name conference))
        (util/from-to-dates (:from conference) (:to conference))]]
-     (if (not (is-future-conference? conference))
+     (if (not (util/is-future-conference? conference))
        [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
         (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
         (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)])]
@@ -71,7 +68,7 @@
      [:div {:class "col-lg-8 col-md-8 col-sm-7"}
       (description (util/formatted-text (:description conference)))
       (link (:link conference))]
-     (if (not (is-future-conference? conference))
+     (if (not (util/is-future-conference? conference))
        [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-conatiner"}
         (overall-rating (get-in conference [:aggregated-ratings :overall]))
         (add-rating-button (:_id conference))])]]

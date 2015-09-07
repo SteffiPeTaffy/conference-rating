@@ -48,3 +48,6 @@
   (->> (s/split t #"\n")
        (map add-nbsp)
        (map to-paragraph)))
+
+(defn is-future-conference? [conference]
+  (t/after? (parse-string-to-date (:from conference)) (t/now)))

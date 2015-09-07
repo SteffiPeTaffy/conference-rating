@@ -18,7 +18,8 @@
      [:div {:class "col-lg-1 col-md-1"}]
      [:div {:class "col-lg-6 col-md-6"}
       (conference-information/display-conference-information conference)
-      (add-rating-button (:_id conference))]
+      (if (not (util/is-future-conference? conference))
+        (add-rating-button (:_id conference)))]
      [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
       (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]
      [:div {:class "col-lg-1 col-md-1"}]]
