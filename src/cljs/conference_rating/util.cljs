@@ -23,6 +23,9 @@
   (tf/unparse built-in-formatter
               (t/date-time (:year date) (:month date) (:day date))))
 
+(defn parse-string-to-date [date-str]
+  (tf/parse built-in-formatter date-str))
+
 (defn format-date [date-str]
   (let [datetime (tf/parse built-in-formatter date-str)]
     (tf/unparse (tf/formatter "dd MMMM YYYY") datetime)))
