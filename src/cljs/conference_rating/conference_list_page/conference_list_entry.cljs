@@ -2,35 +2,6 @@
   (:require [conference-rating.view-utils.panel :as panel]
             [conference-rating.util :as util]))
 
-(def aggregated-ratings
-  {:aggregated-ratings {:number-of-ratings 2
-                        :recommendations 1
-                        :overall {:avg 4 :count 2}
-                        :talks {:avg 4 :count 2}
-                        :venue {:avg 2.5 :count 2}
-                        :community {:avg 4.5 :count 2}
-                        :roles {:dev 2
-                                :devops 2
-                                :ux 2
-                                :qa 1
-                                :ba 1
-                                :pm 1
-                                :sales 1
-                                :recruting 1
-                                :other 1}
-                        :experience {
-                                     :rookie 1
-                                     :beginner 3
-                                     :intermediate 12
-                                     :advanced 5
-                                     :expert 0}
-                        :tags {
-                               :inspiring 2
-                               :entertaining 2
-                               :learning 2
-                               :potential-hires 1
-                               :potential-clients 1}}})
-
 (defn series-tag [series-tag]
   (if (not (nil? series-tag))
       [:div {:class "series-tag-container"}[:span {:class "series-tag"} series-tag]]
