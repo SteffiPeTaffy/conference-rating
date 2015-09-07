@@ -11,7 +11,7 @@
    (header/nav-bar)
    [:div {:class "container-fluid content-container pad-top"}
     (header/add-conference-bar)
-    [:div {:class "row"}(map list-entry/display-conference-list-item conference-list)]]])
+    [:div {:class "row"}(map list-entry/display-conference-list-item (sort-by :from conference-list))]]])
 
 (defonce displayed-conferences (atom nil))
 
