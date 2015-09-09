@@ -46,7 +46,7 @@
      (roles (perc count (:ba rolesMap)) "bg-ba" "BA")
      (roles (perc count (:pm rolesMap)) "bg-pm" "PM")
      (roles (perc count (:sales rolesMap)) "bg-sales" "SALES")
-     (roles (perc count (:recruting rolesMap)) "bg-recruting" "RECRUITING")
+     (roles (perc count (:recruiting rolesMap)) "bg-recruting" "RECRUITING")
      (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
 (defn display-conference-list-item [conference]
