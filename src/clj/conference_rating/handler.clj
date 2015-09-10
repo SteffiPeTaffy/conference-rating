@@ -22,8 +22,8 @@
      [:meta {:charset "utf-8"}]
      [:meta {:name "viewport"
              :content "width=device-width, initial-scale=1"}]
-     (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
-     (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css")
+     (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap.min.css")
+     (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap-theme.min.css")
      (include-css "css/reagent-forms.css")
      (include-css "css/site.css")]
     [:body {:class "bg-body"}
@@ -32,8 +32,8 @@
       [:p "please run "
        [:b "lein figwheel"]
        " in order to start the compiler"]]
-     (include-js "https://code.jquery.com/jquery-2.1.4.min.js")
-     (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+     (include-js "thirdparty/jquery-2.1.4.min.js")
+     (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
      (include-js "js/app.js")]]))
 
 
