@@ -37,6 +37,8 @@
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
 
+(set! (. js/document -title) "conference voices")
+
 (defn init! []
   (history/hook-browser-navigation!)
   (mount-root))
