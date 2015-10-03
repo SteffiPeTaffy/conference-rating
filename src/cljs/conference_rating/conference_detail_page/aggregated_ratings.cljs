@@ -81,11 +81,21 @@
      [:p (first top-2-tags)]
      [:p (second top-2-tags)]]))
 
+(defn has-non-zero-ratings [ratings-collection]
+  (->> ratings-collection
+       (map second)
+       (filter (complement zero?))
+       (not-empty)))
+
+(defn ratings-sentence [collection sentence-fn]
+  (if (has-non-zero-ratings collection)
+    [:p (sentence-fn collection)]))
+
 (defn average-attendee [aggregated-ratings]
   [:div
-   [:p (get-role-sentence (:roles aggregated-ratings))]
-   [:p (get-experience-sentence (:experience aggregated-ratings))]
-   [:p (get-tags-sentence (:tags aggregated-ratings))]])
+   (ratings-sentence (:roles aggregated-ratings) get-role-sentence)
+   (ratings-sentence (:experience aggregated-ratings) get-experience-sentence)
+   (ratings-sentence (:tags aggregated-ratings) get-tags-sentence)])
 
 (defn- conference-badge [lookup-table]
   (fn [[key count]]
