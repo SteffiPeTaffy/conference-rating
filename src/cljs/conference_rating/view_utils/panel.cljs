@@ -1,4 +1,5 @@
-(ns conference-rating.view-utils.panel)
+(ns conference-rating.view-utils.panel
+ (:require [goog.string :as gstring]))
 
 (defn coloured-panel [heading-label body heading-classes body-classes]
   [:div {:class "panel"}
@@ -33,7 +34,7 @@
      [:div {:class "media-container icon-wrap icon-md"}
       [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
-     [:h3 {:class "media-body range-label"} (str absolute " / 4")]
+     [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
      [:div {:class "text-uppercase"} name]]]
    [:div {:class "progress-xs"}
     [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light"}]]
