@@ -3,18 +3,13 @@
             [conference-rating.view-utils.header :as header]
             [conference-rating.conference-list-page.conference-list-entry :as list-entry]
             [conference-rating.util :as util]
-            [conference-rating.history :as history]))
+            [conference-rating.history :as history]
+            [conference-rating.view-utils.typeahead :as typeahead]))
 
 
 (defn search-for-conference-input []
   [:input {:type "text" :class "form-control search-for-conference-input" :placeholder "search for conference"}])
 
-(def typeaheadConfig
-  (clj->js {
-            :hint true,
-            :highlight true,
-            :minLength 1
-            }))
 
 (defn matching [name q]
   (let [name-lower-case (.toLowerCase name)
@@ -24,8 +19,7 @@
     not-result))
 
 (defn conference-suggestion-template [conference]
-  (let [conference (js->clj conference :keywordize-keys true)
-        series (:series conference)
+  (let [series (:series conference)
         name (:name conference)
         from-date (util/format-date (:from conference))
         to-date (util/format-date (:to conference))]
@@ -35,25 +29,31 @@
          "<p>"from-date " - " to-date "</p>"
          "</div>")))
 
-(defn typeaheadDataConfig [conference-list]
-  (clj->js {
-            :name "conferences",
-            :source (fn [q cb] (let [match (->> conference-list
-                                                (filter (fn [conference] (not (nil? (:name conference)))))
-                                                (filter (fn [conference] (matching (:name conference) q))))]
-                                 (cb (clj->js match))))
-            :display (fn [conference] (:name (js->clj conference :keywordize-keys true)))
-            :templates {:suggestion conference-suggestion-template}}))
 
 (defn go-to-conference [conference]
   (history/redirect-to (str "/conferences/" (:_id conference))))
+
+
+(defn conference-suggestion-source [conference-list]
+  (fn [q cb] (let [match (->> conference-list
+                              (filter #(not (nil? (:name %))))
+                              (filter #(matching (:name %) q)))]
+               (cb  match))))
+
+(defn conference-name [conference] (:name conference))
 
 (defn search-for-conference-component [conference-list]
   (with-meta search-for-conference-input
              {:component-did-mount
               (fn [this]
                 (doto (js/jQuery (reagent/dom-node this))
-                  (.typeahead  typeaheadConfig (typeaheadDataConfig conference-list))
+                  (.typeahead  (typeahead/config {:hint true,
+                                                  :highlight true,
+                                                  :minLength 1})
+                               (typeahead/data-sets {:name "conferences",
+                                                     :source (conference-suggestion-source conference-list)
+                                                     :display conference-name
+                                                     :templates {:suggestion conference-suggestion-template}}))
                   (.bind "typeahead:select" #(go-to-conference (js->clj %2 :keywordize-keys true)))))}))
 
 (defn display-conference-list [conference-list]
