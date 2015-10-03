@@ -6,9 +6,8 @@
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]
             [conference-rating.util :as util]
-            [conference-rating.view-utils.navbar :as navbar]
-            [conference-rating.view-utils.header :as header]
             [conference-rating.backend :as backend]
+            [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.view-utils.typeahead :as typeahead]))
 
 (defn form-input [label input]
