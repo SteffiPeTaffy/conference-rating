@@ -6,6 +6,8 @@
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]
             [conference-rating.view-utils.header :as header]
+            [conference-rating.backend :as backend]
+            [conference-rating.view-utils.typeahead :as typeahead]
             [conference-rating.util :as util]))
 
 (defn form-input [label input]
@@ -13,9 +15,33 @@
    [:label {:for (:id (second input))} label]
    input])
 
+(defn conference-series-input []
+  [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
+
+(defn conference-series-suggestions [q cb]
+  (cb "foobar")
+  (backend/load-series-suggestions q (fn [x]
+                                       (println "foo" x)
+                                       (cb ["foobar"]))))
+
+(defn conference-series-template [series]
+  (println "template" series)
+  (str "<div>" series "</div>"))
+
+(def conference-series-component
+  (typeahead/init-typeahead
+    conference-series-input
+    (typeahead/config {:hint true,
+                       :highlight true,
+                       :minLength 1})
+    (typeahead/data-sets {:name "series",
+                          :source conference-series-suggestions
+                          :display identity
+                          :templates {:suggestion conference-series-template}})))
+
 (def conference-form-template
   [:div
-   (form-input "Series" [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
+   (form-input "Series" [conference-series-component])
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
    [:div {:class "row"}
     [:div {:class "col-md-6"} (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])]

@@ -13,6 +13,7 @@
             [conference-rating.aggregator :as aggregator]
             [schema.core :as s]
             [schema.coerce :as coerce]
+            [clojure.string :as string]
             [conference-rating.schemas :as schemas]))
 
 (def home-page
@@ -70,6 +71,18 @@
         id         (:_id add-result)]
     (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
 
+(defn matches-series [q]
+  (fn [series]
+    (.contains (string/lower-case series)
+               (string/lower-case q))))
+
+(defn series-suggestions [db q]
+  (->> (db/get-conferences-list db)
+       (map :series)
+       (filter (complement string/blank?))
+       (filter (matches-series q))
+       (distinct)))
+
 (defn create-routes [db]
   (routes
    (GET "/api/conferences" [] (response (get-conferences db)))
@@ -77,6 +90,10 @@
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
    (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
    (POST "/api/conferences/" request (add-conference (:body request) db))
+   (GET "/api/series/suggestions" {params :params}
+     (do
+       (println params)
+       (response (series-suggestions  db (:q params)))))
    (resources "/")
    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                   clojure.java.io/resource

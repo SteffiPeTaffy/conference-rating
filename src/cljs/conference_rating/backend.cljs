@@ -18,3 +18,10 @@
                                 :error-handler #(js/alert (str "conferences not found" %1))
                                 :response-format :json
                                 :keywords? true}))
+
+(defn load-series-suggestions [q success-handler]
+  (ajax/GET (str "/api/series/suggestions?q=" q)
+            {:handler         success-handler
+             :response-format :json
+             :keywords? true}))
+
