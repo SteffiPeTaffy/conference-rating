@@ -26,7 +26,8 @@
                  [environ "1.0.0"]
                  [org.clojure/clojurescript "0.0-3308" :scope "provided"]
                  [secretary "1.2.3"]
-                 [com.novemberain/monger "3.0.0-rc2"]]
+                 [com.novemberain/monger "3.0.0-rc2"]
+                 [cljsjs/typeahead-bundle "0.11.1-1"]]
 
 
   :plugins [[lein-environ "1.0.0"]

@@ -7,7 +7,8 @@
             [conference-rating.backend :as backend]
             [conference-rating.conference-detail-page.conference-detail-page :as conference]
             [conference-rating.rating.add-rating-page :as add-rating]
-            [conference-rating.conference-list-page.conference-list-page :as conference-list])
+            [conference-rating.conference-list-page.conference-list-page :as conference-list]
+            [cljsjs.typeahead-bundle])
     (:import goog.History))
 
 ;; -------------------------

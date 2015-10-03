@@ -1,4 +1,5 @@
-(ns conference-rating.view-utils.header)
+(ns conference-rating.view-utils.header
+  (:require [reagent.core :as reagent]))
 
 
 (defn nav-bar []
@@ -29,6 +30,7 @@
      (legend "SALES" "bg-sales")
      (legend "RECRUITING" "bg-recruting")
      (legend "OTHER" "bg-other")]]]])
+
 
 (defn add-conference-bar []
   [:div {:class "add-conference-btn-container"}
