@@ -7,47 +7,112 @@
 (defn badge [label classes]
   [:span {:class (str "badge " classes)} label])
 
-(defn conference-badges-row [& badges]
-  [:div {:class "badge-row"} badges ])
+(defn conference-badges-row [badges]
+  [:div {:class "badge-row"} badges])
 
-;;TODO show sentence for experience level, too
-(defn average-attendee []
+(defn top-2 [collection]
+  (->> collection
+       (sort-by #(second %))
+       (reverse)
+       (take 2)
+       (map first)))
+
+(def roles->sentence-fragment {:dev        "a developer"
+                               :devops     "a devops aka admin :)"
+                               :ux         "a user experience designer"
+                               :qa         "a quality analyst"
+                               :ba         "a business analyst"
+                               :pm         "a project manager"
+                               :sales      "a sales person"
+                               :other      "a random person"
+                               :recruiting "a recruiter"})
+
+(def roles->badge-label {:dev        "DEV"
+                         :devops     "DEVOPS"
+                         :ux         "UX"
+                         :qa         "QA"
+                         :ba         "BA"
+                         :pm         "PM"
+                         :sales      "Sales"
+                         :other      "Other"
+                         :recruiting "Recruiting"})
+
+(def experience->sentence-fragment {:rookie       "a rookie"
+                               :beginner     "a beginner"
+                               :intermediate "intermediate"
+                               :advanced     "advanced"
+                               :expert       "an expert"})
+
+(def experience->badge-label {:rookie       "Rookie"
+                              :beginner     "Beginner"
+                              :intermediate "Intermediate"
+                              :advanced     "Advanced"
+                              :expert       "Expert"})
+
+(def tags->sentence-fragment {:inspiring    "I am looking for inspiring talks to get awesome ideas for new projects."
+                              :entertaining "I want to get entertained. And have fun at an awesome after party."
+                              :informative  "I am here to learn a lot and watch as many talks as possible."
+                              :hires        "I want to met potential future collegues and extend my network."
+                              :clients      "I am on the hunt for potential clients that have a booth at this confernece."})
+
+(def tags->badge-label {:inspiring    "Inspiring"
+                        :entertaining "Entertaining"
+                        :informative  "Informative"
+                        :hires        "Potential Hires"
+                        :clients      "Potential Clients"})
+
+(defn get-role-sentence [roles]
+  (let [top-2-roles (->> roles
+                         (top-2)
+                         (map roles->sentence-fragment))]
+    (str "I am " (first top-2-roles) " or " (second top-2-roles))))
+
+(defn get-experience-sentence [experiences]
+  (let [top-2-experience (->> experiences
+                              (top-2)
+                              (map experience->sentence-fragment))]
+    (str "I am " (first top-2-experience) " or " (second top-2-experience) " in my field.")))
+
+(defn get-tags-sentence [tags]
+  (let [top-2-tags (->> tags
+                        (top-2)
+                        (map tags->sentence-fragment))]
+    [:div
+     [:p (first top-2-tags)]
+     [:p (second top-2-tags)]]))
+
+(defn average-attendee [aggregated-ratings]
   [:div
-   [:p "I am a Dev or QA"]
-   [:p "I am looking for entertainment and fun"]
-   [:p "I want to learn a lot"]
-   [:p "I want to eatch out for potential clients"]
-   [:p "I want to watch out for potential hires"]])
+   [:p (get-role-sentence (:roles aggregated-ratings))]
+   [:p (get-experience-sentence (:experience aggregated-ratings))]
+   [:p (get-tags-sentence (:tags aggregated-ratings))]])
 
-(defn- selection-of-role-elements [aggregated-ratings role label]
-  (let [count (role aggregated-ratings)]
-    (if (> count 0) [badge (str label " " count) "badge-light-blue"])))
+(defn- conference-badge [lookup-table]
+  (fn [[key count]]
+    (let [label (lookup-table key)]
+      [badge (str label " (" count ")") "badge-light-blue"])))
+
+(defn badges [coll lookup-table]
+  (->> coll
+       (filter #(not= 0 (second %)))
+       (sort-by #(second %))
+       (reverse)
+       (map (conference-badge lookup-table))))
 
 
 (defn conference-badges [aggregated-ratings]
   [:div
-   (conference-badges-row (selection-of-role-elements aggregated-ratings :dev "DEV")
-                          (selection-of-role-elements aggregated-ratings :devops "DEVOPS")
-                          (selection-of-role-elements aggregated-ratings :ux "UX")
-                          (selection-of-role-elements aggregated-ratings :qa "QA")
-                          (selection-of-role-elements aggregated-ratings :ba "BA")
-                          (selection-of-role-elements aggregated-ratings :pm "PM")
-                          (selection-of-role-elements aggregated-ratings :sales "Sales")
-                          (selection-of-role-elements aggregated-ratings :recruting "Recruting")
-                          (selection-of-role-elements aggregated-ratings :other "Others"))
-   (conference-badges-row (badge "Inspiring" "badge-light-primary")
-                          (badge "learnings" "badge-light-primary")
-                          (badge "Network" "badge-light-primary")
-                          (badge "Hires" "badge-light-primary")
-                          (badge "Clients" "badge-light-primary"))])
+   (conference-badges-row (badges (:roles aggregated-ratings) roles->badge-label))
+   (conference-badges-row (badges (:experience aggregated-ratings) experience->badge-label))
+   (conference-badges-row (badges (:tags aggregated-ratings) tags->badge-label))])
 
 (defn conference-average-attendee [aggregated-ratings]
   [:div
-   (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee) (conference-badges aggregated-ratings))])
+   (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee aggregated-ratings) (conference-badges aggregated-ratings))])
 
 
 (defn display-aggregated-ratings [aggregated-ratings]
-  (let  [overall-avg (get-in aggregated-ratings [:overall :avg])
+  (let [overall-avg (get-in aggregated-ratings [:overall :avg])
         overall-avg-percentage (* (/ overall-avg 4) 100)
         overall-ratings-str (str (get-in aggregated-ratings [:overall :count]) " ratings")
         talks-avg (get-in aggregated-ratings [:talks :avg])
@@ -59,15 +124,15 @@
         networking-avg (get-in aggregated-ratings [:community :avg])
         networking-avg-percentage (* (/ networking-avg 4) 100)
         networking-ratings-str (str (get-in aggregated-ratings [:community :count]) " ratings")]
-  [:div
-   (conference-recommendations (:recommendations aggregated-ratings))
-   [:div {:class "row"}
-    [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-     (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
-     (panel/range-panel talks-avg-percentage talks-avg "Talks" talks-ratings-str "bg-purple" "glyphicon-user")]
-    [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-     (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")
-     (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]
-   (conference-average-attendee aggregated-ratings)]))
+    [:div
+     (conference-recommendations (:recommendations aggregated-ratings))
+     [:div {:class "row"}
+      [:div {:class "col-lg-6 col-md-6 col-sm-6"}
+       (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
+       (panel/range-panel talks-avg-percentage talks-avg "Talks" talks-ratings-str "bg-purple" "glyphicon-user")]
+      [:div {:class "col-lg-6 col-md-6 col-sm-6"}
+       (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")
+       (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]
+     (conference-average-attendee aggregated-ratings)]))
 
 
