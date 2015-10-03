@@ -4,12 +4,13 @@
 (defn config [c]
   (clj->js c))
 
-(defn wrap-source [source-fn]
-  (fn [q cb]
+(defn wrap-source [source-fn is-async]
+  (fn [q sync-callback async-callback]
     (source-fn q (fn [data]
-                   (cb
-                     (println "in wrapper" data (clj->js data))
-                     (clj->js data))))))
+                   (let [converted-data (clj->js data)]
+                     (if is-async
+                       (async-callback converted-data)
+                       (sync-callback  converted-data)))))))
 
 (defn wrap-display [display-fn]
   (fn [suggestion]
@@ -26,7 +27,7 @@
 
 (defn data-sets [d]
   (let [result (-> d
-                   (assoc :source (wrap-source (:source d)))
+                   (assoc :source (wrap-source (:source d) (:async d)))
                    (assoc :display (wrap-display (:display d)))
                    (assoc :templates (wrap-templates (:templates d))))]
     (clj->js result)))

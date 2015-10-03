@@ -19,13 +19,10 @@
   [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
 
 (defn conference-series-suggestions [q cb]
-  (cb "foobar")
   (backend/load-series-suggestions q (fn [x]
-                                       (println "foo" x)
-                                       (cb ["foobar"]))))
+                                       (cb x))))
 
 (defn conference-series-template [series]
-  (println "template" series)
   (str "<div>" series "</div>"))
 
 (def conference-series-component
@@ -37,6 +34,7 @@
     (typeahead/data-sets {:name "series",
                           :source conference-series-suggestions
                           :display identity
+                          :async true
                           :templates {:suggestion conference-series-template}})))
 
 (def conference-form-template
