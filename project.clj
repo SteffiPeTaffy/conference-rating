@@ -98,6 +98,7 @@
                                                        "test/vendor/es5-shim.js"
                                                        "test/vendor/es5-sham.js"
                                                        "test/vendor/console-polyfill.js"
+                                                       "resources/public/thirdparty/jquery-2.1.4.min.js"
                                                        "target/test.js"]}}}
 
              :uberjar {:hooks [leiningen.less leiningen.cljsbuild]
