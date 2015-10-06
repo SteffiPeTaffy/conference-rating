@@ -6,6 +6,8 @@
 
 ## Development
 
+Install [Leiningen](http://leiningen.org/), if you don't already have it.
+
 * `lein run` starts server ([http://localhost:3000](http://localhost:3000))
 * `lein figwheel` starts cljs autocompiler
 * `lein less auto` starts the less compiler
