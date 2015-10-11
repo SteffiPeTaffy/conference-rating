@@ -1,6 +1,6 @@
 (ns conference-rating.conference-detail-page.conference-detail-page
   (:require [reagent.core :as reagent :refer [atom]]
-            [conference-rating.view-utils.header :as header]
+            [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.conference-detail-page.rating-list :as rating-list]
             [conference-rating.conference-detail-page.conference-information :as conference-information]
             [conference-rating.conference-detail-page.aggregated-ratings :as aggregated-ratings]
@@ -12,7 +12,7 @@
 
 (defn display-conference-detail-page [conference ratings]
   [:div
-   (header/nav-bar)
+   (navbar/nav-bar)
    [:div {:class "container-fluid content-container pad-top conference-container"}
     [:div {:class "row"}
      [:div {:class "col-lg-1 col-md-1"}]
