@@ -5,7 +5,7 @@
             [reagent.session :as session]
             [conference-rating.history :as history]
             [conference-rating.util :as util]
-            [conference-rating.view-utils.header :as header]))
+            [conference-rating.view-utils.navbar :as navbar]))
 
 (defn- convert-to-tag-list [m k]
   (assoc m k (util/checkboxes-to-tag-list (get m k))))
@@ -67,15 +67,15 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "This conference might be interesting for"]
    [:div {:class "row"}
-     (role-checkbox :roles.dev "Devs" "Technical interests")
-     (role-checkbox :roles.devops "Dev Ops" "DevOps interests")
-     (role-checkbox :roles.ux "UX" "UX interests")
-     (role-checkbox :roles.qa "QAs" "QA interests")
-     (role-checkbox :roles.ba "BAs" "BA interests")
-     (role-checkbox :roles.pm "PMs" "doing PM stuff all day long")
-     (role-checkbox :roles.sales "Sales" "doing sales stuff all day long")
-     (role-checkbox :roles.recruiting "Recruiters" "doing recruiting stuff all day long")
-     (role-checkbox :roles.other "Others" "doing other stuff all day long")]])
+     (role-checkbox :roles.dev "Devs" "with a focus on technical topics")
+     (role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems")
+     (role-checkbox :roles.ux "UX" "that are all about user experience and visual designs")
+     (role-checkbox :roles.qa "QAs" "that are interested in getting input on testing")
+     (role-checkbox :roles.ba "BAs" "which lover to get more insight about stories")
+     (role-checkbox :roles.pm "PMs" "that want to know how to manage creative people")
+     (role-checkbox :roles.sales "Sales" "who want to support our clients even better")
+     (role-checkbox :roles.recruiting "Recruiters" "that are on the hunt to find us the brightest colleagues")
+     (role-checkbox :roles.other "Others" "that have other interests :)")]])
 
 (defn tag-checkbox [id input-label input-label-description]
   [:div {:class "row role-checkbox-container"}
@@ -95,8 +95,8 @@
      (tag-checkbox :tags.inspiring "inspriring" "This conference had an impact one me.")
      (tag-checkbox :tags.informative "informative" "I learned a lot during the workshops, sessions and talks.")
      (tag-checkbox :tags.entertaining "entertaining" "The speakers where showmasters and the after party was amazing.")
-     (tag-checkbox :tags.hires "good to meet potential hires" "The speakers where showmasters and the after party was amazing.")
-     (tag-checkbox :tags.clients "good to meet potential clients" "The speakers where showmasters and the after party was amazing.")]]])
+     (tag-checkbox :tags.hires "good to meet potential hires" "I meet amazing people I would like to work with in the future.")
+     (tag-checkbox :tags.clients "good to meet potential clients" "The business sponsoring or being present at this conference coud be our next client.")]]])
 
 (defn experience-checkbox [id input-label]
  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
@@ -168,7 +168,7 @@
                                  :hires        false
                                  :clients      false}})]
     [:div
-     (header/nav-bar)
+     (navbar/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row add-rating-container"}
        [:div {:class "col-lg-1 col-md-1"}]
