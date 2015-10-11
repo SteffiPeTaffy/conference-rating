@@ -1,6 +1,6 @@
 (ns conference-rating.conference-list-page.conference-list-page
   (:require [reagent.core :as reagent :refer [atom]]
-            [conference-rating.view-utils.header :as header]
+            [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.conference-list-page.conference-list-entry :as list-entry]
             [conference-rating.util :as util]
             [conference-rating.history :as history]
@@ -54,13 +54,18 @@
                           :templates {:suggestion conference-suggestion-template}})
     #(go-to-conference %2)))
 
+
+(defn add-conference-bar []
+  [:div {:class "add-conference-btn-container"}
+   [:a {:class "btn btn-md btn-orange mar-bottom" :href "#/add-conference"} "new conference"]])
+
 (defn display-conference-list [conference-list]
   [:div
-   (header/nav-bar)
+   (navbar/nav-bar)
    [:div {:class "container-fluid content-container pad-top"}
     [:div {:class "conference-search form-group"}
      [(search-for-conference-component conference-list)]]
-    (header/add-conference-bar)
+    (add-conference-bar)
     [:div {:class "row"}(map list-entry/display-conference-list-item (sort-by :from conference-list))]]])
 
 (defonce displayed-conferences (atom nil))

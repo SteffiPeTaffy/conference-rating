@@ -5,10 +5,11 @@
             [cljs-time.format :as tf]
             [reagent.core :refer [atom]]
             [reagent-forms.core :as forms]
+            [conference-rating.util :as util]
+            [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.view-utils.header :as header]
             [conference-rating.backend :as backend]
-            [conference-rating.view-utils.typeahead :as typeahead]
-            [conference-rating.util :as util]))
+            [conference-rating.view-utils.typeahead :as typeahead]))
 
 (defn form-input [label input]
   [:div {:class "form-group"}
@@ -65,7 +66,7 @@
 (defn add-conference-page []
   (let [doc (atom {})]
     [:div
-     (header/nav-bar)
+     (navbar/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row"}
        [:div {:class "col-lg-2"}]

@@ -38,10 +38,10 @@
                          :recruiting "Recruiting"})
 
 (def experience->sentence-fragment {:rookie       "a rookie"
-                               :beginner     "a beginner"
-                               :intermediate "intermediate"
-                               :advanced     "advanced"
-                               :expert       "an expert"})
+                                    :beginner     "a beginner"
+                                    :intermediate "intermediate"
+                                    :advanced     "advanced"
+                                    :expert       "an expert"})
 
 (def experience->badge-label {:rookie       "Rookie"
                               :beginner     "Beginner"
@@ -50,10 +50,10 @@
                               :expert       "Expert"})
 
 (def tags->sentence-fragment {:inspiring    "I am looking for inspiring talks to get awesome ideas for new projects."
-                              :entertaining "I want to get entertained. And have fun at an awesome after party."
+                              :entertaining "I want to get entertained and have fun at an awesome after party."
                               :informative  "I am here to learn a lot and watch as many talks as possible."
                               :hires        "I want to met potential future collegues and extend my network."
-                              :clients      "I am on the hunt for potential clients that have a booth at this confernece."})
+                              :clients      "I am on the hunt for potential clients that are present at this confernece."})
 
 (def tags->badge-label {:inspiring    "Inspiring"
                         :entertaining "Entertaining"
