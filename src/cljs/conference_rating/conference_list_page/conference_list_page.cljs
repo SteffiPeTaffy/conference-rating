@@ -63,8 +63,7 @@
   [:div
    (navbar/nav-bar)
    [:div {:class "container-fluid content-container pad-top"}
-    [:div {:class "conference-search form-group"}
-     [(search-for-conference-component conference-list)]]
+    [:div {:class "conference-search form-group"}]
     (add-conference-bar)
     [:div {:class "row"}(map list-entry/display-conference-list-item (sort-by :from conference-list))]]])
 
