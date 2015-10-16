@@ -1,5 +1,6 @@
 (ns conference-rating.server
   (:require [conference-rating.handler :refer [app]]
+            [clojure.java.io :as io]
             [environ.core :refer [env]]
             [conference-rating.db-handler :as db-handler]
             [ring.adapter.jetty :refer [run-jetty]]
@@ -11,7 +12,7 @@
 
 (defn do-wrap-okta [handler okta-active]
   (if okta-active
-    (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config-location "okta-ci-config.xml"})
+    (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config-location (io/resource "okta-ci-config.xml")})
     handler))
 
  (defn -main [& args]
