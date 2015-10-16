@@ -11,9 +11,11 @@
   (:gen-class))
 
 (defn do-wrap-okta [handler okta-active]
-  (if okta-active
-    (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config-location (io/resource "okta-ci-config.xml")})
-    handler))
+  (let [config-res (io/resource "okta-ci-config.xml")]
+    (println "initialize okta?" okta-active " config location: " config-res)
+    (if okta-active
+      (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config config-res})
+      handler)))
 
  (defn -main [& args]
    (let [port (Integer/parseInt (or (env :port) "3000"))
