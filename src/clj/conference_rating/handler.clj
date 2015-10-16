@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [GET POST defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults api-defaults]]
-            [ring.util.response :refer [created response]]
+            [ring.util.response :refer [created response redirect]]
             [hiccup.core :refer [html]]
             [ring.middleware.json :as json]
             [hiccup.page :refer [include-js include-css]]
@@ -83,8 +83,7 @@
                                                   clojure.java.io/resource
                                                   slurp)))
    okta/okta-routes
-   (GET "/login" request {:headers {"Content-Type" "text/plain"}
-                          :body (str "Hello Okta: " request)})
+   (GET "/login" [] (redirect "/"))
    (GET "/" [] home-page)
    (not-found "Not Found")))
 
