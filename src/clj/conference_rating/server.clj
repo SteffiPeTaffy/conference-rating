@@ -47,10 +47,8 @@
 
 (defn -main [& args]
    (let [port (Integer/parseInt (or (env :port) "3000"))
-         {:keys [options arguments errors summary]} (cli/parse-opts args cli-options)
-         okta-active (= "--okta-active" (first args))]
+         {:keys [options _ errors summary]} (cli/parse-opts args cli-options)]
      (cond
        (:help options) (exit 0 (usage summary))
-       (not= (count arguments) 1) (exit 1 (usage summary))
        errors (exit 1 (error-msg errors)))
      (start-server port (:okta-active options) (:environment options))))
