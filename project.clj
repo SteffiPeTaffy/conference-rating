@@ -18,6 +18,7 @@
                  [com.andrewmcveigh/cljs-time "0.3.11"]
                  [prismatic/schema "0.4.4"]
                  [ring "1.4.0"]
+                 [org.clojure/tools.cli "0.3.3"]
                  [ring/ring-defaults "0.1.5"]
                  [ring-okta "0.1.5"]
                  [ring.middleware.logger "0.5.0"]
