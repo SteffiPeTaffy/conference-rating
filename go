@@ -18,9 +18,12 @@ goal_check-codestyle() {
   lein kibit
 }
 
-
 goal_test() {
   lein test && lein cljsbuild test
+}
+
+goal_build-uberjar {
+  lein uberjar
 }
 
 if type -t "goal_$1" &>/dev/null; then
@@ -33,6 +36,7 @@ goal:
     serve-styles       -- start css autocompiler
     test               -- run tests
     check-codestyle    -- run code style recommendations
+    build-uberjar       -- build self contained jar file
     "
 
   exit 1
