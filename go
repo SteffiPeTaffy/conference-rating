@@ -22,11 +22,11 @@ goal_test() {
   lein test && lein cljsbuild test
 }
 
-goal_build-uberjar {
+goal_build-uberjar() {
   lein uberjar
 }
 
-goal_deploy-uberjar {
+goal_deploy-uberjar() {
   heroku plugins:install https://github.com/heroku/heroku-deploy
   heroku deploy:jar --jar target/conference-rating.jar --app $1
 }
