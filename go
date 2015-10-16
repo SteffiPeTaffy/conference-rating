@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 set -e
 
@@ -27,8 +28,11 @@ goal_build-uberjar() {
 }
 
 goal_deploy-uberjar() {
+  JARFILE=${BASEDIR}/target/conference-rating.jar
   heroku plugins:install https://github.com/heroku/heroku-deploy
-  heroku deploy:jar --jar target/conference-rating.jar --app $@
+  cd ~
+  heroku deploy:jar --jar $JARFILE --app $@
+  cd -
 }
 
 if type -t "goal_$1" &>/dev/null; then
