@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
+set -x
 set -e
 
 goal_serve-backend() {
@@ -28,10 +28,14 @@ goal_build-uberjar() {
 }
 
 goal_deploy-uberjar() {
+  APPNAME=$1
+  shift
+  OPTIONS=$@
+
   JARFILE=${BASEDIR}/target/conference-rating.jar
   heroku plugins:install https://github.com/heroku/heroku-deploy
   cd ~
-  heroku deploy:jar --jar $JARFILE --app $@ --options "$2"
+  heroku deploy:jar --jar $JARFILE --app $APPNAME --options "$OPTIONS"
   cd -
 }
 
