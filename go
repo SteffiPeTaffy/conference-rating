@@ -26,17 +26,23 @@ goal_build-uberjar {
   lein uberjar
 }
 
+goal_deploy-uberjar {
+  heroku plugins:install https://github.com/heroku/heroku-deploy
+  heroku deploy:jar --jar target/conference-rating.jar --app $1
+}
+
 if type -t "goal_$1" &>/dev/null; then
   goal_$1 ${@:2}
 else
   echo "usage: $0 <goal>
 goal:
-    serve-backend      -- start backend server
-    serve-frontend     -- start cljs autocompiler and figwheel
-    serve-styles       -- start css autocompiler
-    test               -- run tests
-    check-codestyle    -- run code style recommendations
-    build-uberjar       -- build self contained jar file
+    serve-backend            -- start backend server
+    serve-frontend           -- start cljs autocompiler and figwheel
+    serve-styles             -- start css autocompiler
+    test                     -- run tests
+    check-codestyle          -- run code style recommendations
+    build-uberjar            -- build self contained jar file
+    deploy-uberjar <appname> -- deploys the uberjar to heroku with the given app name
     "
 
   exit 1
