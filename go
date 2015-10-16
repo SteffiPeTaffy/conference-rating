@@ -28,7 +28,7 @@ goal_build-uberjar() {
 
 goal_deploy-uberjar() {
   heroku plugins:install https://github.com/heroku/heroku-deploy
-  heroku deploy:jar --jar target/conference-rating.jar --app $1
+  heroku deploy:jar --jar target/conference-rating.jar --app $@
 }
 
 if type -t "goal_$1" &>/dev/null; then
