@@ -11,7 +11,7 @@
 
 (defn do-wrap-okta [handler okta-active]
   (if okta-active
-    (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/"})
+    (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config-location "okta-ci-config.xml"})
     handler))
 
  (defn -main [& args]
