@@ -19,6 +19,8 @@
                  [prismatic/schema "0.4.4"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
+                 [ring-okta "0.1.5"]
+                 [ring.middleware.logger "0.5.0"]
                  [ring/ring-json "0.4.0"]
                  [prone "0.8.2"]
                  [compojure "1.4.0"]
@@ -28,6 +30,8 @@
                  [secretary "1.2.3"]
                  [com.novemberain/monger "3.0.0-rc2"]
                  [cljsjs/typeahead-bundle "0.11.1-1"]]
+
+  :repositories [["localrepo" "https://raw.githubusercontent.com/Hendrick/ring-okta/master/maven_repository"]]
 
 
   :plugins [[lein-environ "1.0.0"]

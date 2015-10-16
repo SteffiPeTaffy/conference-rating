@@ -12,6 +12,7 @@
             [conference-rating.db-handler :as db]
             [conference-rating.aggregator :as aggregator]
             [schema.core :as s]
+            [ring.middleware.okta :as okta]
             [schema.coerce :as coerce]
             [conference-rating.schemas :as schemas]))
 
@@ -81,6 +82,9 @@
    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                   clojure.java.io/resource
                                                   slurp)))
+   okta/okta-routes
+   (GET "/login" request {:headers {"Content-Type" "text/plain"}
+                          :body (str "Hello Okta: " request)})
    (GET "/" [] home-page)
    (not-found "Not Found")))
 
