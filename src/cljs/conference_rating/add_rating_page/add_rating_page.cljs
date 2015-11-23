@@ -34,9 +34,9 @@
 
 (defn rating-panel-radio-input [id key input-label value]
   [:div
-   [:p {:class "text-lg-center"} input-label]
    [:input {:field :radio :value value :type "radio" :id id :name key}]
    [:label {:for id}
+   [:p {:class "text-lg-center"} input-label]
     [:span {:class "radio"}]]])
 
 (defn rating-panel [icon data-key panel-label panel-classes]
