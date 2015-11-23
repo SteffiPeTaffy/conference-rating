@@ -97,9 +97,9 @@
 
 (defn experience-checkbox [id input-label]
   [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
-   [:p {:class "text-lg-center"} input-label]
    [:input {:field :checkbox :type "checkbox" :id id}]
    [:label {:for id}
+    [:p {:class "text-lg-center"} input-label]
     [:span {:class "checkbox"}]]])
 
 (defn experience-panel []
