@@ -12,14 +12,15 @@
 
 (defn mini-panel [number icon year color]
  (if number
-  [:div {:class (str "panel mini-panel cl-light " color )}
+   [:div {:class "col-sm-5 col-xs-12 mini-panel-container"}
+   [:div {:class (str "panel mini-panel cl-light " color )}
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap glyphicon-mini"}
       [:span {:class (str "glyphicon " icon)}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body text-lg-center"} (str number)]]]
-     [:div {:class "media-container media-body text-lg-center"} (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]))
+     [:div {:class "media-container media-body text-lg-center"} (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]]))
 
 (defn mini-panel-recommendations [number year]
  (mini-panel number "glyphicon-star" year "bg-dark-lightened"))
