@@ -1,3 +1,4 @@
+resources/okta-*-config.xml
 .idea
 *.iml
 .lein-env
