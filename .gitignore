@@ -9,3 +9,4 @@ resources/public/css
 .nrepl-port
 data
 .lein-failures
+.DS_Store
