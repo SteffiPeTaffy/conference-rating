@@ -123,13 +123,24 @@
     height: 17px;
   }
 
+  .mini-panel-container {
+     margin: 5px;
+  }
 
   .mini-panel {
-    width: 45%;
+
+  @media (max-width: 767px) {
+     width: 100%;
+     /*float: right*/
+
+      }
+
+
     display: inline-block;
 
     .media-container:nth-child(1) {
       padding-bottom: 2px;
+
     }
 
     .media-container:nth-child(2) {
