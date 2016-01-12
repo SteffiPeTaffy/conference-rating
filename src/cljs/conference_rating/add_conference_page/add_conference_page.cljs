@@ -23,7 +23,9 @@
                                        (cb x))))
 
 (defn conference-series-template [series]
-  (str "<div>" series "</div>"))
+  (str "<div class=\"series-suggestion-template\">"
+       "<p>"series"</p>"
+       "</div>"))
 
 (def conference-series-component
   (typeahead/init-typeahead
