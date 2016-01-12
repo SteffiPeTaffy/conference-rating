@@ -114,5 +114,7 @@
                                    :builds {:app
                                              {:source-paths ["env/prod/cljs"]
                                               :compiler
-                                              {:optimizations :advanced
+                                              {; don't use advanced optimizations here without checking that jumping to search results still works (#39),
+                                               ; apparently agressive optimizations optimize bindings for typeahead:select away as dead code
+                                               :optimizations :simple
                                                :pretty-print false}}}}}})
