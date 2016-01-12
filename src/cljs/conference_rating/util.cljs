@@ -26,8 +26,11 @@
 (defn parse-string-to-date [date-str]
   (tf/parse built-in-formatter date-str))
 
+(defn parse-date [date-str]
+  (tf/parse built-in-formatter date-str))
+
 (defn format-date [date-str]
-  (let [datetime (tf/parse built-in-formatter date-str)]
+  (let [datetime (parse-date date-str)]
     (tf/unparse (tf/formatter "dd MMMM YYYY") datetime)))
 
 (defn from-to-dates [from-date to-date]

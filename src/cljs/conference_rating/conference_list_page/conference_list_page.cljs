@@ -3,6 +3,7 @@
             [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.conference-list-page.conference-list-entry :as list-entry]
             [conference-rating.util :as util]
+            [cljs-time.core :as t]
             [conference-rating.history :as history]
             [conference-rating.view-utils.typeahead :as typeahead]))
 
@@ -59,14 +60,25 @@
   [:div {:class "add-conference-btn-container"}
    [:a {:class "btn btn-md btn-orange mar-bottom" :href "#/add-conference"} "new conference"]])
 
+(defn- upcoming-conference? [conference]
+  (t/after? (util/parse-date (:to conference)) (t/now)))
+
+(defn- past-conference? [conference]
+  (not (upcoming-conference? conference)))
+
 (defn display-conference-list [conference-list]
-  [:div
-   (navbar/nav-bar)
-   [:div {:class "container-fluid content-container pad-top"}
-    [:div {:class "conference-search form-group"}
-     [(search-for-conference-component conference-list)]]
-    (add-conference-bar)
-    [:div {:class "row"}(map list-entry/display-conference-list-item (reverse (sort-by :to conference-list)))]]])
+  (let [upcoming-conferences (filter upcoming-conference? conference-list)
+        past-conferences (filter past-conference? conference-list)]
+    [:div
+     (navbar/nav-bar)
+     [:div {:class "container-fluid content-container pad-top"}
+      [:div {:class "conference-search form-group"}
+       [(search-for-conference-component conference-list)]]
+      (add-conference-bar)
+      [:h3 "Upcoming conferences"]
+      [:div {:class "row"} (map list-entry/display-conference-list-item (sort-by :to upcoming-conferences))]
+      [:h3 "Past conferences"]
+      [:div {:class "row"} (map list-entry/display-conference-list-item (reverse (sort-by :to past-conferences)))]]]))
 
 (defonce displayed-conferences (atom nil))
 
