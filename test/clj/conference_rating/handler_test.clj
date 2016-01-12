@@ -4,13 +4,18 @@
             [ring.mock.request :refer [request body header]]
             [clojure.data.json :as json]
             [monger.collection :as mc]
+            [schema.test]
             [conference-rating.testdata :refer [some-rating-with some-rating]])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
 
 (use-fixtures :once schema.test/validate-schemas)
 
-(defn json-body-for [db request] (json/read-str (:body ((app db) request)) :key-fn keyword))
+(defn json-body [response]
+  (json/read-str (:body response) :key-fn keyword))
+
+(defn json-body-for [db request]
+  (json-body ((app db) request)))
 
 (defn- create-mock-db []
   (let [fongo (Fongo. "some mock mongodb")]
@@ -53,6 +58,22 @@
         (is (= "some description" (:description (first conferences))))
         (is (= "some name" (:name (first conferences))))
         (is (map? (:aggregated-ratings (first conferences))))))))
+  (testing "series suggestions"
+    (let [db (create-mock-db)]
+      ((app db) (-> (request :post "/api/conferences/")
+                    (body (json/write-str {:name "some name" :description "some description" :series "some series"}))
+                    (header :content-type "application/json")))
+      ((app db) (-> (request :post "/api/conferences/")
+                    (body (json/write-str {:name "some other name" :description "some other description" :series "some series"}))
+                    (header :content-type "application/json")))
+      ((app db) (-> (request :post "/api/conferences/")
+                    (body (json/write-str {:name "some other name" :description "some other description" :series "other series"}))
+                    (header :content-type "application/json")))
+
+      (testing "should find suggestions for existing series"
+        (let [response ((app db) (request :get "/api/series/suggestions?q=some"))]
+          (is (= 200 (:status response)))
+          (is (= ["some series"] (json-body response)))))))
   (testing "should fail if incomplete data is written to ratings"
     (let [db (create-mock-db)
           response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")

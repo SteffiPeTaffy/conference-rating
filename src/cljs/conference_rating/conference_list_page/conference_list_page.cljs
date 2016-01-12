@@ -43,18 +43,16 @@
 (defn conference-name [conference] (:name conference))
 
 (defn search-for-conference-component [conference-list]
-  (with-meta search-for-conference-input
-             {:component-did-mount
-              (fn [this]
-                (doto (js/jQuery (reagent/dom-node this))
-                  (.typeahead  (typeahead/config {:hint true,
-                                                  :highlight true,
-                                                  :minLength 1})
-                               (typeahead/data-sets {:name "conferences",
-                                                     :source (conference-suggestion-source conference-list)
-                                                     :display conference-name
-                                                     :templates {:suggestion conference-suggestion-template}}))
-                  (.bind "typeahead:select" #(go-to-conference (js->clj %2 :keywordize-keys true)))))}))
+  (typeahead/init-typeahead
+    search-for-conference-input
+    (typeahead/config {:hint true,
+                       :highlight true,
+                       :minLength 1})
+    (typeahead/data-sets {:name "conferences",
+                          :source (conference-suggestion-source conference-list)
+                          :display conference-name
+                          :templates {:suggestion conference-suggestion-template}})
+    #(go-to-conference %2)))
 
 
 (defn add-conference-bar []
