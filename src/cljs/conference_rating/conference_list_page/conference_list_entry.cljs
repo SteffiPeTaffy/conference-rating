@@ -49,6 +49,22 @@
      (roles (perc count (:recruiting rolesMap)) "bg-recruting" "RECRUITING")
      (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
+(defn display-overall-rating [conference]
+  (if (not (util/is-future-conference? conference))
+    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
+     (overall-rating (get-in conference [:aggregated-ratings :overall]))
+     (add-rating-button (:_id conference))]
+    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
+     [:div {:class "series-average-ratings panel-heading"} "Series Average Rating"]
+     (overall-rating (get-in conference [:average-series-rating :overall]))
+     ]))
+
+(defn display-recommendations-votes [conference]
+  (when-not (util/is-future-conference? conference)
+    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
+     (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
+     (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]))
+
 (defn display-conference-list-item [conference]
   [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
    [:div {:class "panel panel-heading bg-light cl-dark"}
@@ -58,20 +74,14 @@
       [:a {:href (str "#/conferences/" (:_id conference))}
        (title (:name conference))
        (util/from-to-dates (:from conference) (:to conference))]]
-     (if (not (util/is-future-conference? conference))
-       [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
-        (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
-        (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)])]
+     (display-recommendations-votes conference)]
     [:div {:class "bottom-line"}]]
    [:div {:class "panel-body  bg-light"}
     [:div {:class "row"}
      [:div {:class "col-lg-8 col-md-8 col-sm-7"}
       (description (util/formatted-text (:description conference)))
       (link (:link conference))]
-     (if (not (util/is-future-conference? conference))
-       [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-conatiner"}
-        (overall-rating (get-in conference [:aggregated-ratings :overall]))
-        (add-rating-button (:_id conference))])]]
+     (display-overall-rating conference)]]
    [:div {:class "panel-footer"}
     [:div {:class "row"}
      [:div {:class "col-md-12"}

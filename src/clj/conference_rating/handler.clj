@@ -45,8 +45,11 @@
   (let [conference-info   (db/get-conference conference-id db)
         ratings           (db/get-ratings conference-id db)
         aggregate-ratings (aggregator/aggregate-ratings ratings)
-        merged            (assoc conference-info :aggregated-ratings aggregate-ratings)]
-    merged))
+        ratings-of-series (db/get-average-rating-for-series (:series conference-info) db)]
+    (->
+      conference-info
+      (assoc  :aggregated-ratings aggregate-ratings)
+      (assoc :average-series-rating ratings-of-series))))
 
 (defn get-conference-ratings [conference-id db]
   (response
