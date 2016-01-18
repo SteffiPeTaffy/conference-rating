@@ -3,8 +3,7 @@
             [monger.collection :as mc]
             [schema.core :as s]
             [conference-rating.schemas :as schemas]
-            [schema.utils :as schema-utils]
-            [schema.coerce :as coerce])
+            [schema.utils :as schema-utils])
         (:import org.bson.types.ObjectId))
 
 (def mongolab-uri (System/getenv "MONGOLAB_URI"))
@@ -31,6 +30,8 @@
   (let [list (mc/find-maps db "conferences")]
     (map clear-id list)))
 
+
+
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
     (println item)
@@ -49,3 +50,8 @@
                              (map schemas/coerce-rating)
                              (filter only-valid))]
     cleared-ratings))
+
+(defn- get-conferences-by-series [series db]
+  (map #(:_id %) (mc/find-maps db "conferences" {:series series})))
+
+
