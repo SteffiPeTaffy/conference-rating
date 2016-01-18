@@ -3,12 +3,13 @@
             [monger.collection :as mc]
             [schema.core :as s]
             [conference-rating.schemas :as schemas]
-            [schema.utils :as schema-utils])
-        (:import org.bson.types.ObjectId))
+            [schema.utils :as schema-utils]
+            [conference-rating.aggregator :as ag])
+  (:import (org.bson.types ObjectId)))
 
 (def mongolab-uri (System/getenv "MONGOLAB_URI"))
 
-(defn clear-id [doc]
+(defn clear-id-in-doc [doc]
   (assoc doc :_id (.toHexString (:_id doc))))
 
 (defn connect []
@@ -19,23 +20,21 @@
 (defn add-conference [conference db]
   (let [document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
-    (clear-id document)))
+    (clear-id-in-doc document)))
 
 (s/defn add-rating [rating :- schemas/Rating db]
   (let [document (assoc rating :_id (ObjectId.))]
     (mc/insert db "ratings" document)
-    (clear-id document)))
+    (clear-id-in-doc document)))
 
 (defn get-conferences-list [db]
   (let [list (mc/find-maps db "conferences")]
-    (map clear-id list)))
-
-
+    (map clear-id-in-doc list)))
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
     (println item)
-    (clear-id item)))
+    (clear-id-in-doc item)))
 
 (defn- only-valid [rating]
   (let [valid (not (schema-utils/error? rating))]
@@ -44,14 +43,20 @@
     valid))
 
 (s/defn ^:always-validate get-ratings :- [schemas/Rating] [conference-id db]
-  (let [rating-list     (mc/find-maps db "ratings" {:conference-id conference-id})
+  (let [rating-list (mc/find-maps db "ratings" {:conference-id conference-id})
         cleared-ratings (->> rating-list
-                             (map clear-id)
+                             (map clear-id-in-doc)
                              (map schemas/coerce-rating)
                              (filter only-valid))]
     cleared-ratings))
 
 (defn- get-conferences-by-series [series db]
-  (map #(:_id %) (mc/find-maps db "conferences" {:series series})))
+  (->>
+    (mc/find-maps db "conferences" {:series series})
+    (map :_id)
+    (map #(.toHexString %))))
 
-
+(defn get-average-rating-for-series [series db]
+  (let [ids (get-conferences-by-series series db)
+        ratings (flatten (map #(get-ratings % db) ids))]
+    (ag/aggregate-ratings ratings)))
