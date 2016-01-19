@@ -67,7 +67,7 @@
   (let [top-2-roles (->> roles
                          (top-2)
                          (map roles->sentence-fragment))]
-    (str "I am " (first top-2-roles) " or " (second top-2-roles))))
+    (str "I am " (first top-2-roles) " or " (second top-2-roles) ".")))
 
 (defn get-experience-sentence [experiences]
   (let [top-2-experience (->> experiences
