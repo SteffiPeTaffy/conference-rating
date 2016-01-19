@@ -73,7 +73,7 @@
       (testing "should find suggestions for existing series"
         (let [response ((app db) (request :get "/api/series/suggestions?q=some"))]
           (is (= 200 (:status response)))
-          (is (= ["some series"] (json-body response)))))))
+          (is (= ["SOME SERIES"] (json-body response)))))))
   (testing "should fail if incomplete data is written to ratings"
     (let [db (create-mock-db)
           response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
