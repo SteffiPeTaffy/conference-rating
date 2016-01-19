@@ -18,7 +18,9 @@
     (mg/get-db (mg/connect {:host "127.0.0.1" :port 27017}) "crdb")))
 
 (defn add-conference [conference db]
-  (let [document (assoc conference :_id (ObjectId.))]
+  (let [series (:series conference)
+        upper-case-series (if series (.toUpperCase series) "")
+        document (assoc conference :_id (ObjectId.) :series upper-case-series)]
     (mc/insert db "conferences" document)
     (clear-id-in-doc document)))
 
@@ -33,7 +35,6 @@
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
-    (println item)
     (clear-id-in-doc item)))
 
 (defn- only-valid [rating]
