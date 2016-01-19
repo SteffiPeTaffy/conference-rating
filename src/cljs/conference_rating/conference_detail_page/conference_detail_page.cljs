@@ -20,8 +20,10 @@
       (conference-information/display-conference-information conference)
       (if (not (util/is-future-conference? conference))
         (add-rating-button (:_id conference)))]
-     [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
-      (aggregated-ratings/display-aggregated-ratings (:aggregated-ratings conference))]
+
+
+      [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
+       (aggregated-ratings/display-aggregated-ratings conference)]
      [:div {:class "col-lg-1 col-md-1"}]]
     [:div {:class "row"}
      [:div {:class "col-lg-1 col-md-1"}]

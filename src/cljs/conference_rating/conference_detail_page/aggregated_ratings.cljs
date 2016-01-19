@@ -1,5 +1,7 @@
 (ns conference-rating.conference-detail-page.aggregated-ratings
-  (:require [conference-rating.view-utils.panel :as panel]))
+  (:require [conference-rating.view-utils.panel :as panel]
+            [conference-rating.util :as util]
+            ))
 
 (defn conference-recommendations [numberOfRecommendations]
   (panel/icon-panel "glyphicon-star" numberOfRecommendations "would go again" "bg-yellow cl-light"))
@@ -121,8 +123,13 @@
    (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee aggregated-ratings) (conference-badges aggregated-ratings))])
 
 
-(defn display-aggregated-ratings [aggregated-ratings]
-  (let [overall-avg (get-in aggregated-ratings [:overall :avg])
+(defn display-series-ratings-header []
+  [:div {:class "series-average-ratings panel-heading series-average-ratings-detailpage"} "Series Average Rating"]
+  )
+
+(defn display-aggregated-ratings [conference]
+  (let [aggregated-ratings (if (util/is-future-conference? conference) (:average-series-rating conference) (:aggregated-ratings conference))
+        overall-avg (get-in aggregated-ratings [:overall :avg])
         overall-avg-percentage (* (/ overall-avg 4) 100)
         overall-ratings-str (str (get-in aggregated-ratings [:overall :count]) " ratings")
         talks-avg (get-in aggregated-ratings [:talks :avg])
@@ -135,7 +142,11 @@
         networking-avg-percentage (* (/ networking-avg 4) 100)
         networking-ratings-str (str (get-in aggregated-ratings [:community :count]) " ratings")]
     [:div
-     (conference-recommendations (:recommendations aggregated-ratings))
+
+      (if (util/is-future-conference? conference)
+       (display-series-ratings-header)
+       (conference-recommendations (:recommendations aggregated-ratings)))
+
      [:div {:class "row"}
       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
        (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
