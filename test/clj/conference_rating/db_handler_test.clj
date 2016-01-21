@@ -18,31 +18,33 @@
 (deftest by-series-test
   (let [fake-db (create-mock-db)
         test-series "Testseries"
+        lower-case-test-series "testseries"
         id1 (ObjectId.)
         id2 (ObjectId.)
         id1-string (.toHexString id1)
-        id2-string (.toHexString id2)
-        ]
+        id2-string (.toHexString id2)]
 
     (mc/insert fake-db "conferences" {:_id id1 :series test-series})
-    (mc/insert fake-db "conferences" {:_id id2 :series test-series})
+    (mc/insert fake-db "conferences" {:_id id2 :series lower-case-test-series})
     (mc/insert fake-db "conferences" {:_id 666 :series "different series"})
     (mc/insert fake-db "ratings" (->
                                    (assoc-in (some-rating) [:rating :overall] 4)
                                    (assoc :conference-id id1-string)
-                                   (assoc :_id (ObjectId.))
-                                   ))
+                                   (assoc :_id (ObjectId.))))
     (mc/insert fake-db "ratings" (->
                                    (assoc-in (some-rating) [:rating :overall] 2)
                                    (assoc :conference-id id2-string)
-                                   (assoc :_id (ObjectId.))
-                                   ))
+                                   (assoc :_id (ObjectId.))))
 
     (testing "Should return all ids for a series"
       (let [result (get-conferences-by-series test-series fake-db)]
         (is (contains-in-lazy? result id1-string))
         (is (contains-in-lazy? result id2-string))
         (is (not (contains-in-lazy? result 666)))))
+
+    (testing "Should return empty collection if series is nil"
+      (let [result (get-conferences-by-series nil fake-db)]
+        (is (empty? result))))
 
     (testing "Should return all ratings for a series"
       (let [result (dh/get-average-rating-for-series test-series fake-db)]

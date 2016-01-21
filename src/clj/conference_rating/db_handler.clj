@@ -1,6 +1,7 @@
 (ns conference-rating.db-handler
   (:require [monger.core :as mg]
             [monger.collection :as mc]
+            [monger.operators :refer :all]
             [schema.core :as s]
             [conference-rating.schemas :as schemas]
             [schema.utils :as schema-utils]
@@ -18,9 +19,7 @@
     (mg/get-db (mg/connect {:host "127.0.0.1" :port 27017}) "crdb")))
 
 (defn add-conference [conference db]
-  (let [series (:series conference)
-        upper-case-series (if series (.toUpperCase series) "")
-        document (assoc conference :_id (ObjectId.) :series upper-case-series)]
+  (let [document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
     (clear-id-in-doc document)))
 
@@ -52,12 +51,13 @@
     cleared-ratings))
 
 (defn- get-conferences-by-series [series db]
-  (->>
-    (mc/find-maps db "conferences" {:series series})
-    (map :_id)
-    (map #(.toHexString %))))
+  (if-not (nil? series)
+    (->> (mc/find-maps db "conferences" {:series {$regex series $options "i"}})
+         (map :_id)
+         (map #(.toHexString %)))
+    (list)))
 
 (defn get-average-rating-for-series [series db]
-  (let [ids (get-conferences-by-series series db)
-        ratings (flatten (map #(get-ratings % db) ids))]
-    (ag/aggregate-ratings ratings)))
+    (let [ids (get-conferences-by-series series db)
+          ratings (flatten (map #(get-ratings % db) ids))]
+      (ag/aggregate-ratings ratings)))
