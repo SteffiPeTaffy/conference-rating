@@ -15,8 +15,9 @@
    [:label {:for (:id (second input))} label]
    input])
 
-(defn conference-series-input []
-  [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
+(defn conference-series-input [data-atom]
+  (fn []
+    [:input {:field :text :on-blur (fn [e] (swap! data-atom #(assoc % :series (-> e .-target .-value)))) :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}]))
 
 (defn conference-series-suggestions [q cb]
   (backend/load-series-suggestions q (fn [x]
@@ -27,9 +28,9 @@
        "<p>"series"</p>"
        "</div>"))
 
-(def conference-series-component
+(defn conference-series-component [data-atom]
   (typeahead/init-typeahead
-    conference-series-input
+    (conference-series-input data-atom)
     (typeahead/config {:hint true,
                        :highlight true,
                        :minLength 1})
@@ -39,9 +40,9 @@
                           :async true
                           :templates {:suggestion conference-series-template}})))
 
-(def conference-form-template
+(defn conference-form-template [data-atom]
   [:div
-   (form-input "Series" [:input {:field :text :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"}])
+   [(conference-series-component data-atom)]
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
    [:div {:class "row"}
     [:div {:class "col-md-6"} (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])]
@@ -73,6 +74,6 @@
        [:div {:class "col-lg-2"}]
        [:div {:class "col-lg-8"}
         [:div {:class "add-conference-form-container bg-light"}
-         [forms/bind-fields conference-form-template doc]
+         [forms/bind-fields (conference-form-template doc) doc]
          [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(create-conference doc)} "Create"]]]
        [:div {:class "col-lg-2"}]]]]))
