@@ -65,4 +65,5 @@
     ; conference detail page
     (wait-for "page-conference-detail")
     (is (= "SOME SERIES" (text "text-conference-series")))
-    (is (= "some conference name" (text "text-conference-name")))))
+    (is (= "some conference name" (text "text-conference-name")))
+    (is (= "www.some-link.org" (text "text-conference-link")))))

@@ -8,7 +8,7 @@
     [:div {:class "series-tag-container"}[:span {:class "series-tag" :data-e2e "text-conference-series"} series-tag]]))
 
 (defn link [link]
-  [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
+  [:p {:class "conference-link"}[:a {:href link :class "conference-link" :data-e2e "text-conference-link"} link]])
 
 (defn display-conference-information [conference]
   [:div {:class "row conference-information-container bg-light cl-dark"}
