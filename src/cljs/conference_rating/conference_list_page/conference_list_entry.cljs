@@ -47,12 +47,9 @@
      (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
 (defn display-overall-rating [conference]
-  (if (not (util/is-future-conference? conference))
+  (let [ratings (if (util/is-future-conference? conference) :average-series-rating :aggregated-ratings)]
     [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
-     (overall-rating (get-in conference [:aggregated-ratings :overall]))]
-    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
-     [:div {:class "series-average-ratings panel-heading"} "Series Average Rating"]
-     (overall-rating (get-in conference [:average-series-rating :overall]))
+     (overall-rating (get-in conference [ratings :overall]))
      ]))
 
 (defn display-vote [conference]
@@ -61,10 +58,10 @@
      (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
-  (when-not (util/is-future-conference? conference)
+  (let [ratings (if (util/is-future-conference? conference) :average-series-rating :aggregated-ratings)]
     [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
-     (panel/mini-panel-recommendations (get-in conference [:aggregated-ratings :recommendations]) nil)
-     (panel/mini-panel-voices (get-in conference [:aggregated-ratings :number-of-ratings]) nil)]))
+     (panel/mini-panel-recommendations (get-in conference [ratings :recommendations]) nil)
+     (panel/mini-panel-voices (get-in conference [ratings :number-of-ratings]) nil)]))
 
 (defn display-conference-list-item [conference]
   [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}

@@ -123,10 +123,6 @@
    (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee aggregated-ratings) (conference-badges aggregated-ratings))])
 
 
-(defn display-series-ratings-header []
-  [:div {:class "series-average-ratings panel-heading series-average-ratings-detailpage"} "Series Average Rating"]
-  )
-
 (defn display-aggregated-ratings [conference]
   (let [aggregated-ratings (if (util/is-future-conference? conference) (:average-series-rating conference) (:aggregated-ratings conference))
         overall-avg (get-in aggregated-ratings [:overall :avg])
@@ -142,11 +138,7 @@
         networking-avg-percentage (* (/ networking-avg 4) 100)
         networking-ratings-str (str (get-in aggregated-ratings [:community :count]) " ratings")]
     [:div
-
-      (if (util/is-future-conference? conference)
-       (display-series-ratings-header)
-       (conference-recommendations (:recommendations aggregated-ratings)))
-
+     (conference-recommendations (:recommendations aggregated-ratings))
      [:div {:class "row"}
       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
        (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
