@@ -9,9 +9,7 @@
       [:div {:class "series-tag-container"}[:span {:class "series-tag series-tag-hidden"} ""]]))
 
 (defn title [name]
-  (if (not (nil? name))
-    [:h4 {:class "conference-title"} name]
-    [:h4 "untitled conference"]))
+  [:h4 {:class "conference-title"} (or name "untitled conference")])
 
 (defn description [description]
   [:div {:class "text-muted conference-description"} description])
