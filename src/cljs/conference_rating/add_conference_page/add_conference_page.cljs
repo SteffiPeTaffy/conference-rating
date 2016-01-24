@@ -42,7 +42,7 @@
 
 (defn conference-form-template [data-atom]
   [:div
-   [(conference-series-component data-atom)]
+   (form-input "Series" [(conference-series-component data-atom)])
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference"}])
    [:div {:class "row"}
     [:div {:class "col-md-6"} (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])]
