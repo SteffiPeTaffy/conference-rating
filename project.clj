@@ -30,7 +30,9 @@
                  [org.clojure/clojurescript "0.0-3308" :scope "provided"]
                  [secretary "1.2.3"]
                  [com.novemberain/monger "3.0.0-rc2"]
-                 [cljsjs/typeahead-bundle "0.11.1-1"]]
+                 [cljsjs/typeahead-bundle "0.11.1-1"]
+                 [clj-webdriver "0.7.2"]
+                 [org.seleniumhq.selenium/selenium-java "2.47.1"]]
 
   :repositories [["localrepo" "https://raw.githubusercontent.com/Hendrick/ring-okta/master/maven_repository"]]
 

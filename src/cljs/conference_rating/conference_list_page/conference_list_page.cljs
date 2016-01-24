@@ -58,7 +58,7 @@
 
 (defn add-conference-bar []
   [:div {:class "add-conference-btn-container"}
-   [:a {:class "btn btn-md btn-orange mar-bottom" :href "#/add-conference"} "new conference"]])
+   [:a {:class "btn btn-md btn-orange mar-bottom" :href "#/add-conference" :data-e2e "btn-add-conference"} "new conference"]])
 
 (defn- upcoming-conference? [conference]
   (t/after? (util/parse-date (:to conference)) (t/now)))
@@ -69,7 +69,7 @@
 (defn display-conference-list [conference-list]
   (let [upcoming-conferences (filter upcoming-conference? conference-list)
         past-conferences (filter past-conference? conference-list)]
-    [:div
+    [:div {:data-e2e "page-conference-list"}
      (navbar/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "conference-search form-group"}

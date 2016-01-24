@@ -20,7 +20,7 @@ goal_check-codestyle() {
 }
 
 goal_test() {
-  lein test && lein cljsbuild test
+  lein cljsbuild test && lein test
 }
 
 goal_build-uberjar() {

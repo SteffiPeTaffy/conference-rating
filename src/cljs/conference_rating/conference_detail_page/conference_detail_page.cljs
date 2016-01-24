@@ -11,7 +11,7 @@
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating")} "give it your voice"]])
 
 (defn display-conference-detail-page [conference ratings]
-  [:div
+  [:div {:data-e2e "page-conference-detail"}
    (navbar/nav-bar)
    [:div {:class "container-fluid content-container pad-top conference-container"}
     [:div {:class "row"}
