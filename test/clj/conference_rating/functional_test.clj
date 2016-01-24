@@ -1,7 +1,8 @@
 (ns conference-rating.functional-test
   (:require [clj-webdriver.taxi :as taxi]
             [clojure.test :refer [deftest is testing use-fixtures]]
-            [conference-rating.server :as server]))
+            [conference-rating.server :as server]
+            [clojure.string :as s]))
 
 (taxi/set-driver! {:browser :chrome})
 
@@ -64,6 +65,6 @@
 
     ; conference detail page
     (wait-for "page-conference-detail")
-    (is (= "SOME SERIES" (text "text-conference-series")))
+    (is (= "some series" (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
     (is (= "some conference name" (text "text-conference-name")))
     (is (= "www.some-link.org" (text "text-conference-link")))))
