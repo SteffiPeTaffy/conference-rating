@@ -12,7 +12,7 @@
 
 (defn mini-panel [number icon year color]
  (if number
-   [:div {:class "col-sm-5 col-xs-12 mini-panel-container"}
+   [:div {:class "col-sm-6 hidden-xs mini-panel-container"}
    [:div {:class (str "panel mini-panel cl-light " color )}
    [:div {:class "media-container"}
     [:div {:class "media-left"}
@@ -41,6 +41,16 @@
     [:div {:style {:width (str percentage "%")} :class "progressbar progressbar-light"}]]
    [:div {:class "media-container media-body text-lg-right"}
     [:span {:class "text-semi"} comment]]])
+
+(defn range-panel-small [absolute name panel-classes icon]
+ [:div {:class (str "panel range-panel " panel-classes)}
+  [:div {:class "media-container"}
+   [:div {:class "media-left"}
+    [:div {:class "media-container icon-wrap icon-md"}
+     [:span {:class (str "glyphicon " icon)}]]]
+   [:div {:class "media-body"}
+    [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
+    [:div {:class "text-uppercase"} name]]]])
 
 (defn icon-panel [icon number label color]
   [:div {:class "panel"}

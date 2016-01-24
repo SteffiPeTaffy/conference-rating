@@ -18,8 +18,7 @@
   [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
 
 (defn overall-rating [overall-rating]
-  (let [overall-rating-percentage (* (/ (:avg overall-rating) 4) 100)]
-    [:div {:class "conference-overall-rating"} (panel/range-panel overall-rating-percentage (:avg overall-rating) "Overall" (str (:count overall-rating) " ratings") "bg-dark-lightened" "glyphicon-thumbs-up")]))
+  [:div {:class "conference-overall-rating"} (panel/range-panel-small (:avg overall-rating) "Overall" "bg-dark-lightened" "glyphicon-thumbs-up")])
 
 (defn add-rating-button [id]
   [:div {:class "text-lg-right"}
@@ -49,13 +48,17 @@
 
 (defn display-overall-rating [conference]
   (if (not (util/is-future-conference? conference))
-    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
-     (overall-rating (get-in conference [:aggregated-ratings :overall]))
-     (add-rating-button (:_id conference))]
-    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
+    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
+     (overall-rating (get-in conference [:aggregated-ratings :overall]))]
+    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
      [:div {:class "series-average-ratings panel-heading"} "Series Average Rating"]
      (overall-rating (get-in conference [:average-series-rating :overall]))
      ]))
+
+(defn display-vote [conference]
+  (if (not (util/is-future-conference? conference))
+    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
+     (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
   (when-not (util/is-future-conference? conference)
@@ -72,14 +75,15 @@
       [:a {:href (str "#/conferences/" (:_id conference))}
        (title (:name conference))
        (util/from-to-dates (:from conference) (:to conference))]]
-     (display-recommendations-votes conference)]
+     (display-recommendations-votes conference)
+     (display-overall-rating conference)]
     [:div {:class "bottom-line"}]]
    [:div {:class "panel-body  bg-light"}
     [:div {:class "row"}
      [:div {:class "col-lg-8 col-md-8 col-sm-7"}
       (description (util/formatted-text (:description conference)))
       (link (:link conference))]
-     (display-overall-rating conference)]]
+     (display-vote conference)]]
    [:div {:class "panel-footer"}
     [:div {:class "row"}
      [:div {:class "col-md-12"}
