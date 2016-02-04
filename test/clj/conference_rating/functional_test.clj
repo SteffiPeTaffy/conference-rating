@@ -16,10 +16,12 @@
 
 (defn once-fixture [tests]
   (let [server (start-server)]
-    (tests)
-    (taxi/take-screenshot :file "screenshot-after-test.png")
-    (taxi/quit)
-    (stop-server server)))
+    (try
+      (tests)
+      (finally
+        (taxi/take-screenshot :file "screenshot-after-test.png")
+        (taxi/quit)
+        (stop-server server)))))
 
 (use-fixtures :once once-fixture)
 
