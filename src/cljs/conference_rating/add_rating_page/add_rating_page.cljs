@@ -26,9 +26,9 @@
     [:span
      [:i {:class "glyphicon glyphicon-star"}]
      [:span "I would go again!"]]
-    [:div {:data-e2e "checkbox-rating-voice"}
+    [:div
      [:input {:field :checkbox :type "checkbox" :id :recommended}]
-     [:label {:for :recommended}
+     [:label {:for :recommended :data-e2e "checkbox-rating-voice"}
       [:span {:class "checkbox checkbox-lg"}]]]]]
   )
 
