@@ -52,6 +52,7 @@
 (deftest basic-journey-test
   (testing "go to home page/ conference list page"
     (taxi/to "http://localhost:4000/#")
+    (taxi/window-maximize)
 
     ; conference list page
     (wait-for "page-conference-list")
