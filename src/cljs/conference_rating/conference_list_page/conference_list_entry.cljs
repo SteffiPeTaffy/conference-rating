@@ -49,8 +49,7 @@
 (defn display-overall-rating [conference]
   (let [ratings (if (util/is-future-conference? conference) :average-series-rating :aggregated-ratings)]
     [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
-     (overall-rating (get-in conference [ratings :overall]))
-     ]))
+     (overall-rating (get-in conference [ratings :overall]))]))
 
 (defn display-vote [conference]
   (if (not (util/is-future-conference? conference))

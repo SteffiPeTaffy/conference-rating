@@ -15,5 +15,5 @@
    (series-tag (:series conference))
    [:h1 {:data-e2e "text-conference-name"} (:name conference)]
    (util/from-to-dates (:from conference) (:to conference))
-   [:h4 (util/formatted-text (:description conference))]
+   [:h4 {:data-e2e "text-conference-description"} (util/formatted-text (:description conference))]
    (link (:link conference))])

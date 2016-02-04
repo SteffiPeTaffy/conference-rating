@@ -67,4 +67,10 @@
     (wait-for "page-conference-detail")
     (is (= "some series" (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
     (is (= "some conference name" (text "text-conference-name")))
-    (is (= "www.some-link.org" (text "text-conference-link")))))
+    (is (not-empty (text "text-conference-from-to-dates")))
+    (is (= "www.some-link.org" (text "text-conference-link")))
+    (is (= "some really fancy description with a new line.\nAnd here is the new line. Wohooo!" (text "text-conference-description")))
+    (click "button-add-rating")
+
+    ; add rating page
+    (wait-for "page-add-rating")))

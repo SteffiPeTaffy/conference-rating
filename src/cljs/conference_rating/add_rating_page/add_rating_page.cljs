@@ -164,7 +164,7 @@
                                  :entertaining false
                                  :hires        false
                                  :clients      false}})]
-    [:div
+    [:div {:data-e2e "page-add-rating"}
      (navbar/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row add-rating-container"}

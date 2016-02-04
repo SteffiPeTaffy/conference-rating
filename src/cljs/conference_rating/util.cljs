@@ -35,7 +35,7 @@
 
 (defn from-to-dates [from-date to-date]
   (cond
-    (and from-date from-date) [:p {:class "conference-dates"} (str (format-date from-date) " - " (format-date to-date))]
+    (and from-date from-date) [:p {:class "conference-dates" :data-e2e "text-conference-from-to-dates"} (str (format-date from-date) " - " (format-date to-date))]
     from-date [:p {:class "conference-dates"} (format-date from-date)]
     :else [:p {:class "conference-dates"} "TBD"]))
 
