@@ -60,7 +60,7 @@
       [:div {:class "media-container icon-wrap icon-lg"}
        [:span {:class (str "glyphicon " icon)}]]]
      [:div {:class "media-body"}
-      [:h3 number]
+      [:h3 {:data-e2e "text-icon-panel-number"} number]
       [:h3 label]]]]])
 
 (defn info-panel [icon title body-information footer-information]

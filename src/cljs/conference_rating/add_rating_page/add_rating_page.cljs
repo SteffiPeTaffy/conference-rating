@@ -17,7 +17,7 @@
                            (convert-to-tag-list :tags))]
     (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        processed-data
                                                                    :format        :json
-                                                                   :handler       (history/redirect-to (str "/conferences/" conference-id))
+                                                                   :handler       #(history/redirect-to (str "/conferences/" conference-id))
                                                                    :error-handler #(js/alert (str "could not create rating" %1))})))
 
 (defn recommendation-panel []
@@ -26,7 +26,7 @@
     [:span
      [:i {:class "glyphicon glyphicon-star"}]
      [:span "I would go again!"]]
-    [:div
+    [:div {:data-e2e "checkbox-rating-voice"}
      [:input {:field :checkbox :type "checkbox" :id :recommended}]
      [:label {:for :recommended}
       [:span {:class "checkbox checkbox-lg"}]]]]]
@@ -171,6 +171,7 @@
        [:div {:class "col-lg-1 col-md-1"}]
        [:div {:class "col-lg-10 col-md-10"}
         [forms/bind-fields add-rating-template doc]
-        [:div {:class "text-lg-right"} [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate))} "add rating"]]]
+        [:div {:class "text-lg-right"}
+         [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add rating"]]]
        [:div {:class "col-lg-1 col-md-1"}]]]]))
 

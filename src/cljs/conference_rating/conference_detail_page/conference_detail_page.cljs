@@ -8,7 +8,7 @@
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right voice-btn-container"}
-   [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-rating"} "give it your voice"]])
+   [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"} "give it your voice"]])
 
 (defn display-conference-detail-page [conference ratings]
   [:div {:data-e2e "page-conference-detail"}

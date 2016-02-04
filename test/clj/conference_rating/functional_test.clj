@@ -1,5 +1,6 @@
 (ns conference-rating.functional-test
   (:require [clj-webdriver.taxi :as taxi]
+            [clj-webdriver.core :as core]
             [clojure.test :refer [deftest is testing use-fixtures]]
             [conference-rating.server :as server]
             [clojure.string :as s]))
@@ -37,10 +38,13 @@
   (doseq [[k v] fill-map]
     (taxi/send-keys (e2e-selector k) v)))
 
+(defn first-of-month [dates]
+  (first (filter #(= "1" (core/text %)) dates)))
+
 (defn fill-past-date [e2e-tag]
   (click e2e-tag)
   (taxi/click (str (e2e-selector e2e-tag) " .datepicker.dp-dropdown .prev"))
-  (taxi/click (str (e2e-selector e2e-tag) " .datepicker.dp-dropdown td:not(.old)")))
+  (core/click (first-of-month (taxi/css-finder (str (e2e-selector e2e-tag) " .datepicker.dp-dropdown td")))))
 
 (defn text [e2e-tag]
   (taxi/text (e2e-selector e2e-tag)))
@@ -70,7 +74,13 @@
     (is (not-empty (text "text-conference-from-to-dates")))
     (is (= "www.some-link.org" (text "text-conference-link")))
     (is (= "some really fancy description with a new line.\nAnd here is the new line. Wohooo!" (text "text-conference-description")))
-    (click "button-add-rating")
+    (click "button-add-new-rating")
 
     ; add rating page
-    (wait-for "page-add-rating")))
+    (wait-for "page-add-rating")
+    (click "checkbox-rating-voice")
+    (click "button-add-rating")
+
+    ; conference detail page
+    (wait-for "page-conference-detail")
+    (is (= "1" (text "text-icon-panel-number")))))
