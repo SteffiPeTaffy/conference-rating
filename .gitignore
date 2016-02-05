@@ -1,4 +1,4 @@
-resources/okta-*-config.xml
+resources/okta-*-config*.xml
 .idea
 *.iml
 .lein-env
@@ -11,3 +11,4 @@ resources/public/css
 data
 .lein-failures
 .DS_Store
+
