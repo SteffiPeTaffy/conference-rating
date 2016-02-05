@@ -9,7 +9,7 @@
 
 
 (defn start-server []
-  (server/start-server 4000 false {}))
+  (server/start-server 4000 false {} nil))
 
 (defn stop-server [server]
   (.stop server))
@@ -52,7 +52,7 @@
 (defn text [e2e-tag]
   (taxi/text (e2e-selector e2e-tag)))
 
-(deftest basic-journey-test
+(deftest ^:functional basic-journey-test
   (testing "go to home page/ conference list page"
     (taxi/to "http://localhost:4000/#")
     (taxi/window-maximize)

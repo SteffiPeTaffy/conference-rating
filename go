@@ -19,8 +19,16 @@ goal_check-codestyle() {
   lein kibit
 }
 
+goal_unit-test() {
+    lein cljsbuild test && lein test
+}
+
+goal_functional-test() {
+    lein test :functional
+}
+
 goal_test() {
-  lein cljsbuild test && lein test
+  goal_unit-test && goal_functional-test
 }
 
 goal_build-uberjar() {

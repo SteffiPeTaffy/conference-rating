@@ -12,3 +12,4 @@ data
 .lein-failures
 .DS_Store
 
+screenshot-after-test.png

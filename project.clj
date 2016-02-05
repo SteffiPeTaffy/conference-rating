@@ -53,6 +53,10 @@
                                     [:cljsbuild :builds :app :compiler :output-dir]
                                     [:cljsbuild :builds :app :compiler :output-to]]
 
+  :test-selectors {:default (complement :functional)
+                   :functional :functional
+                   :all (constantly true)}
+
   :minify-assets
   {:assets
     {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
