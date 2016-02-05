@@ -32,7 +32,7 @@
   (taxi/find-element {:css (e2e-selector e2e-tag)}))
 
 (defn wait-for [e2e-tag]
-  (taxi/wait-until #(find-element e2e-tag) 20000))
+  (taxi/wait-until #(find-element e2e-tag) 60000))
 
 (defn click [e2e-tag]
   (taxi/click (e2e-selector e2e-tag)))
