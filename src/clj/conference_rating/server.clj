@@ -15,8 +15,8 @@
 (def cli-options
   ;; An option with a required argument
   [["-o" "--okta-active"]
-   ["-e" "--environment ENV" "Environment name, e.g. ci"
-    :default "local"]
+   ["-e" "--environment ENV" "Environment name, e.g. ci" :default "local"]
+   ["-oh" "--okta-home OKTA_HOME" "URL of Okta" :default "https://dev-133267-admin.oktapreview.com/"]
    ["-h" "--help"]])
 
 (defn error-msg [errors]
@@ -28,16 +28,16 @@
   (System/exit status))
 
 
-(defn do-wrap-okta [handler okta-active env]
+(defn do-wrap-okta [handler okta-active env okta-home]
   (let [config-res (io/resource (str "okta-" env "-config.xml"))]
     (println "initialize okta?" okta-active " config location: " config-res)
     (if okta-active
-      (wrap-okta handler {:okta-home "https://dev-133267-admin.oktapreview.com/" :okta-config config-res})
+      (wrap-okta handler {:okta-home okta-home :okta-config config-res})
       handler)))
 
-(defn start-server [port okta-active env]
+(defn start-server [port okta-active env okta-home]
   (let [app (-> (app (db-handler/connect))
-                (do-wrap-okta okta-active env)
+                (do-wrap-okta okta-active env okta-home)
                 (ring-logger/wrap-with-logger)
                 (session/wrap-session))]
     (run-jetty app {:port port :join? false})))
@@ -51,4 +51,4 @@
      (cond
        (:help options) (exit 0 (usage summary))
        errors (exit 1 (error-msg errors)))
-     (start-server port (:okta-active options) (:environment options))))
+     (start-server port (:okta-active options) (:environment options) (:okta-home options))))
