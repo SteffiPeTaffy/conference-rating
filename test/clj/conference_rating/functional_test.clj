@@ -87,4 +87,4 @@
 
     ; conference detail page
     (wait-for "page-conference-detail")
-    (is (= "1" (text "text-icon-panel-number")))))
+    (taxi/wait-until #(= "1" (text "text-icon-panel-number")))))
