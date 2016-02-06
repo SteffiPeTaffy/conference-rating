@@ -109,13 +109,13 @@
 
 (defn create-routes [db]
   (routes
+    okta/okta-routes
+    (GET "/login" [] (redirect "/"))
     (context "" [] (anti-forgery-routes db))
     (resources "/")
     (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                    clojure.java.io/resource
                                                    slurp)))
-    okta/okta-routes
-    (GET "/login" [] (redirect "/"))
     (not-found "Not Found")))
 
 (defn ring-settings [ssl-redirect-disabled]
