@@ -32,7 +32,7 @@
      (include-css "css/reagent-forms.css")
      (include-css "css/site.css")
      [:link {:rel "icon" :type "image/png" :href "img/favicon.png"}]
-     [:script (str "_anti_forgery_token=\"" *anti-forgery-token*"\"")]]
+     [:script (str "_anti_forgery_token=\"" *anti-forgery-token* "\"")]]
     [:body {:class "bg-body"}
      [:div#app
       [:h3 "ClojureScript has not been compiled!"]
@@ -96,26 +96,26 @@
     handler
     (wrap-anti-forgery handler)))
 
-(defn api-routes [db]
+(defn anti-forgery-routes [db]
   (with-anti-forgery
     (routes
-      (GET "/conferences" [] (response (get-conferences db)))
-      (GET "/conferences/:id" [id] (response (get-conference id db)))
-      (GET "/conferences/:id/ratings" [id] (get-conference-ratings id db))
-      (POST "/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
-      (POST "/conferences/" request (add-conference (:body request) db))
-      (GET "/series/suggestions" {params :params} (response (series-suggestions  db (:q params)))))))
+      (GET "/api/conferences" [] (response (get-conferences db)))
+      (GET "/api/conferences/:id" [id] (response (get-conference id db)))
+      (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
+      (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
+      (POST "/api/conferences/" request (add-conference (:body request) db))
+      (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
+      (GET "/" [] (home-page)))))
 
 (defn create-routes [db]
   (routes
-    (context "/api" [] (api-routes db))
+    (context "" [] (anti-forgery-routes db))
     (resources "/")
     (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                    clojure.java.io/resource
                                                    slurp)))
     okta/okta-routes
     (GET "/login" [] (redirect "/"))
-    (GET "/" [] (home-page))
     (not-found "Not Found")))
 
 (defn ring-settings [ssl-redirect-disabled]
