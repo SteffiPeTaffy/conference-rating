@@ -114,8 +114,8 @@
 (defn prevent-open-redirect-through-relay-state [handler]
   (fn [request]
     (let [clean-request (-> request
-                            (assoc-in [:params :RelayState] nil)
-                            (assoc-in [:form-params :RelayState] nil))]
+                            (assoc-in [:params :RelayState] "/")
+                            (assoc-in [:form-params :RelayState] "/"))]
       (println "request coming in: " request)
       (println "clean request coming in: " clean-request)
       (handler clean-request))))
