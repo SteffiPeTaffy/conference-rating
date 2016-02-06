@@ -25,3 +25,6 @@
              :response-format :json
              :keywords? true}))
 
+
+(defn anti-forgery-token []
+  js/_anti_forgery_token)

@@ -64,7 +64,8 @@
                                   :keywords?       true
                                   :handler         #(let [conference-id (:_id %)]
                                                      (history/redirect-to (str "/conferences/" conference-id)))
-                                  :error-handler   #(js/alert (str "could not create conference" %1))})))
+                                  :error-handler   #(js/alert (str "could not create conference" %1))
+                                  :headers {:X-CSRF-Token (backend/anti-forgery-token)}})))
 (defn add-conference-page []
   (let [doc (atom {})]
     [:div {:data-e2e "page-add-conference"}

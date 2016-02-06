@@ -5,7 +5,8 @@
             [reagent.session :as session]
             [conference-rating.history :as history]
             [conference-rating.util :as util]
-            [conference-rating.view-utils.navbar :as navbar]))
+            [conference-rating.view-utils.navbar :as navbar]
+            [conference-rating.backend :as backend]))
 
 (defn- convert-to-tag-list [m k]
   (assoc m k (util/checkboxes-to-tag-list (get m k))))
@@ -18,7 +19,8 @@
     (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        processed-data
                                                                    :format        :json
                                                                    :handler       #(history/redirect-to (str "/conferences/" conference-id))
-                                                                   :error-handler #(js/alert (str "could not create rating" %1))})))
+                                                                   :error-handler #(js/alert (str "could not create rating" %1))
+                                                                   :headers       {:X-CSRF-Token (backend/anti-forgery-token)}})))
 
 (defn recommendation-panel []
   [:label {:for :recommended :class "block-label"}

@@ -16,9 +16,10 @@
             [schema.coerce :as coerce]
             [clojure.string :as string]
             [onelog.core :as onelog]
-            [conference-rating.schemas :as schemas]))
+            [conference-rating.schemas :as schemas])
+  (:use ring.middleware.anti-forgery))
 
-(def home-page
+(defn home-page []
   (html
    [:html
     [:head
@@ -30,7 +31,8 @@
      (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap-theme.min.css")
      (include-css "css/reagent-forms.css")
      (include-css "css/site.css")
-     [:link {:rel "icon" :type "image/png" :href "img/favicon.png"}]]
+     [:link {:rel "icon" :type "image/png" :href "img/favicon.png"}]
+     [:script (str "_anti_forgery_token=\"" *anti-forgery-token*"\"")]]
     [:body {:class "bg-body"}
      [:div#app
       [:h3 "ClojureScript has not been compiled!"]
@@ -103,12 +105,13 @@
                                                   slurp)))
    okta/okta-routes
    (GET "/login" [] (redirect "/"))
-   (GET "/" [] home-page)
+   (GET "/" [] (home-page))
    (not-found "Not Found")))
 
 (defn ring-settings [ssl-redirect-disabled]
   (-> secure-api-defaults
       (assoc-in [:security :ssl-redirect] (not ssl-redirect-disabled))
+      (assoc-in [:security :anti-forgery] true)
       (assoc :proxy true)))
 
 (defn prevent-open-redirect-through-relay-state [handler]
