@@ -18,7 +18,7 @@
     (:db (mg/connect-via-uri mongolab-uri))
     (mg/get-db (mg/connect {:host "127.0.0.1" :port 27017}) "crdb")))
 
-(defn add-conference [conference db]
+(s/defn ^:always-validate add-conference [conference :- schemas/Conference db]
   (let [document (assoc conference :_id (ObjectId.))]
     (mc/insert db "conferences" document)
     (clear-id-in-doc document)))

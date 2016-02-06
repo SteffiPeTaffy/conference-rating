@@ -2,6 +2,8 @@
   (:require [schema.core :as s]
             [schema.coerce :as coerce]))
 
+(defn max-length [l] (s/pred (fn [x] (<= (count x) l)) (str "max length" l)))
+
 (def Count s/Int)
 
 (def RatingSummary
@@ -60,3 +62,13 @@
   (:vs enum))
 
 (def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
+
+
+(def Conference
+  {(s/optional-key :_id) s/Str
+   :series               (s/both s/Str (max-length 100))
+   :name                 (s/both s/Str (max-length 100))
+   :from                 s/Str
+   :to                   s/Str
+   :link                 s/Str
+   :description          s/Str})

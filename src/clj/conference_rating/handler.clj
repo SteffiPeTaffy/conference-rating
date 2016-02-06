@@ -62,7 +62,7 @@
                                 (map #(get-conference % db)))]
     complete-confernces))
 
-(s/defn add-conference [conference db]
+(s/defn add-conference [conference :- schemas/Conference db]
   (let [add-result (db/add-conference conference db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
@@ -95,10 +95,7 @@
    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
    (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
    (POST "/api/conferences/" request (add-conference (:body request) db))
-   (GET "/api/series/suggestions" {params :params}
-     (do
-       (println params)
-       (response (series-suggestions  db (:q params)))))
+   (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
    (resources "/")
    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
                                                   clojure.java.io/resource
