@@ -15,6 +15,7 @@
             [ring.middleware.okta :as okta]
             [schema.coerce :as coerce]
             [clojure.string :as string]
+            [onelog.core :as onelog]
             [conference-rating.schemas :as schemas]))
 
 (def home-page
@@ -119,13 +120,24 @@
       (println "clean request coming in: " clean-request)
       (handler clean-request))))
 
+(defn wrap-dont-show-error-page [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Exception e
+        (onelog/error (onelog/throwable e))
+        {:status 500 :body "An error occurred" }))))
+
 (defn app [db ssl-redirect-disabled]
   (let [handler (-> (create-routes db)
                     (prevent-open-redirect-through-relay-state)
                     (wrap-defaults (ring-settings ssl-redirect-disabled))
                     (json/wrap-json-response)
                     (json/wrap-json-body {:keywords? true}))]
-    (if (env :dev) (-> handler
-                       wrap-exceptions
-                       wrap-reload)
-                   handler)))
+    (if (env :dev)
+      (-> handler
+          wrap-exceptions
+          wrap-reload)
+      (-> handler
+          wrap-dont-show-error-page
+          ))))
