@@ -1,7 +1,7 @@
 (ns conference-rating.handler
   (:require [compojure.core :refer [GET POST defroutes routes]]
             [compojure.route :refer [not-found resources]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults api-defaults]]
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
             [ring.util.response :refer [created response redirect]]
             [hiccup.core :refer [html]]
             [ring.middleware.json :as json]
@@ -105,9 +105,9 @@
    (GET "/" [] home-page)
    (not-found "Not Found")))
 
-(defn app [db]
+(defn app [db ssl-redirect-disabled]
   (let [handler (-> (create-routes db)
-                    (wrap-defaults api-defaults)
+                    (wrap-defaults (assoc-in secure-api-defaults [:security :ssl-redirect] (not ssl-redirect-disabled)))
                     (json/wrap-json-response)
                     (json/wrap-json-body {:keywords? true}))]
     (if (env :dev) (-> handler

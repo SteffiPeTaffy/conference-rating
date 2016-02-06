@@ -17,6 +17,7 @@
   [["-o" "--okta-active"]
    ["-e" "--environment ENV" "Environment name, e.g. ci" :default "local"]
    ["-oh" "--okta-home OKTA_HOME" "URL of Okta" :default "https://dev-133267-admin.oktapreview.com/"]
+   ["-sd" "--ssl-redirect-disabled"]
    ["-h" "--help"]])
 
 (defn error-msg [errors]
@@ -35,8 +36,8 @@
       (wrap-okta handler {:okta-home okta-home :okta-config config-res})
       handler)))
 
-(defn start-server [port okta-active env okta-home]
-  (let [app (-> (app (db-handler/connect))
+(defn start-server [port okta-active env okta-home ssl-redirect-disabled]
+  (let [app (-> (app (db-handler/connect) ssl-redirect-disabled)
                 (do-wrap-okta okta-active env okta-home)
                 (ring-logger/wrap-with-logger)
                 (session/wrap-session))]
@@ -51,4 +52,4 @@
      (cond
        (:help options) (exit 0 (usage summary))
        errors (exit 1 (error-msg errors)))
-     (start-server port (:okta-active options) (:environment options) (:okta-home options))))
+     (start-server port (:okta-active options) (:environment options) (:okta-home options) (:ssl-redirect-disabled options))))

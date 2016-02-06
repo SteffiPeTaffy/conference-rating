@@ -16,7 +16,7 @@
   (json/read-str (:body response) :key-fn keyword))
 
 (defn json-body-for [db request]
-  (json-body ((app db) request)))
+  (json-body ((app db true) request)))
 
 (defn- create-mock-db []
   (let [fongo (Fongo. "some mock mongodb")]
@@ -34,10 +34,10 @@
 
 (deftest acceptance-test
   (testing "should have an index-page"
-    (is (= 200 (:status ((app (create-mock-db)) (request :get "/"))))))
+    (is (= 200 (:status ((app (create-mock-db) true) (request :get "/"))))))
   (testing "should return all ratings of a conference as json"
     (let [db (create-mock-db)
-          response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
+          response ((app db true) (-> (request :post "/api/conferences/someConferenceId/ratings")
                                  (body (json/write-str
                                          (some-rating-with :comment {:name "Bob" :comment "some comment"}
                                                            :rating {:overall 5
@@ -46,7 +46,7 @@
                                                                     :networking 3})))
                                  (header :content-type "application/json")))]
       (is (= 201 (:status response)))
-      (let [ratings-response ((app db) (request :get "/api/conferences/someConferenceId/ratings"))
+      (let [ratings-response ((app db true) (request :get "/api/conferences/someConferenceId/ratings"))
             rating-list (json/read-str (:body ratings-response) :key-fn keyword) ]
         (is (= 200 (:status ratings-response) ))
         (is (= 1 (count rating-list)))
@@ -55,7 +55,7 @@
         (is (= 5 (:overall (:rating (first rating-list))))))))
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
-      (let [response ((app db) (-> (request :post "/api/conferences/")
+      (let [response ((app db true) (-> (request :post "/api/conferences/")
                                    (body (json/write-str (some-conference-with {:name "some name" :description "some description"})))
                                    (header :content-type "application/json")))]
         (is (= 201 (:status response)))
@@ -72,35 +72,35 @@
   (testing "conference validation"
     (testing "series too long"
       (let [db (create-mock-db)]
-        (let [response ((app db) (-> (request :post "/api/conferences/")
+        (let [response ((app db true) (-> (request :post "/api/conferences/")
                                      (body (json/write-str (some-conference-with {:series (s/join (repeat 1000 "x"))})))
                                      (header :content-type "application/json")))]
           (is (= 500 (:status response))))))
     (testing "name too long"
       (let [db (create-mock-db)]
-        (let [response ((app db) (-> (request :post "/api/conferences/")
+        (let [response ((app db true) (-> (request :post "/api/conferences/")
                                      (body (json/write-str (some-conference-with {:name (s/join (repeat 1000 "x"))})))
                                      (header :content-type "application/json")))]
           (is (= 500 (:status response)))))))
   (testing "series suggestions"
     (let [db (create-mock-db)]
-      ((app db) (-> (request :post "/api/conferences/")
+      ((app db true) (-> (request :post "/api/conferences/")
                     (body (json/write-str (some-conference-with {:name "some name" :description "some description" :series "some series"})))
                     (header :content-type "application/json")))
-      ((app db) (-> (request :post "/api/conferences/")
+      ((app db true) (-> (request :post "/api/conferences/")
                     (body (json/write-str (some-conference-with {:name "some other name" :description "some other description" :series "some series"})))
                     (header :content-type "application/json")))
-      ((app db) (-> (request :post "/api/conferences/")
+      ((app db true) (-> (request :post "/api/conferences/")
                     (body (json/write-str (some-conference-with {:name "some other name" :description "some other description" :series "other series"})))
                     (header :content-type "application/json")))
 
       (testing "should find suggestions for existing series"
-        (let [response ((app db) (request :get "/api/series/suggestions?q=some"))]
+        (let [response ((app db true) (request :get "/api/series/suggestions?q=some"))]
           (is (= 200 (:status response)))
           (is (= ["some series"] (json-body response)))))))
   (testing "should fail if incomplete data is written to ratings"
     (let [db (create-mock-db)
-          response ((app db) (-> (request :post "/api/conferences/someConferenceId/ratings")
+          response ((app db true) (-> (request :post "/api/conferences/someConferenceId/ratings")
                                  (body (json/write-str {:some "random value"}))
                                  (header :content-type "application/json")))]
       (is (= 500 (:status response))))))
@@ -112,5 +112,5 @@
           rating-id (ObjectId.)]
       (mc/insert db "conferences" {:_id conference-id :foo :bar})
       (mc/insert db "ratings" {:_id rating-id :conference-id conference-id :foo :bar})
-      (let [response ((app db) (request :get (str "/api/conferences/" conference-id)))]
+      (let [response ((app db true) (request :get (str "/api/conferences/" conference-id)))]
         (is (= 200 (:status response)))))))

@@ -4,7 +4,7 @@ set -x
 set -e
 
 goal_serve-backend() {
-  lein run
+  lein run -- --ssl-redirect-disabled
 }
 
 goal_serve-frontend() {

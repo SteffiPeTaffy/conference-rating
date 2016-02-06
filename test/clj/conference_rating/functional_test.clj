@@ -9,7 +9,7 @@
 
 
 (defn start-server []
-  (server/start-server 4000 false {} nil))
+  (server/start-server 4000 false {} nil true))
 
 (defn stop-server [server]
   (.stop server))
