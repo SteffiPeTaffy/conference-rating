@@ -1,5 +1,5 @@
 (ns conference-rating.handler
-  (:require [compojure.core :refer [GET POST defroutes routes]]
+  (:require [compojure.core :refer [GET POST context defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
             [ring.util.response :refer [created response redirect]]
@@ -91,22 +91,32 @@
        (filter (matches-series q))
        (distinct)))
 
+(defn- with-anti-forgery [handler]
+  (if (env :dev)
+    handler
+    (wrap-anti-forgery handler)))
+
+(defn api-routes [db]
+  (with-anti-forgery
+    (routes
+      (GET "/conferences" [] (response (get-conferences db)))
+      (GET "/conferences/:id" [id] (response (get-conference id db)))
+      (GET "/conferences/:id/ratings" [id] (get-conference-ratings id db))
+      (POST "/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
+      (POST "/conferences/" request (add-conference (:body request) db))
+      (GET "/series/suggestions" {params :params} (response (series-suggestions  db (:q params)))))))
+
 (defn create-routes [db]
   (routes
-   (GET "/api/conferences" [] (response (get-conferences db)))
-   (GET "/api/conferences/:id" [id] (response (get-conference id db)))
-   (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
-   (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
-   (POST "/api/conferences/" request (add-conference (:body request) db))
-   (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
-   (resources "/")
-   (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
-                                                  clojure.java.io/resource
-                                                  slurp)))
-   okta/okta-routes
-   (GET "/login" [] (redirect "/"))
-   (GET "/" [] (home-page))
-   (not-found "Not Found")))
+    (context "/api" [] (api-routes db))
+    (resources "/")
+    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
+                                                   clojure.java.io/resource
+                                                   slurp)))
+    okta/okta-routes
+    (GET "/login" [] (redirect "/"))
+    (GET "/" [] (home-page))
+    (not-found "Not Found")))
 
 (defn ring-settings [ssl-redirect-disabled]
   (-> secure-api-defaults
