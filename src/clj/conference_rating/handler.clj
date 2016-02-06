@@ -110,8 +110,18 @@
       (assoc-in [:security :ssl-redirect] (not ssl-redirect-disabled))
       (assoc :proxy true)))
 
+(defn prevent-open-redirect-through-relay-state [handler]
+  (fn [request]
+    (let [clean-request (-> request
+                            (assoc-in [:params :RelayState] nil)
+                            (assoc-in [:form-params :RelayState] nil))]
+      (println "request coming in: " request)
+      (println "clean request coming in: " clean-request)
+      (handler clean-request))))
+
 (defn app [db ssl-redirect-disabled]
   (let [handler (-> (create-routes db)
+                    (prevent-open-redirect-through-relay-state)
                     (wrap-defaults (ring-settings ssl-redirect-disabled))
                     (json/wrap-json-response)
                     (json/wrap-json-body {:keywords? true}))]
