@@ -105,9 +105,14 @@
    (GET "/" [] home-page)
    (not-found "Not Found")))
 
+(defn ring-settings [ssl-redirect-disabled]
+  (-> secure-api-defaults
+      (assoc-in [:security :ssl-redirect] (not ssl-redirect-disabled))
+      (assoc :proxy true)))
+
 (defn app [db ssl-redirect-disabled]
   (let [handler (-> (create-routes db)
-                    (wrap-defaults (assoc-in secure-api-defaults [:security :ssl-redirect] (not ssl-redirect-disabled)))
+                    (wrap-defaults (ring-settings ssl-redirect-disabled))
                     (json/wrap-json-response)
                     (json/wrap-json-body {:keywords? true}))]
     (if (env :dev) (-> handler
