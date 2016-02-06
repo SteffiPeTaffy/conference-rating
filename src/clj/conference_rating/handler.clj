@@ -111,7 +111,8 @@
 (defn ring-settings [ssl-redirect-disabled]
   (-> secure-api-defaults
       (assoc-in [:security :ssl-redirect] (not ssl-redirect-disabled))
-      (assoc-in [:security :anti-forgery] true)
+      (assoc-in [:security :anti-forgery] (not (env :dev)))
+      (assoc-in [:security :frame-options] :deny)
       (assoc :proxy true)))
 
 (defn prevent-open-redirect-through-relay-state [handler]
