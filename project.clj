@@ -53,9 +53,9 @@
                                     [:cljsbuild :builds :app :compiler :output-dir]
                                     [:cljsbuild :builds :app :compiler :output-to]]
 
-  :test-selectors {:default (complement :functional)
-                   :functional :functional
-                   :all (constantly true)}
+  :test-selectors {:default (constantly true)
+                   :unit (complement :functional)
+                   :functional :functional}
 
   :minify-assets
   {:assets

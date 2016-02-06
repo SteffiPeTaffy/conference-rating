@@ -20,7 +20,7 @@ goal_check-codestyle() {
 }
 
 goal_unit-test() {
-    lein cljsbuild test && lein test
+    lein cljsbuild test && lein test :unit
 }
 
 goal_functional-test() {
@@ -28,7 +28,7 @@ goal_functional-test() {
 }
 
 goal_test() {
-  goal_unit-test && goal_functional-test
+  lein cljsbuild test && lein test
 }
 
 goal_build-uberjar() {
