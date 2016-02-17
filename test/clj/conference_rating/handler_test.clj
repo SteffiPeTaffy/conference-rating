@@ -81,6 +81,31 @@
         (let [response ((app db true) (-> (request :post "/api/conferences/")
                                      (body (json/write-str (some-conference-with {:name (s/join (repeat 1000 "x"))})))
                                      (header :content-type "application/json")))]
+          (is (= 500 (:status response))))))
+    (testing "link too long"
+      (let [db (create-mock-db)]
+        (let [response ((app db true) (-> (request :post "/api/conferences/")
+                                          (body (json/write-str (some-conference-with {:link (s/join (repeat 2000 "x"))})))
+                                          (header :content-type "application/json")))]
+          (is (= 500 (:status response))))))
+    (testing "description too long"
+      (let [db (create-mock-db)]
+        (let [response ((app db true) (-> (request :post "/api/conferences/")
+                                          (body (json/write-str (some-conference-with {:description (s/join (repeat 20000 "x"))})))
+                                          (header :content-type "application/json")))]
+          (is (= 500 (:status response)))))))
+  (testing "rating validation"
+    (testing "name too long"
+      (let [db (create-mock-db)]
+        (let [response ((app db true) (-> (request :post "/api/conferences/someConferenceId/ratings")
+                                          (body (json/write-str (some-rating-with :comment {:name (s/join (repeat 1000 "x")) :comment "some comment"})))
+                                          (header :content-type "application/json")))]
+          (is (= 500 (:status response))))))
+    (testing "description too long"
+      (let [db (create-mock-db)]
+        (let [response ((app db true) (-> (request :post "/api/conferences/someConferenceId/ratings")
+                                          (body (json/write-str (some-rating-with :comment {:name "some name" :comment (s/join (repeat 20000 "x"))})))
+                                          (header :content-type "application/json")))]
           (is (= 500 (:status response)))))))
   (testing "series suggestions"
     (let [db (create-mock-db)]

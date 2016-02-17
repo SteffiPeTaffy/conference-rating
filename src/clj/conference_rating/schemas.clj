@@ -49,8 +49,8 @@
    :recommended          s/Bool
    :roles                [Role]
    :experience           [Experience]
-   :comment              {:name    s/Str
-                          :comment s/Str}
+   :comment              {:name    (s/both s/Str (max-length 100))
+                          :comment (s/both s/Str (max-length 10000))}
    :rating               {:overall    RatingValue
                           :talks      RatingValue
                           :venue      RatingValue
@@ -70,5 +70,5 @@
    :name                 (s/both s/Str (max-length 100))
    :from                 s/Str
    :to                   s/Str
-   :link                 s/Str
-   :description          s/Str})
+   :link                 (s/both s/Str (max-length 1000))
+   :description          (s/both s/Str (max-length 10000))})
