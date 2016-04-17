@@ -122,6 +122,8 @@
   (-> secure-api-defaults
       (assoc-in [:security :ssl-redirect] (not ssl-redirect-disabled))
       (assoc-in [:security :frame-options] :deny)
+      (assoc-in [:security :xss-protection :mode] :block)
+      (assoc-in [:security :content-type-options] :nosniff)
       (assoc :proxy true)))
 
 (defn prevent-open-redirect-through-relay-state [handler]
