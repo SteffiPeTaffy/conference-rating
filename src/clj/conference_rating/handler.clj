@@ -4,6 +4,7 @@
             [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
             [ring.util.response :refer [created response redirect]]
             [hiccup.core :refer [html]]
+            [hiccup.util :refer [escape-html]]
             [ring.middleware.json :as json]
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
@@ -16,7 +17,8 @@
             [schema.coerce :as coerce]
             [clojure.string :as string]
             [onelog.core :as onelog]
-            [conference-rating.schemas :as schemas])
+            [conference-rating.schemas :as schemas]
+            [clojure.walk :as walk])
   (:use ring.middleware.anti-forgery))
 
 (defn home-page []
@@ -65,15 +67,23 @@
                                 (map #(get-conference % db)))]
     complete-confernces))
 
+(defn- escape-string [x]
+  (if (string? x)
+    (escape-html x)
+    x))
+
+(defn- sanatize [m]
+  (walk/postwalk escape-string m))
+
 (s/defn add-conference [conference :- schemas/Conference db]
-  (let [add-result (db/add-conference conference db)
+  (let [add-result (db/add-conference (sanatize conference) db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 
 (def parse-rating (coerce/coercer schemas/Rating coerce/json-coercion-matcher))
 
 (defn add-rating [conference-id raw-rating db]
-  (let [complete   (assoc raw-rating :conference-id conference-id)
+  (let [complete   (assoc (sanatize raw-rating) :conference-id conference-id)
         rating     (parse-rating complete)
         add-result (db/add-rating rating db)
         id         (:_id add-result)]

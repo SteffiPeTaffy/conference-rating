@@ -29,7 +29,7 @@
     (let [db (create-mock-db)
           response ((app db true) (-> (request :post "/api/conferences/someConferenceId/ratings")
                                  (body (json/write-str
-                                         (some-rating-with :comment {:name "Bob" :comment "some comment"}
+                                         (some-rating-with :comment {:name "Bob" :comment "some comment with a <p>p tag</p>"}
                                                            :rating {:overall 5
                                                                     :talks 1
                                                                     :venue 2
@@ -41,22 +41,22 @@
         (is (= 200 (:status ratings-response) ))
         (is (= 1 (count rating-list)))
         (is (= "Bob" (:name (:comment (first rating-list)))))
-        (is (= "some comment" (:comment (:comment (first rating-list)))))
+        (is (= "some comment with a &lt;p&gt;p tag&lt;/p&gt;" (:comment (:comment (first rating-list)))))
         (is (= 5 (:overall (:rating (first rating-list))))))))
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
       (let [response ((app db true) (-> (request :post "/api/conferences/")
-                                   (body (json/write-str (some-conference-with {:name "some name" :description "some description"})))
-                                   (header :content-type "application/json")))]
+                                        (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
+                                        (header :content-type "application/json")))]
         (is (= 201 (:status response)))
         (is (.startsWith (get-in response [:headers "Location"]) "/api/conferences/"))
         (let [conference-response (json-body-for db (request :get (get-in response [:headers "Location"])))]
-          (is (= "some description" (:description conference-response)))
+          (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description conference-response)))
           (is (= "some name" (:name conference-response)))
           (is (map? (:aggregated-ratings conference-response))))
       (let [conferences (json-body-for db (request :get "/api/conferences"))]
         (is (= 1 (count conferences)))
-        (is (= "some description" (:description (first conferences))))
+        (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description (first conferences))))
         (is (= "some name" (:name (first conferences))))
         (is (map? (:aggregated-ratings (first conferences))))))))
   (testing "conference validation"
