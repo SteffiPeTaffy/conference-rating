@@ -9,6 +9,8 @@
             [hiccup.page :refer [include-js include-css]]
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.ratelimit :refer [wrap-ratelimit ip-limit]]
+            [ring.middleware.ratelimit.local-atom :refer [local-atom-backend]]
             [environ.core :refer [env]]
             [conference-rating.db-handler :as db]
             [conference-rating.aggregator :as aggregator]
@@ -106,27 +108,44 @@
     handler
     (wrap-anti-forgery handler)))
 
+(defn read-routes [db]
+  (routes
+    (GET "/api/conferences" [] (response (get-conferences db)))
+    (GET "/api/conferences/:id" [id] (response (get-conference id db)))
+    (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
+    (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
+    (GET "/" [] (home-page))))
+
+(defn write-routes [db]
+  (wrap-ratelimit
+    (routes
+      (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
+      (POST "/api/conferences/" request (add-conference (:body request) db)))
+    {:limits [(ip-limit 100)]
+     :backend (local-atom-backend (atom {}))}))
+
+(defn all-routes [db]
+  (let [read-routes (read-routes db)
+        write-routes (write-routes db)]
+    (routes
+      read-routes
+      write-routes)))
+
 (defn anti-forgery-routes [db]
   (with-anti-forgery
-    (routes
-      (GET "/api/conferences" [] (response (get-conferences db)))
-      (GET "/api/conferences/:id" [id] (response (get-conference id db)))
-      (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
-      (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
-      (POST "/api/conferences/" request (add-conference (:body request) db))
-      (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
-      (GET "/" [] (home-page)))))
+    (all-routes db)))
 
 (defn create-routes [db]
-  (routes
-    okta/okta-routes
-    (GET "/login" [] (redirect "/"))
-    (context "" [] (anti-forgery-routes db))
-    (resources "/")
-    (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
-                                                   clojure.java.io/resource
-                                                   slurp)))
-    (not-found "Not Found")))
+  (let [anti-forgery-routes (anti-forgery-routes db)]
+    (routes
+      okta/okta-routes
+      (GET "/login" [] (redirect "/"))
+      (resources "/")
+      (GET "/css/reagent-forms.css" [] (response (-> "reagent-forms.css"
+                                                     clojure.java.io/resource
+                                                     slurp)))
+      (context "" [] anti-forgery-routes)
+      (not-found "Not Found"))))
 
 (defn ring-settings [ssl-redirect-disabled]
   (-> secure-api-defaults
@@ -141,8 +160,6 @@
     (let [clean-request (-> request
                             (assoc-in [:params :RelayState] "/")
                             (assoc-in [:form-params :RelayState] "/"))]
-      (println "request coming in: " request)
-      (println "clean request coming in: " clean-request)
       (handler clean-request))))
 
 (defn wrap-dont-show-error-page [handler]

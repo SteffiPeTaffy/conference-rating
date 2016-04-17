@@ -43,6 +43,15 @@
         (is (= "Bob" (:name (:comment (first rating-list)))))
         (is (= "some comment with a &lt;p&gt;p tag&lt;/p&gt;" (:comment (:comment (first rating-list)))))
         (is (= 5 (:overall (:rating (first rating-list))))))))
+  (testing "rate limiting"
+    (let [db (create-mock-db)
+
+          app-instance (app db true)
+          responses (doall (repeatedly 101 (fn []
+                                             (app-instance (-> (request :post "/api/conferences/")
+                                                             (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
+                                                             (header :content-type "application/json"))))))]
+      (is (= 429 (:status (last responses))))))
   (testing "should add a conference to the database"
     (let [db (create-mock-db)]
       (let [response ((app db true) (-> (request :post "/api/conferences/")
@@ -54,11 +63,11 @@
           (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description conference-response)))
           (is (= "some name" (:name conference-response)))
           (is (map? (:aggregated-ratings conference-response))))
-      (let [conferences (json-body-for db (request :get "/api/conferences"))]
-        (is (= 1 (count conferences)))
-        (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description (first conferences))))
-        (is (= "some name" (:name (first conferences))))
-        (is (map? (:aggregated-ratings (first conferences))))))))
+        (let [conferences (json-body-for db (request :get "/api/conferences"))]
+          (is (= 1 (count conferences)))
+          (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description (first conferences))))
+          (is (= "some name" (:name (first conferences))))
+          (is (map? (:aggregated-ratings (first conferences))))))))
   (testing "conference validation"
     (testing "series too long"
       (let [db (create-mock-db)]

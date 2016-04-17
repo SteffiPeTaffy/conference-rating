@@ -23,6 +23,7 @@
                  [ring-okta "0.1.6"]
                  [ring.middleware.logger "0.5.0"]
                  [ring/ring-json "0.4.0"]
+                 [ring-ratelimit "0.2.2"]
                  [prone "0.8.2"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
