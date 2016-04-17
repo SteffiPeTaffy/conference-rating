@@ -5,7 +5,7 @@
             [clojure.data.json :as json]
             [monger.collection :as mc]
             [schema.test]
-            [conference-rating.testdata :refer [some-rating-with some-rating]]
+            [conference-rating.testdata :refer [some-rating-with some-rating some-conference-with]]
             [clojure.string :as s])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
@@ -21,16 +21,6 @@
 (defn- create-mock-db []
   (let [fongo (Fongo. "some mock mongodb")]
     (.getDB fongo "crdb")))
-
-(def some-valid-conference {:name        "some name"
-                            :series      "some series"
-                            :from        "2016-02-06T16:31:03.679"
-                            :to          "2016-02-07T16:31:03.679"
-                            :description "some description"
-                            :link        "http://some-link.com"})
-
-(defn some-conference-with [m]
-  (merge some-valid-conference m))
 
 (deftest acceptance-test
   (testing "should have an index-page"

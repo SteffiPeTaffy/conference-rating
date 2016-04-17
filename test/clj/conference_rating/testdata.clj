@@ -12,7 +12,7 @@
 (defn some-rating-values-with [& kv]
   (apply assoc (some-rating-values) kv))
 
-(s/defn some-rating :- schemas/Rating []
+(defn some-rating []
   {:_id           (str (UUID/randomUUID))
    :conference-id "some-conference-id"
    :recommended   false
@@ -23,5 +23,16 @@
    :rating        (some-rating-values)
    :tags          [:inspiring :informative :entertaining :hires :clients]})
 
-(s/defn some-rating-with :- schemas/Rating [& kv]
+(defn some-rating-with [& kv]
   (apply assoc (some-rating) kv))
+
+
+(def some-valid-conference {:name        "some name"
+                            :series      "some series"
+                            :from        "2016-02-06T16:31:03.679"
+                            :to          "2016-02-07T16:31:03.679"
+                            :description "some description"
+                            :link        "http://some-link.com"})
+
+(defn some-conference-with [m]
+  (merge some-valid-conference m))
