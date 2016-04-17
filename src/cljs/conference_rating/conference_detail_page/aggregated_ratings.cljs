@@ -14,7 +14,7 @@
 
 (defn top-2 [collection]
   (->> collection
-       (sort-by #(second %))
+       (sort-by second)
        (reverse)
        (take 2)
        (map first)))
@@ -107,7 +107,7 @@
 (defn badges [coll lookup-table]
   (->> coll
        (filter #(not= 0 (second %)))
-       (sort-by #(second %))
+       (sort-by second)
        (reverse)
        (map (conference-badge lookup-table))))
 

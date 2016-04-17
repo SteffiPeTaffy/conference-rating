@@ -84,6 +84,6 @@
 
 (defn conferences-page []
   (let [conference-list @displayed-conferences]
-    (if (not (nil? conference-list))
+    (if-not (nil? conference-list)
       (display-conference-list conference-list)
       (util/display-loading))))

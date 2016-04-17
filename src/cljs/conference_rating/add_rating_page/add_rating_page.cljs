@@ -9,7 +9,7 @@
             [conference-rating.backend :as backend]))
 
 (defn- convert-to-tag-list [m k]
-  (assoc m k (util/checkboxes-to-tag-list (get m k))))
+  (update-in m [k] util/checkboxes-to-tag-list))
 
 (defn create-rating [form-data conference-id]
   (let [processed-data (-> @form-data

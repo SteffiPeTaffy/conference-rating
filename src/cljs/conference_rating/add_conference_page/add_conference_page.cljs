@@ -20,8 +20,7 @@
     [:input {:field :text :on-blur (fn [e] (swap! data-atom #(assoc % :series (-> e .-target .-value)))) :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference" :data-e2e "input-conference-series"}]))
 
 (defn conference-series-suggestions [q cb]
-  (backend/load-series-suggestions q (fn [x]
-                                       (cb x))))
+  (backend/load-series-suggestions q cb))
 
 (defn conference-series-template [series]
   (str "<div class=\"series-suggestion-template\">"

@@ -4,7 +4,7 @@
             [cljs-time.core :as t]))
 
 (defn series-tag [series-tag]
-  (if (not (nil? series-tag))
+  (if-not (nil? series-tag)
       [:div {:class "series-tag-container"}[:span {:class "series-tag"} series-tag]]
       [:div {:class "series-tag-container"}[:span {:class "series-tag series-tag-hidden"} ""]]))
 

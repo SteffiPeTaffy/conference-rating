@@ -36,6 +36,6 @@
 (defn conference-page []
   (let [conference @displayed-conference
        ratings @display-ratings]
-    (if (not (nil? conference))
+    (if-not (nil? conference)
       (display-conference-detail-page conference ratings)
       (util/display-loading))))
