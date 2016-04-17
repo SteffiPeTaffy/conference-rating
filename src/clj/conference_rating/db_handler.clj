@@ -29,7 +29,7 @@
     (clear-id-in-doc document)))
 
 (defn get-conferences-list [db]
-  (let [list (mc/find-maps db "conferences")]
+  (let [list (mc/find-maps db "conferences" {:limit 100})]
     (map clear-id-in-doc list)))
 
 (defn get-conference [id db]
@@ -43,7 +43,7 @@
     valid))
 
 (s/defn ^:always-validate get-ratings :- [schemas/Rating] [conference-id db]
-  (let [rating-list (mc/find-maps db "ratings" {:conference-id conference-id})
+  (let [rating-list (mc/find-maps db "ratings" {:conference-id conference-id :limit 100})
         cleared-ratings (->> rating-list
                              (map clear-id-in-doc)
                              (map schemas/coerce-rating)
