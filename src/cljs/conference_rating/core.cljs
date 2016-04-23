@@ -18,7 +18,7 @@
   [:div [(session/get :current-page)]])
 
 (secretary/defroute "/" []
-                    (backend/load-conferences #(reset! conference-list/displayed-conferences %1))
+                    (backend/reload-conferences conference-list/displayed-conferences)
                     (session/put! :current-page #'conference-list/conferences-page))
 
 (secretary/defroute "/add-conference" []
