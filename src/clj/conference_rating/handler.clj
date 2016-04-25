@@ -1,5 +1,5 @@
 (ns conference-rating.handler
-  (:require [compojure.core :refer [GET POST DELETE context defroutes routes]]
+  (:require [compojure.core :refer [GET POST context defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
             [ring.util.response :refer [created response redirect]]
@@ -25,37 +25,37 @@
 
 (defn home-page []
   (html
-    [:html
-     [:head
-      [:meta {:charset "utf-8"}]
-      [:meta {:name    "viewport"
-              :content "width=device-width, initial-scale=1"}]
-      [:title "conference voices"]
-      (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap.min.css")
-      (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap-theme.min.css")
-      (include-css "css/reagent-forms.css")
-      (include-css "css/site.css")
-      [:link {:rel "icon" :type "image/png" :href "img/favicon.png"}]
-      [:script (str "_anti_forgery_token=\"" *anti-forgery-token* "\"")]]
-     [:body {:class "bg-body"}
-      [:div#app
-       [:h3 "ClojureScript has not been compiled!"]
-       [:p "please run "
-        [:b "lein figwheel"]
-        " in order to start the compiler"]]
-      (include-js "thirdparty/jquery-2.1.4.min.js")
-      (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
-      (include-js "js/app.js")]]))
+   [:html
+    [:head
+     [:meta {:charset "utf-8"}]
+     [:meta {:name "viewport"
+             :content "width=device-width, initial-scale=1"}]
+     [:title "conference voices"]
+     (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap.min.css")
+     (include-css "thirdparty/bootstrap-3.3.5/css/bootstrap-theme.min.css")
+     (include-css "css/reagent-forms.css")
+     (include-css "css/site.css")
+     [:link {:rel "icon" :type "image/png" :href "img/favicon.png"}]
+     [:script (str "_anti_forgery_token=\"" *anti-forgery-token* "\"")]]
+    [:body {:class "bg-body"}
+     [:div#app
+      [:h3 "ClojureScript has not been compiled!"]
+      [:p "please run "
+       [:b "lein figwheel"]
+       " in order to start the compiler"]]
+     (include-js "thirdparty/jquery-2.1.4.min.js")
+     (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
+     (include-js "js/app.js")]]))
 
 
 (defn get-conference [conference-id db]
-  (let [conference-info (db/get-conference conference-id db)
-        ratings (db/get-ratings conference-id db)
+  (let [conference-info   (db/get-conference conference-id db)
+        ratings           (db/get-ratings conference-id db)
         aggregate-ratings (aggregator/aggregate-ratings ratings)
         ratings-of-series (db/get-average-rating-for-series (:series conference-info) db)]
     (->
       conference-info
-      (assoc :aggregated-ratings aggregate-ratings)
+      (assoc  :aggregated-ratings aggregate-ratings)
       (assoc :average-series-rating ratings-of-series))))
 
 (defn get-conference-ratings [conference-id db]
@@ -65,8 +65,8 @@
 (defn get-conferences [db]
   (let [conferences (db/get-conferences-list db)
         complete-confernces (->> conferences
-                                 (map :_id)
-                                 (map #(get-conference % db)))]
+                                (map :_id)
+                                (map #(get-conference % db)))]
     complete-confernces))
 
 (defn- escape-string [x]
@@ -79,24 +79,16 @@
 
 (s/defn add-conference [conference :- schemas/Conference db]
   (let [add-result (db/add-conference (sanatize conference) db)
-        id (:_id add-result)]
+        id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
-
-(defn delete-conference [conference-id db]
-  (let [delete-successful (db/delete-conference conference-id db)]
-    (if delete-successful
-      {:status  204
-       :headers {}
-       :body    ""}
-      (not-found (str "conference with id " conference-id "not found")))))
 
 (def parse-rating (coerce/coercer schemas/Rating coerce/json-coercion-matcher))
 
 (defn add-rating [conference-id raw-rating db]
-  (let [complete (assoc (sanatize raw-rating) :conference-id conference-id)
-        rating (parse-rating complete)
+  (let [complete   (assoc (sanatize raw-rating) :conference-id conference-id)
+        rating     (parse-rating complete)
         add-result (db/add-rating rating db)
-        id (:_id add-result)]
+        id         (:_id add-result)]
     (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
 
 (defn matches-series [q]
@@ -121,16 +113,15 @@
     (GET "/api/conferences" [] (response (get-conferences db)))
     (GET "/api/conferences/:id" [id] (response (get-conference id db)))
     (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
-    (GET "/api/series/suggestions" {params :params} (response (series-suggestions db (:q params))))
+    (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
     (GET "/" [] (home-page))))
 
 (defn write-routes [db]
   (wrap-ratelimit
     (routes
       (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
-      (POST "/api/conferences/" request (add-conference (:body request) db))
-      (DELETE "/api/conferences/:id" [id] (delete-conference id db)))
-    {:limits  [(ip-limit 100)]
+      (POST "/api/conferences/" request (add-conference (:body request) db)))
+    {:limits [(ip-limit 100)]
      :backend (local-atom-backend (atom {}))}))
 
 (defn all-routes [db]
@@ -177,7 +168,7 @@
       (handler request)
       (catch Exception e
         (onelog/error (onelog/throwable e))
-        {:status 500 :body "An error occurred"}))))
+        {:status 500 :body "An error occurred" }))))
 
 (defn app [db ssl-redirect-disabled]
   (let [handler (-> (create-routes db)

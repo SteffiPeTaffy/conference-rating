@@ -25,10 +25,6 @@
              :response-format :json
              :keywords? true}))
 
-(defn reload-conferences [conferences-atom]
-  (load-conferences #(reset! conferences-atom %1)))
-
-
 
 (defn anti-forgery-token []
   js/_anti_forgery_token)

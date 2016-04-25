@@ -37,8 +37,7 @@
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
-    (when item
-      (clear-id-in-doc item))))
+    (clear-id-in-doc item)))
 
 (defn- only-valid [rating]
   (let [valid (not (schema-utils/error? rating))]
@@ -67,9 +66,3 @@
     (let [ids (get-conferences-by-series series db)
           ratings (flatten (map #(get-ratings % db) ids))]
       (ag/aggregate-ratings ratings)))
-
-(defn delete-conference [conference-id db]
-  (let [conference (get-conference conference-id db)
-        success (not (nil? conference))]
-    (mc/remove-by-id db "conferences" (ObjectId. ^String conference-id))
-    success))
