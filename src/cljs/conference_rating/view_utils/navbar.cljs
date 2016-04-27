@@ -4,7 +4,12 @@
             [conference-rating.util :as util]))
 
 (defn search-for-conference-input []
-  [:input {:type "text" :class "form-control search-for-conference-input" :placeholder "search for conference"}])
+  [:input {:type "text"
+           :class "form-control search-for-conference-input"
+           :placeholder "search for conference"
+           :style {:background "transparent"
+                   :color "white"
+                   :border-color "transparent"}}])
 
 (defn conference-suggestion-template [conference]
   (let [series (:series conference)
@@ -48,9 +53,9 @@
                           :templates {:suggestion conference-suggestion-template}})
     #(go-to-conference %2)))
 
-(defn add-conference-bar [conference-list]
+(defn action-bar [conference-list]
   [:div {:class "conference-search form-group text-lg-right"}
-   [:div {:class "add-conference-btn-container"}
+   [:div {:class "action-bar-container"}
     [(search-for-conference-component conference-list)]
     [:a {:class "btn btn-sm btn-orange mar-bottom" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]])
 
@@ -62,4 +67,4 @@
       [:span {:class "cl-yellow"} "conference"]
       [:span " voices"]
       [:span {:class "glyphicon glyphicon-bullhorn"}]]]
-    (add-conference-bar conference-list)]])
+    (action-bar conference-list)]])
