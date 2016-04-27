@@ -26,7 +26,7 @@
   [:div {:class "row bg-gray cl-light"}
    [:div {:class "action-button-container"}
     [:a {:class "btn btn-sm btn-gray" :on-click #(delete-conference conference)} "delete"]
-    [:a {:class "btn btn-sm btn-gray"} "edit"]]])
+    [:a {:class "btn btn-sm btn-gray" :on-click #(js/alert "not implemented yet")} "edit"]]])
 
 
 (defn display-conference-detail-page [conference ratings conference-list]
