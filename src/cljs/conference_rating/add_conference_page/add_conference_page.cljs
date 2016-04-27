@@ -57,16 +57,10 @@
                  :series      (:series data)
                  :link        (:link data)
                  :description (:description data)}]
-  (ajax/POST "/api/conferences/" {:params          payload
-                                  :format          :json
-                                  :response-format :json
-                                  :keywords?       true
-                                  :handler         #(let [conference-id (:_id %)]
-                                                     (history/redirect-to (str "/conferences/" conference-id)))
-                                  :error-handler   #(js/alert (str "could not create conference" %1))
-                                  :headers {:X-CSRF-Token (backend/anti-forgery-token)}})))
-(defn add-conference-page []
-  (let [doc (atom {})]
+  (backend/add-conference payload)))
+
+(defn add&edit-conference-page [initial-data on-click-function]
+  (let [doc initial-data]
     [:div {:data-e2e "page-add-conference"}
      (navbar/nav-bar)
      [:div {:class "container-fluid content-container pad-top"}
@@ -75,5 +69,16 @@
        [:div {:class "col-lg-8"}
         [:div {:class "add-conference-form-container bg-light"}
          [forms/bind-fields (conference-form-template doc) doc]
-         [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(create-conference doc) :data-e2e "button-create-conference"} "Create"]]]
+         [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(on-click-function doc) :data-e2e "button-create-conference"} "Create"]]]
        [:div {:class "col-lg-2"}]]]]))
+
+(defn add-conference-page []
+  (add&edit-conference-page (atom {}) create-conference))
+
+(defonce edit-conference-data (atom nil))
+
+(defn edit-conference-page []
+  (let [confererence-to-edit @edit-conference-data]
+    (if confererence-to-edit
+      (add&edit-conference-page edit-conference-data #(backend/edit-conference @%))
+      (util/display-loading))))

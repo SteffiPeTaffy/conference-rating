@@ -24,6 +24,11 @@
 (secretary/defroute "/add-conference" []
                     (session/put! :current-page #'add-conference/add-conference-page))
 
+(secretary/defroute "/conferences/:id/edit" [id]
+                    (backend/load-conference id #(reset! add-conference/edit-conference-data (assoc %1 :id id)))
+                    (session/put! :current-page #'add-conference/edit-conference-page)
+                    )
+
 (secretary/defroute "/conferences/:id" [id]
                     (backend/load-conference id #(reset! conference/displayed-conference %1))
                     (backend/load-conference-ratings id #(reset! conference/display-ratings %1))

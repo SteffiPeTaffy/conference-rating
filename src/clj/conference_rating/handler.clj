@@ -1,5 +1,5 @@
 (ns conference-rating.handler
-  (:require [compojure.core :refer [GET POST context defroutes routes]]
+  (:require [compojure.core :refer [GET POST PUT context defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
             [ring.util.response :refer [created response redirect]]
@@ -21,6 +21,7 @@
             [onelog.core :as onelog]
             [conference-rating.schemas :as schemas]
             [clojure.walk :as walk])
+
   (:use ring.middleware.anti-forgery))
 
 (defn home-page []
@@ -120,7 +121,9 @@
   (wrap-ratelimit
     (routes
       (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
-      (POST "/api/conferences/" request (add-conference (:body request) db)))
+      (POST "/api/conferences/" request (add-conference (:body request) db))
+      (PUT "/api/conferences/:id/edit" [id :as request] (do (println "id:" id "\nrequest:" request) (response {:id id})))
+      )
     {:limits [(ip-limit 100)]
      :backend (local-atom-backend (atom {}))}))
 
