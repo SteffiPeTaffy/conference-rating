@@ -4,20 +4,40 @@
             [conference-rating.conference-detail-page.rating-list :as rating-list]
             [conference-rating.conference-detail-page.conference-information :as conference-information]
             [conference-rating.conference-detail-page.aggregated-ratings :as aggregated-ratings]
-            [conference-rating.util :as util]))
+            [conference-rating.util :as util]
+            [ajax.core :as ajax]
+            [conference-rating.backend :as backend]
+            [conference-rating.history :as history]))
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right voice-btn-container"}
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"} "give it your voice"]])
 
-(defn display-conference-detail-page [conference ratings]
+(defn delete-conference [conference]
+  (let [delete (js/confirm "If you delete this conference, it will be gone forever!")]
+    (println conference)
+    (if delete
+      (ajax/DELETE (str "/api/conferences/" (:_id conference)) {:keywords?       true
+                                                                :handler         #(history/redirect-to "/")
+                                                                :error-handler   #(js/alert (str "could not delete conference" %1))
+                                                                :headers         {:X-CSRF-Token (backend/anti-forgery-token)}}))))
+
+(defn add-action-bar [conference]
+  [:div {:class "row bg-gray cl-light"}
+   [:div {:class "action-button-container"}
+    [:a {:class "btn btn-sm btn-gray" :on-click #(delete-conference conference)} "delete"]
+    [:a {:class "btn btn-sm btn-gray"} "edit"]]])
+
+
+(defn display-conference-detail-page [conference ratings conference-list]
   [:div {:data-e2e "page-conference-detail"}
-   (navbar/nav-bar)
+   (navbar/nav-bar conference-list)
    [:div {:class "container-fluid content-container pad-top conference-container"}
     [:div {:class "row"}
      [:div {:class "col-lg-1 col-md-1"}]
      [:div {:class "col-lg-6 col-md-6"}
       (conference-information/display-conference-information conference)
+      (add-action-bar conference)
       (if (not (util/is-future-conference? conference))
         (add-rating-button (:_id conference)))]
 
@@ -32,10 +52,12 @@
 
 (defonce displayed-conference (atom nil))
 (defonce display-ratings (atom nil))
+(defonce displayed-conference-list (atom []))
 
 (defn conference-page []
   (let [conference @displayed-conference
-       ratings @display-ratings]
+        ratings @display-ratings
+        conference-list @displayed-conference-list]
     (if-not (nil? conference)
-      (display-conference-detail-page conference ratings)
+      (display-conference-detail-page conference ratings conference-list)
       (util/display-loading))))

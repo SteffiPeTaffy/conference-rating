@@ -60,9 +60,10 @@
   (backend/add-conference payload)))
 
 (defn add&edit-conference-page [initial-data on-click-function]
-  (let [doc initial-data]
+  (let [doc initial-data
+        temporary-broken-nav-bar-empty-list []]
     [:div {:data-e2e "page-add-conference"}
-     (navbar/nav-bar)
+     (navbar/nav-bar temporary-broken-nav-bar-empty-list)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row"}
        [:div {:class "col-lg-2"}]
