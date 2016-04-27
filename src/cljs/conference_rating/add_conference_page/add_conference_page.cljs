@@ -16,8 +16,15 @@
    input])
 
 (defn conference-series-input [data-atom]
-  (fn []
-    [:input {:field :text :on-blur (fn [e] (swap! data-atom #(assoc % :series (-> e .-target .-value)))) :id :series :class "form-control" :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference" :data-e2e "input-conference-series"}]))
+  (let [value (:series @data-atom)
+        input-properties {:field       :text
+                          :on-blur     (fn [e] (swap! data-atom #(assoc % :series (-> e .-target .-value))))
+                          :id          :series
+                          :class       "form-control"
+                          :placeholder "Name of the conference series, e.g. EuroClojure for the EuroClojure 2015 conference"
+                          :data-e2e    "input-conference-series"}]
+    (fn []
+      [:input (if value (assoc input-properties :value value) input-properties)])))
 
 (defn conference-series-suggestions [q cb]
   (backend/load-series-suggestions q cb))
@@ -45,8 +52,8 @@
    (form-input "Name" [:input {:field :text :id :name :class "form-control" :placeholder "Name of the conference" :data-e2e "input-conference-name"}])
    [:div {:class "row"}
     [:div {:class "col-md-6" :data-e2e "date-conference-from"} (form-input "From" [:div {:field :datepicker :id :from-date :date-format "yyyy/mm/dd" :inline false :auto-close? true }])]
-    [:div {:class "col-md-6" :data-e2e "date-conference-to"} (form-input "To" [:div {:field :datepicker :id :to-date :date-format "yyyy/mm/dd" :inline false :auto-close? true}])]]
-   (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page" :data-e2e "input-conference-link"}])
+    [:div {:class "col-md-6" :data-e2e "date-conference-to"} (form-input "To" [:div {:field :datepicker :id :to-date :date-format "yyyy/mm/dd" :inline false :auto-close? true }])]]
+   (form-input "Link" [:input {:field :text :id :link :class "form-control" :placeholder "Link to the conference page" :data-e2e "input-conference-link"  }])
    (form-input "Description" [:textarea {:field :textarea :rows 5 :id :description :class "form-control" :placeholder "More information about the conference" :data-e2e "input-conference-description"}])])
 
 (defn create-conference [data-atom]
@@ -59,7 +66,7 @@
                  :description (:description data)}]
   (backend/add-conference payload)))
 
-(defn add&edit-conference-page [initial-data on-click-function]
+(defn add&edit-conference-page [initial-data on-click-function button-name]
   (let [doc initial-data]
     [:div {:data-e2e "page-add-conference"}
      (navbar/nav-bar)
@@ -69,16 +76,16 @@
        [:div {:class "col-lg-8"}
         [:div {:class "add-conference-form-container bg-light"}
          [forms/bind-fields (conference-form-template doc) doc]
-         [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(on-click-function doc) :data-e2e "button-create-conference"} "Create"]]]
+         [:button {:class "btn btn-primary btn-md btn-orange" :on-click #(on-click-function doc) :data-e2e "button-create-conference"} button-name]]]
        [:div {:class "col-lg-2"}]]]]))
 
 (defn add-conference-page []
-  (add&edit-conference-page (atom {}) create-conference))
+  (add&edit-conference-page (atom {}) create-conference "Create"))
 
 (defonce edit-conference-data (atom nil))
 
 (defn edit-conference-page []
   (let [confererence-to-edit @edit-conference-data]
     (if confererence-to-edit
-      (add&edit-conference-page edit-conference-data #(backend/edit-conference @%))
+      (add&edit-conference-page edit-conference-data #(backend/edit-conference @%) "Edit")
       (util/display-loading))))
