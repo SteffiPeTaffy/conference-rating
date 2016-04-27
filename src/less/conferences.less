@@ -6,7 +6,6 @@
 
   .conference-information-container{
     padding: 15px;
-    margin-bottom: 15px;
   }
 
   .voice-btn-container {
@@ -17,6 +16,21 @@
 
     .panel {
       margin-bottom: 15px;
+    }
+  }
+
+  .action-button-container {
+    padding: 5px;
+
+    .btn {
+      margin-right: 5px;
+      background-color: darken(@gray, 3%);
+      border: 1px solid darken(@gray, 5%) !important;
+    }
+
+    .btn:hover {
+      background-color: darken(@gray, 5%);
+      border: 1px solid darken(@gray, 8%) !important;
     }
   }
 }
@@ -67,6 +81,7 @@
 
   .panel-body {
     padding-top: 0;
+    padding-bottom: 0;
   }
 
   .bottom-line {

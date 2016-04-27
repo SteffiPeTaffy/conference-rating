@@ -165,9 +165,10 @@
                                  :informative  false
                                  :entertaining false
                                  :hires        false
-                                 :clients      false}})]
+                                 :clients      false}})
+        temporary-broken-nav-bar-empty-list []]
     [:div {:data-e2e "page-add-rating"}
-     (navbar/nav-bar)
+     (navbar/nav-bar temporary-broken-nav-bar-empty-list)
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row add-rating-container"}
        [:div {:class "col-lg-1 col-md-1"}]
