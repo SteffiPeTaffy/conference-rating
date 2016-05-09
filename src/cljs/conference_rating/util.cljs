@@ -19,9 +19,6 @@
 
 (def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
 
-(defn assoc-when [map key value]
-  (if value (assoc map key value) map))
-
 (defn form-date-to-datestr [date]
   (tf/unparse built-in-formatter
               (t/date-time (:year date) (:month date) (:day date))))
