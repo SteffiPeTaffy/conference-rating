@@ -25,6 +25,7 @@
                     (session/put! :current-page #'add-conference/add-conference-page))
 
 (secretary/defroute "/conferences/:id/edit" [id]
+                    (reset! add-conference/edit-conference-data nil)
                     (backend/load-conference id #(reset! add-conference/edit-conference-data (assoc %1 :id id)))
                     (session/put! :current-page #'add-conference/edit-conference-page)
                     )
