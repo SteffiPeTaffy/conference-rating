@@ -79,7 +79,7 @@
     (role-checkbox :roles.dev "Devs" "with a focus on technical topics")
     (role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems")
     (role-checkbox :roles.ux "UX" "that are all about user experience and visual designs")
-    (role-checkbox :roles.qa "QAs" "that are interested in getting input on testing")
+    (role-checkbox :roles.qa "QAs" "that are interested in getting input on quality assurance")
     (role-checkbox :roles.ba "BAs" "which lover to get more insight about stories")
     (role-checkbox :roles.pm "PMs" "that want to know how to manage creative people")
     (role-checkbox :roles.sales "Sales" "who want to support our clients even better")
