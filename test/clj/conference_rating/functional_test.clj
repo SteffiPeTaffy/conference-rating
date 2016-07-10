@@ -3,7 +3,8 @@
             [clj-webdriver.core :as core]
             [clojure.test :refer [deftest is testing use-fixtures]]
             [conference-rating.server :as server]
-            [clojure.string :as s]))
+            [clojure.string :as s])
+  (:import (java.util UUID)))
 
 (taxi/set-driver! {:browser :chrome})
 
@@ -52,39 +53,60 @@
 (defn text [e2e-tag]
   (taxi/text (e2e-selector e2e-tag)))
 
+(defn texts [e2e-tag]
+  (map core/text (taxi/find-elements {:css (e2e-selector e2e-tag)})))
+
+(defn not-contains? [x coll]
+  (not (some #{x} coll)))
+
 (deftest ^:functional basic-journey-test
-  (testing "go to home page/ conference list page"
-    (taxi/to "http://localhost:4000/#")
-    (taxi/window-maximize)
+  (let [conference-name (str "some conference name" (UUID/randomUUID))
+        conference-series "some series"
+        conference-link "www.some-link.org"
+        conference-description "some really fancy description with a new line.\nAnd here is the new line. Wohooo!"]
 
-    ; conference list page
-    (wait-for "page-conference-list")
-    (click "btn-add-conference")
+    ; open conference voices home page
+    (testing "go to home page/ conference list page"
+      (taxi/to "http://localhost:4000/#")
+      (taxi/window-maximize)
 
-    ; add conference page
-    (wait-for "page-add-conference")
-    (fill-input {"input-conference-series"      "some series"
-                 "input-conference-name"        "some conference name"
-                 "input-conference-link"        "www.some-link.org"
-                 "input-conference-description" "some really fancy description with a new line. \nAnd here is the new line. Wohooo!"})
-    (fill-past-date "date-conference-from")
-    (fill-past-date "date-conference-to")
-    (click "button-create-conference")
+      ; shows a list os conferences
+      (wait-for "page-conference-list")
+      (click "btn-add-conference")
 
-    ; conference detail page
-    (wait-for "page-conference-detail")
-    (is (= "some series" (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
-    (is (= "some conference name" (text "text-conference-name")))
-    (is (not-empty (text "text-conference-from-to-dates")))
-    (is (= "www.some-link.org" (text "text-conference-link")))
-    (is (= "some really fancy description with a new line.\nAnd here is the new line. Wohooo!" (text "text-conference-description")))
-    (click "button-add-new-rating")
+      ; adds conference
+      (wait-for "page-add-conference")
+      (fill-input {"input-conference-series"      conference-series
+                   "input-conference-name"        conference-name
+                   "input-conference-link"        conference-link
+                   "input-conference-description" conference-description})
+      (fill-past-date "date-conference-from")
+      (fill-past-date "date-conference-to")
+      (click "button-create-conference")
 
-    ; add rating page
-    (wait-for "page-add-rating")
-    (click "checkbox-rating-voice")
-    (click "button-add-rating")
+      ; detail page of the newly added conference
+      (wait-for "page-conference-detail")
+      (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
+      (is (= conference-name (text "text-conference-name")))
+      (is (not-empty (text "text-conference-from-to-dates")))
+      (is (= conference-link (text "text-conference-link")))
+      (is (= conference-description (text "text-conference-description")))
+      (click "button-add-new-rating")
 
-    ; conference detail page
-    (wait-for "page-conference-detail")
-    (taxi/wait-until #(= "1" (text "text-icon-panel-number")))))
+      ; add rating to newly created conference
+      (wait-for "page-add-rating")
+      (click "checkbox-rating-voice")
+      (click "button-add-rating")
+
+      ; checks that the rating is added and visible on the detail page
+      (wait-for "page-conference-detail")
+      (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
+
+      ; deletes conference
+      (click "button-delete-conference")
+      (taxi/accept)
+
+      ; back to the conference list page
+      (wait-for "page-conference-list")
+      (is (not-contains? conference-name (texts "text-conference-name"))))))
+

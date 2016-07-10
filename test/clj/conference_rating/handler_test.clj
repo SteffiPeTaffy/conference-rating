@@ -52,7 +52,7 @@
                                                              (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
                                                              (header :content-type "application/json"))))))]
       (is (= 429 (:status (last responses))))))
-  (testing "should add a conference to the database"
+  (testing "should add and delete a conference"
     (let [db (create-mock-db)]
       (let [response ((app db true) (-> (request :post "/api/conferences/")
                                         (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
@@ -67,7 +67,12 @@
           (is (= 1 (count conferences)))
           (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description (first conferences))))
           (is (= "some name" (:name (first conferences))))
-          (is (map? (:aggregated-ratings (first conferences))))))))
+          (is (map? (:aggregated-ratings (first conferences))))
+          (let [id (:_id (first conferences))
+                response ((app db true) (-> (request :delete (str "/api/conferences/" id))))]
+            (is (= 204 (:status response)))))
+        (let [conferences (json-body-for db (request :get "/api/conferences"))]
+          (is (= 0 (count conferences)))))))
   (testing "conference validation"
     (testing "series too long"
       (let [db (create-mock-db)]
@@ -129,7 +134,7 @@
                                  (header :content-type "application/json")))]
       (is (= 500 (:status response))))))
 
-  (deftest backwards-compatibility-test
+(deftest backwards-compatibility-test
   (testing "that we get valid ratings even if there is crap in the db"
     (let [db (create-mock-db)
           conference-id (ObjectId.)

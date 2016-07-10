@@ -15,7 +15,6 @@
 
 (defn delete-conference [conference]
   (let [delete (js/confirm "If you delete this conference, it will be gone forever!")]
-    (println conference)
     (if delete
       (ajax/DELETE (str "/api/conferences/" (:_id conference)) {:keywords?       true
                                                                 :handler         #(history/redirect-to "/")
@@ -25,8 +24,10 @@
 (defn add-action-bar [conference]
   [:div {:class "row bg-gray cl-light"}
    [:div {:class "action-button-container"}
-    [:a {:class "btn btn-sm btn-gray" :on-click #(delete-conference conference)} "delete"]
-    [:a {:class "btn btn-sm btn-gray" :on-click #(js/alert "not implemented yet")} "edit"]]])
+    [:a {:class "btn btn-sm btn-gray"
+         :data-e2e "button-delete-conference"
+         :on-click #(delete-conference conference)}
+     "delete"]]])
 
 
 (defn display-conference-detail-page [conference ratings conference-list]
@@ -37,6 +38,7 @@
      [:div {:class "col-lg-1 col-md-1"}]
      [:div {:class "col-lg-6 col-md-6"}
       (conference-information/display-conference-information conference)
+      (add-action-bar conference)
       (if (not (util/is-future-conference? conference))
         (add-rating-button (:_id conference)))]
 

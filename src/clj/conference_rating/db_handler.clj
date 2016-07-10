@@ -31,13 +31,16 @@
 
 (defn get-conferences-list [db]
   (let [list (mq/with-collection db "conferences"
-                                 (mq/find {})
+                                 (mq/find {:deleted {$ne true}})
                                  (mq/limit 100))]
     (map clear-id-in-doc list)))
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
     (clear-id-in-doc item)))
+
+(defn delete-conference-by-id [^String id db]
+  (mc/update-by-id db "conferences" (ObjectId. id) {$set {:deleted true}}))
 
 (defn- only-valid [rating]
   (let [valid (not (schema-utils/error? rating))]
@@ -57,7 +60,7 @@
 
 (defn- get-conferences-by-series [series db]
   (if-not (nil? series)
-    (->> (mc/find-maps db "conferences" {:series {$regex series $options "i"}})
+    (->> (mc/find-maps db "conferences" {:series {$regex series $options "i"} :deleted {$ne true}})
          (map :_id)
          (map #(.toHexString %)))
     (list)))

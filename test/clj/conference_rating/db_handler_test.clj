@@ -1,7 +1,7 @@
 (ns conference-rating.db-handler-test
   (:require [monger.collection :as mc]
             [clojure.test :refer :all]
-            [conference-rating.db-handler :as dh]
+            [conference-rating.db-handler :as dh :refer [delete-conference-by-id get-conferences-list]]
             [conference-rating.testdata :refer :all])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
@@ -9,9 +9,6 @@
 (defn- create-mock-db []
   (let [fongo (Fongo. "some mock mongodb")]
     (.getDB fongo "crdb")))
-
-(defn- contains-in-lazy? [coll key]
-  (some #{key} coll))
 
 (def get-conferences-by-series #'dh/get-conferences-by-series)
 
@@ -21,26 +18,26 @@
         lower-case-test-series "testseries"
         id1 (ObjectId.)
         id2 (ObjectId.)
+        id-deleted (ObjectId.)
         id1-string (.toHexString id1)
         id2-string (.toHexString id2)]
 
     (mc/insert fake-db "conferences" {:_id id1 :series test-series})
     (mc/insert fake-db "conferences" {:_id id2 :series lower-case-test-series})
+    (mc/insert fake-db "conferences" {:_id id-deleted :series test-series :deleted true})
     (mc/insert fake-db "conferences" {:_id 666 :series "different series"})
-    (mc/insert fake-db "ratings" (->
-                                   (assoc-in (some-rating) [:rating :overall] 4)
-                                   (assoc :conference-id id1-string)
-                                   (assoc :_id (ObjectId.))))
-    (mc/insert fake-db "ratings" (->
-                                   (assoc-in (some-rating) [:rating :overall] 2)
-                                   (assoc :conference-id id2-string)
-                                   (assoc :_id (ObjectId.))))
+    (mc/insert fake-db "ratings" (-> (some-rating)
+                                     (assoc-in [:rating :overall] 4)
+                                     (assoc :conference-id id1-string)
+                                     (assoc :_id (ObjectId.))))
+    (mc/insert fake-db "ratings" (-> (some-rating)
+                                     (assoc-in [:rating :overall] 2)
+                                     (assoc :conference-id id2-string)
+                                     (assoc :_id (ObjectId.))))
 
     (testing "Should return all ids for a series"
       (let [result (get-conferences-by-series test-series fake-db)]
-        (is (contains-in-lazy? result id1-string))
-        (is (contains-in-lazy? result id2-string))
-        (is (not (contains-in-lazy? result 666)))))
+        (is (= [id1-string id2-string] result))))
 
     (testing "Should return empty collection if series is nil"
       (let [result (get-conferences-by-series nil fake-db)]
@@ -48,7 +45,41 @@
 
     (testing "Should return all ratings for a series"
       (let [result (dh/get-average-rating-for-series test-series fake-db)]
-        (is (= 3
-               (get-in result [:overall :avg])))))))
+        (is (= 3 (get-in result [:overall :avg])))))))
 
+(deftest delete-conference-test
+  (let [fake-db (create-mock-db)
+        id1 (ObjectId.)
+        id2 (ObjectId.)
+        id1-string (.toHexString id1)]
+
+    (mc/insert fake-db "conferences" {:_id id1 :series "Conference to be deleted"})
+    (mc/insert fake-db "conferences" {:_id id2 :series "different series"})
+    (mc/insert fake-db "ratings" (-> (some-rating)
+                                     (assoc-in [:rating :overall] 2)
+                                     (assoc :conference-id id1-string)))
+
+    (delete-conference-by-id id1-string fake-db)
+
+    (testing "that the deleted conference has a delete flag"
+      (let [conference (mc/find-one-as-map fake-db "conferences" {:_id id1})]
+        (is (:deleted conference))
+        (is (= "Conference to be deleted" (:series conference)))))
+    (testing "that ratings for the conference remain untouched"
+      (let [rating (mc/find-one-as-map fake-db "ratings" {:conference-id id1-string})]
+        (is (not (:deleted rating)))
+        (is (= 2 (:overall (:rating rating))))))))
+
+(deftest get-conference-list-test
+  (let [fake-db (create-mock-db)
+        id (ObjectId.)
+        id-deleted (ObjectId.)]
+
+    (mc/insert fake-db "conferences" {:_id id})
+    (mc/insert fake-db "conferences" {:_id id-deleted :deleted true})
+
+    (let [conference-list (get-conferences-list fake-db)
+          ids (map :_id conference-list)]
+      (testing "that it should get a list of not deleted conferences"
+        (is (= [(.toHexString id)] ids))))))
 

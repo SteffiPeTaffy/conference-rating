@@ -9,7 +9,7 @@
       [:div {:class "series-tag-container"}[:span {:class "series-tag series-tag-hidden"} ""]]))
 
 (defn title [name]
-  [:h4 {:class "conference-title"} (or name "untitled conference")])
+  [:h4 {:class "conference-title" :data-e2e "text-conference-name"} (or name "untitled conference")])
 
 (defn description [description]
   [:div {:class "text-muted conference-description"} description])
