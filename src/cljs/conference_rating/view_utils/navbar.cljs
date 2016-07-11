@@ -54,10 +54,7 @@
     #(go-to-conference %2)))
 
 (defn action-bar [conference-list]
-  [:div {:class "conference-search form-group text-lg-right"}
-   [:div {:class "action-bar-container"}
-    [(search-for-conference-component conference-list)]
-    [:a {:class "btn btn-sm btn-orange mar-bottom button-add-conference" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]])
+ )
 
 (defn nav-bar [conference-list]
   [:nav {:class "navbar navbar-inverse navbar-fixed-top"}
@@ -67,4 +64,7 @@
       [:span {:class "cl-yellow"} "conference"]
       [:span " voices"]
       [:span {:class "glyphicon glyphicon-bullhorn"}]]]
-    (action-bar conference-list)]])
+    [:div {:class "conference-search form-group text-lg-right"}
+     [:div {:class "action-bar-container"}
+      [(search-for-conference-component conference-list)]
+      [:a {:class "btn btn-sm btn-orange mar-bottom button-add-conference" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]]]])
