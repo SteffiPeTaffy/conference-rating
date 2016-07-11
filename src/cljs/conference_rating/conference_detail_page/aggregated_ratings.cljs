@@ -122,26 +122,33 @@
    (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee aggregated-ratings) (conference-badges aggregated-ratings))])
 
 (defn display-aggregated-ratings [conference]
-  (let [aggregated-ratings (get conference (conference-util/ratings-key-for conference))
-        overall-avg (get-in aggregated-ratings [:overall :avg])
-        overall-avg-percentage (* (/ overall-avg 4) 100)
-        overall-ratings-str (str (get-in aggregated-ratings [:overall :count]) " ratings")
-        talks-avg (get-in aggregated-ratings [:talks :avg])
-        talks-avg-percentage (* (/ talks-avg 4) 100)
-        talks-ratings-str (str (get-in aggregated-ratings [:talks :count]) " ratings")
-        venue-avg (get-in aggregated-ratings [:venue :avg])
-        venue-avg-percentage (* (/ venue-avg 4) 100)
-        venue-ratings-str (str (get-in aggregated-ratings [:venue :count]) " ratings")
-        networking-avg (get-in aggregated-ratings [:community :avg])
+  (let [ratings                   (get conference (conference-util/ratings-key-for conference))
+        has-ratings?              (> 0 (:number-of-ratings ratings))
+        no-ratings-msg            (if (conference-util/is-future-conference? conference)
+                                    "This conference has not started yet and no conference of this series has been rated yet. Come back later!"
+                                    "This conference has not been rated yet. Be the first one to give it your voice!")
+        overall-avg               (get-in ratings [:overall :avg])
+        overall-avg-percentage    (* (/ overall-avg 4) 100)
+        overall-ratings-str       (str (get-in ratings [:overall :count]) " ratings")
+        talks-avg                 (get-in ratings [:talks :avg])
+        talks-avg-percentage      (* (/ talks-avg 4) 100)
+        talks-ratings-str         (str (get-in ratings [:talks :count]) " ratings")
+        venue-avg                 (get-in ratings [:venue :avg])
+        venue-avg-percentage      (* (/ venue-avg 4) 100)
+        venue-ratings-str         (str (get-in ratings [:venue :count]) " ratings")
+        networking-avg            (get-in ratings [:community :avg])
         networking-avg-percentage (* (/ networking-avg 4) 100)
-        networking-ratings-str (str (get-in aggregated-ratings [:community :count]) " ratings")]
+        networking-ratings-str    (str (get-in ratings [:community :count]) " ratings")]
     [:div
-     (conference-recommendations (:recommendations aggregated-ratings))
-     [:div {:class "row"}
-      [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-       (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
-       (panel/range-panel talks-avg-percentage talks-avg "Talks" talks-ratings-str "bg-purple" "glyphicon-user")]
-      [:div {:class "col-lg-6 col-md-6 col-sm-6"}
-       (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")
-       (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]
-     (conference-average-attendee aggregated-ratings)]))
+     (if (not has-ratings?)
+       [:div {:class "no-ratings-info"} no-ratings-msg])
+     [:div {:class (if has-ratings? "" "no-ratings")}
+      (conference-recommendations (:recommendations ratings))
+      [:div {:class "row"}
+       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
+        (panel/range-panel overall-avg-percentage overall-avg "Overall" overall-ratings-str "bg-mint" "glyphicon-thumbs-up")
+        (panel/range-panel talks-avg-percentage talks-avg "Talks" talks-ratings-str "bg-purple" "glyphicon-user")]
+       [:div {:class "col-lg-6 col-md-6 col-sm-6"}
+        (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")
+        (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]
+      (conference-average-attendee ratings)]]))

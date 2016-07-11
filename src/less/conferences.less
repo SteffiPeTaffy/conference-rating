@@ -33,6 +33,20 @@
       border: 1px solid darken(@gray, 8%) !important;
     }
   }
+
+  .no-ratings {
+    opacity: .2;
+  }
+
+  .no-ratings-info {
+    position: absolute;
+    color: @dark;
+    margin-top: 255px;
+    margin-right: 30px;
+    margin-left: 15px;
+    font-size: 18px;
+    text-align: center;
+  }
 }
 
 
@@ -137,12 +151,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .conference-link {
     overflow: hidden;
     height: 16px;
   }
-  
+
   .conference-dates {
     overflow: hidden;
     height: 17px;
@@ -226,7 +240,7 @@
     box-shadow: 10px 10px 9px -10px @gray;
     width: 350px;
   }
-  
+
   .tt-cursor {
     background-color: lighten(@orange, 20%);
   }
