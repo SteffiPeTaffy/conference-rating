@@ -103,7 +103,9 @@
       [:div {:class "row"}
        [:div {:class "col-lg-2"}]
        [:div {:class "col-lg-8"}
-        [:form {:on-submit #(on-click-function doc)}
+        [:form {:on-submit #(do
+                             (on-click-function doc)
+                             false)}
          [:div {:class "add-conference-form-container bg-light"}
           [forms/bind-fields (conference-form-template doc) doc]
           [:input {:type "submit"
