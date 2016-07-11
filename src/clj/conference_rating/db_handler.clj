@@ -42,6 +42,13 @@
 (defn delete-conference-by-id [^String id db]
   (mc/update-by-id db "conferences" (ObjectId. id) {$set {:deleted true}}))
 
+
+(defn update-conference-by-id [^String id conference db]
+  (let [object-id (ObjectId. id)
+        document (assoc conference :_id object-id)]
+    (mc/update-by-id db "conferences" object-id document)
+    (clear-id-in-doc document)))
+
 (defn- only-valid [rating]
   (let [valid (not (schema-utils/error? rating))]
     (if-not valid

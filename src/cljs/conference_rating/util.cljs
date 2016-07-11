@@ -20,6 +20,9 @@
 
 (def built-in-formatter (tf/formatters :date-hour-minute-second-ms))
 
+(defn assoc-when [map key value]
+  (if value (assoc map key value) map))
+
 (defn form-date-to-datestr [date]
   (tf/unparse built-in-formatter
               (t/date-time (:year date) (:month date) (:day date))))
@@ -30,14 +33,20 @@
 (defn parse-date [date-str]
   (tf/parse built-in-formatter date-str))
 
-(defn format-date [date-str]
+(defn format-date [date-str format]
   (let [datetime (parse-date date-str)]
-    (tf/unparse (tf/formatter "dd MMMM YYYY") datetime)))
+    (tf/unparse (tf/formatter format) datetime)))
+
+(defn format-to-human-readable-date [date-str]
+  (format-date date-str "dd MMMM YYYY"))
+
+(defn format-date-to-calendar-format [date-str]
+  (format-date date-str "yyyy/MM/dd"))
 
 (defn from-to-dates [from-date to-date]
   (cond
-    (and from-date from-date) [:p {:class "conference-dates" :data-e2e "text-conference-from-to-dates"} (str (format-date from-date) " - " (format-date to-date))]
-    from-date [:p {:class "conference-dates"} (format-date from-date)]
+    (and from-date from-date) [:p {:class "conference-dates" :data-e2e "text-conference-from-to-dates"} (str (format-to-human-readable-date from-date) " - " (format-to-human-readable-date to-date))]
+    from-date [:p {:class "conference-dates"} (format-to-human-readable-date from-date)]
     :else [:p {:class "conference-dates"} "TBD"]))
 
 (defn- add-nbsp [s]
@@ -59,11 +68,12 @@
   [:p s])
 
 (defn formatted-text [t]
-  (as-> t $
-        (unescape $)
-        (s/split $ #"\n")
-        (map add-nbsp $)
-        (map to-paragraph $)))
+  (if t
+    (as-> t $
+          (unescape $)
+          (s/split $ #"\n")
+          (map add-nbsp $)
+          (map to-paragraph $))))
 
 (defn is-future-conference? [conference]
   (t/after? (parse-string-to-date (:from conference)) (t/now)))

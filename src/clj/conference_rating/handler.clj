@@ -117,12 +117,17 @@
     (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
     (GET "/" [] (home-page))))
 
+(defn update-conference [id body db]
+  (let [update-result (db/update-conference-by-id id body db)]
+    (response update-result)))
+
+
 (defn write-routes [db]
   (wrap-ratelimit
     (routes
       (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
       (POST "/api/conferences/" request (add-conference (:body request) db))
-      (PUT "/api/conferences/:id/edit" [id :as request] (do (println "id:" id "\nrequest:" request) (response {:id id})))
+      (PUT "/api/conferences/:id/edit" [id :as request] (update-conference id (:body request) db))
       (DELETE "/api/conferences/:id" [id] (do (db/delete-conference-by-id id db) {:status  204
                                                                                   :headers {}})))
     {:limits [(ip-limit 100)]

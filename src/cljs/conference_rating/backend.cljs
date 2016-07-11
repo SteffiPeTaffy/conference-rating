@@ -1,9 +1,13 @@
 (ns conference-rating.backend
   (:require [ajax.core :as ajax]
-            [conference-rating.history :as history]))
+            [conference-rating.history :as history]
+            [conference-rating.util :as util]))
+
+(defn- unsanitize [conference-data]
+  (assoc conference-data :description (util/unescape (:description conference-data))))
 
 (defn load-conference [id success-handler]
-  (ajax/GET (str "/api/conferences/" id) {:handler success-handler
+  (ajax/GET (str "/api/conferences/" id) {:handler (fn [conference] (success-handler (unsanitize conference)))
                                           :error-handler #(js/alert (str "conference not found" %1))
                                           :response-format :json
                                           :keywords? true}))
@@ -42,8 +46,7 @@
 (defn add-conference [conference-data]
   (add&edit-conference conference-data "/api/conferences/" ajax/POST))
 
-(defn edit-conference [conference-data]
-
-  (println conference-data)
-
-  (add&edit-conference conference-data (str "/api/conferences/" (:id conference-data) "/edit") ajax/PUT))
+(defn edit-conference [id]
+  (fn
+    [conference-data]
+  (add&edit-conference conference-data (str "/api/conferences/" id "/edit") ajax/PUT)))

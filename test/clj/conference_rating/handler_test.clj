@@ -49,10 +49,10 @@
           app-instance (app db true)
           responses (doall (repeatedly 101 (fn []
                                              (app-instance (-> (request :post "/api/conferences/")
-                                                             (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
-                                                             (header :content-type "application/json"))))))]
+                                                               (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
+                                                               (header :content-type "application/json"))))))]
       (is (= 429 (:status (last responses))))))
-  (testing "should add and delete a conference"
+  (testing "should add, edit and delete a conference"
     (let [db (create-mock-db)]
       (let [response ((app db true) (-> (request :post "/api/conferences/")
                                         (body (json/write-str (some-conference-with {:name "some name" :description "some description with a <p>p tag</p>"})))
@@ -68,11 +68,24 @@
           (is (= "some description with a &lt;p&gt;p tag&lt;/p&gt;" (:description (first conferences))))
           (is (= "some name" (:name (first conferences))))
           (is (map? (:aggregated-ratings (first conferences))))
+
           (let [id (:_id (first conferences))
-                response ((app db true) (-> (request :delete (str "/api/conferences/" id))))]
+                response ((app db true) (-> (request :put (str "/api/conferences/" id "/edit"))
+                                            (body (json/write-str (some-conference-with {
+                                                                                         :name "some other name"
+                                                                                         :description "some other description"})))
+                                            (header :content-type "application/json")))]
+            (is (= 200 (:status response)))
+            (is (= id (:_id (json-body response))))
+            (let [conference (json-body-for db (request :get (str "/api/conferences/" id)))]
+              (is (= "some other name" (:name conference)))
+              (is (= "some other description" (:description conference)))))
+          (let [id (:_id (first conferences))
+                response ((app db true) (request :delete (str "/api/conferences/" id)))]
             (is (= 204 (:status response)))))
         (let [conferences (json-body-for db (request :get "/api/conferences"))]
           (is (= 0 (count conferences)))))))
+
   (testing "conference validation"
     (testing "series too long"
       (let [db (create-mock-db)]

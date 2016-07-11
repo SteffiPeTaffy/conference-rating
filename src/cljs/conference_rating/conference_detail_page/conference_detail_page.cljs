@@ -21,13 +21,20 @@
                                                                 :error-handler   #(js/alert (str "could not delete conference" %1))
                                                                 :headers         {:X-CSRF-Token (backend/anti-forgery-token)}}))))
 
+(defn edit-conference [conference]
+  (history/redirect-to (str "/conferences/" (:_id conference) "/edit")))
+
 (defn add-action-bar [conference]
   [:div {:class "row bg-gray cl-light"}
    [:div {:class "action-button-container"}
     [:a {:class "btn btn-sm btn-gray"
          :data-e2e "button-delete-conference"
          :on-click #(delete-conference conference)}
-     "delete"]]])
+     "delete"]
+    [:a {:class "btn btn-sm btn-gray"
+         :data-e2e "button-edit-conference"
+         :on-click #(edit-conference conference)}
+     "edit"]]])
 
 
 (defn display-conference-detail-page [conference ratings conference-list]

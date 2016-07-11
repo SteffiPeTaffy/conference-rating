@@ -1,7 +1,7 @@
 (ns conference-rating.db-handler-test
   (:require [monger.collection :as mc]
             [clojure.test :refer :all]
-            [conference-rating.db-handler :as dh :refer [delete-conference-by-id get-conferences-list]]
+            [conference-rating.db-handler :as dh :refer [delete-conference-by-id get-conferences-list update-conference-by-id]]
             [conference-rating.testdata :refer :all])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
@@ -69,6 +69,21 @@
       (let [rating (mc/find-one-as-map fake-db "ratings" {:conference-id id1-string})]
         (is (not (:deleted rating)))
         (is (= 2 (:overall (:rating rating))))))))
+
+(deftest edit-conference-test
+  (let [fake-db (create-mock-db)
+        id (ObjectId.)
+        id-string (.toHexString id)
+        original-conference {:_id id :series "Conference to be edited" :name "some name" :description "some description" :foo "bar"}
+        edited-conference {:_id id :series "Conference to be edited" :name "some other name" :description "some other description"}]
+
+    (mc/insert fake-db "conferences" original-conference)
+
+    (update-conference-by-id id-string edited-conference fake-db)
+
+    (testing "that the conference has been updated"
+      (let [conference (mc/find-one-as-map fake-db "conferences" {:_id id})]
+        (is (= edited-conference conference))))))
 
 (deftest get-conference-list-test
   (let [fake-db (create-mock-db)

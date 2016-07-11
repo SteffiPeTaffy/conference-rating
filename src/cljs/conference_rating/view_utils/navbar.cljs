@@ -14,8 +14,8 @@
 (defn conference-suggestion-template [conference]
   (let [series (:series conference)
         name (:name conference)
-        from-date (util/format-date (:from conference))
-        to-date (util/format-date (:to conference))]
+        from-date (util/format-to-human-readable-date (:from conference))
+        to-date (util/format-to-human-readable-date (:to conference))]
     (str "<div class=\"conference-suggestion-template\">"
          "<p>" series "</p>"
          "<h4>" name "</h4>"
