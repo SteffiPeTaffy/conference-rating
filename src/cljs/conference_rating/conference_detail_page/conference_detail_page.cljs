@@ -7,7 +7,8 @@
             [conference-rating.util :as util]
             [ajax.core :as ajax]
             [conference-rating.backend :as backend]
-            [conference-rating.history :as history]))
+            [conference-rating.history :as history]
+            [conference-rating.view-utils.conference :as conference-util]))
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right voice-btn-container"}
@@ -45,7 +46,7 @@
      [:div {:class "col-lg-6 col-md-6"}
       (conference-information/display-conference-information conference)
       (add-action-bar conference)
-      (if (not (util/is-future-conference? conference))
+      (if (not (conference-util/is-future-conference? conference))
         (add-rating-button (:_id conference)))]
 
 

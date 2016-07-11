@@ -1,6 +1,7 @@
 (ns conference-rating.conference-list-page.conference-list-entry
   (:require [conference-rating.view-utils.panel :as panel]
             [conference-rating.util :as util]
+            [conference-rating.view-utils.conference :as conference-util]
             [cljs-time.core :as t]))
 
 (defn series-tag [series-tag]
@@ -44,20 +45,20 @@
      (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
 (defn display-overall-rating [conference]
-  (let [ratings (if (util/is-future-conference? conference) :average-series-rating :aggregated-ratings)]
+  (let [ratings-key (conference-util/ratings-key-for conference)]
     [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
-     (overall-rating (get-in conference [ratings :overall]))]))
+     (overall-rating (get-in conference [ratings-key :overall]))]))
 
 (defn display-vote [conference]
-  (if (not (util/is-future-conference? conference))
+  (if (not (conference-util/is-future-conference? conference))
     [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
      (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
-  (let [ratings (if (util/is-future-conference? conference) :average-series-rating :aggregated-ratings)]
+  (let [ratings-key (conference-util/ratings-key-for conference)]
     [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
-     (panel/mini-panel-recommendations (get-in conference [ratings :recommendations]) nil)
-     (panel/mini-panel-voices (get-in conference [ratings :number-of-ratings]) nil)]))
+     (panel/mini-panel-recommendations (get-in conference [ratings-key :recommendations]) nil)
+     (panel/mini-panel-voices (get-in conference [ratings-key :number-of-ratings]) nil)]))
 
 (defn display-conference-list-item [conference]
   [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
@@ -80,5 +81,5 @@
    [:div {:class "panel-footer"}
     [:div {:class "row"}
      [:div {:class "col-md-12"}
-      (roles-bar (get-in conference [:aggregated-ratings :roles]))]]]])
+      (roles-bar (get-in conference [(conference-util/ratings-key-for conference) :roles]))]]]])
 

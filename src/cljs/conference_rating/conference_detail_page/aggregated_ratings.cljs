@@ -1,7 +1,6 @@
 (ns conference-rating.conference-detail-page.aggregated-ratings
   (:require [conference-rating.view-utils.panel :as panel]
-            [conference-rating.util :as util]
-            ))
+            [conference-rating.view-utils.conference :as conference-util]))
 
 (defn conference-recommendations [numberOfRecommendations]
   (panel/icon-panel "glyphicon-star" numberOfRecommendations "would go again" "bg-yellow cl-light"))
@@ -122,9 +121,8 @@
   [:div
    (panel/info-panel "glyphicon-user" "I am your average attende" (average-attendee aggregated-ratings) (conference-badges aggregated-ratings))])
 
-
 (defn display-aggregated-ratings [conference]
-  (let [aggregated-ratings (if (util/is-future-conference? conference) (:average-series-rating conference) (:aggregated-ratings conference))
+  (let [aggregated-ratings (get conference (conference-util/ratings-key-for conference))
         overall-avg (get-in aggregated-ratings [:overall :avg])
         overall-avg-percentage (* (/ overall-avg 4) 100)
         overall-ratings-str (str (get-in aggregated-ratings [:overall :count]) " ratings")
@@ -147,5 +145,3 @@
        (panel/range-panel venue-avg-percentage venue-avg "Venue" venue-ratings-str "bg-pink" "glyphicon-home")
        (panel/range-panel networking-avg-percentage networking-avg "Networking" networking-ratings-str "bg-green" "glyphicon-glass")]]
      (conference-average-attendee aggregated-ratings)]))
-
-
