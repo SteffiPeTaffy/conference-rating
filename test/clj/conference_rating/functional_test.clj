@@ -40,6 +40,7 @@
 
 (defn fill-input [fill-map]
   (doseq [[k v] fill-map]
+    (taxi/clear (e2e-selector k))
     (taxi/send-keys (e2e-selector k) v)))
 
 (defn first-of-month [dates]
@@ -101,6 +102,16 @@
       ; checks that the rating is added and visible on the detail page
       (wait-for "page-conference-detail")
       (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
+
+      ; edits conference
+      (click "button-edit-conference")
+      (wait-for "page-add-conference")
+      (fill-input {"input-conference-description" "some edited description"})
+      (click "button-create-conference")
+
+      ; detail page of the edited conference
+      (wait-for "page-conference-detail")
+      (is (= "some edited description" (text "text-conference-description")))
 
       ; deletes conference
       (click "button-delete-conference")
