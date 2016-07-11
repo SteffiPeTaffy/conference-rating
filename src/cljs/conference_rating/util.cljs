@@ -77,3 +77,6 @@
 
 (defn is-future-conference? [conference]
   (t/after? (parse-string-to-date (:from conference)) (t/now)))
+
+(defn link [link]
+  [:p {:class "conference-link"}[:a {:href link :target "_blank" :class "conference-link" :data-e2e "text-conference-link"} link]])

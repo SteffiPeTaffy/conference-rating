@@ -14,9 +14,6 @@
 (defn description [description]
   [:div {:class "text-muted conference-description"} description])
 
-(defn link [link]
-  [:p {:class "conference-link"}[:a {:href link :class "conference-link"} link]])
-
 (defn overall-rating [overall-rating]
   [:div {:class "conference-overall-rating"} (panel/range-panel-small (:avg overall-rating) "Overall" "bg-dark-lightened" "glyphicon-thumbs-up")])
 
@@ -78,7 +75,7 @@
     [:div {:class "row"}
      [:div {:class "col-lg-8 col-md-8 col-sm-7"}
       (description (util/formatted-text (:description conference)))
-      (link (:link conference))]
+      (util/link (:link conference))]
      (display-vote conference)]]
    [:div {:class "panel-footer"}
     [:div {:class "row"}
