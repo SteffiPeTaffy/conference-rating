@@ -138,7 +138,6 @@
      (rating-panel "glyphicon-glass" :rating.networking "Networking" "bg-green cl-light")
      (tags-panel)]]])
 
-
 (defn add-rating []
   (let [doc (atom {:recommended false
                    :roles       {:dev        false
@@ -172,9 +171,8 @@
      [:div {:class "container-fluid content-container pad-top"}
       [:div {:class "row add-rating-container"}
        [:div {:class "col-lg-1 col-md-1"}]
-       [:div {:class "col-lg-10 col-md-10"}
-        [forms/bind-fields add-rating-template doc]
-        [:div {:class "text-lg-right"}
-         [:button {:class "btn btn-lg btn-orange" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add rating"]]]
-       [:div {:class "col-lg-1 col-md-1"}]]]]))
+       [:div {:class "col-lg-10 col-md-9"}
+        [forms/bind-fields add-rating-template doc]]
+       [:div {:class "col-lg-1 col-md-2 col-sm-12 col-xs-12"}
+        [:button {:class "btn btn-lg btn-orange button-add-rating" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add rating"]]]]]))
 
