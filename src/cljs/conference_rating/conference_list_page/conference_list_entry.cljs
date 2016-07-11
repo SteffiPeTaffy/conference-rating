@@ -6,8 +6,8 @@
 
 (defn series-tag [series-tag]
   (if-not (nil? series-tag)
-      [:div {:class "series-tag-container"}[:span {:class "series-tag"} series-tag]]
-      [:div {:class "series-tag-container"}[:span {:class "series-tag series-tag-hidden"} ""]]))
+    [:div {:class "series-tag-container"} [:span {:class "series-tag"} series-tag]]
+    [:div {:class "series-tag-container"} [:span {:class "series-tag series-tag-hidden"} ""]]))
 
 (defn title [name]
   [:h4 {:class "conference-title" :data-e2e "text-conference-name"} (or name "untitled conference")])
@@ -24,15 +24,15 @@
 
 (defn roles [percentage bg-color role-name]
   [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light roles " bg-color)}
-   (if (> percentage  15) [:p role-name])])
+   (if (> percentage 15) [:p role-name])])
 
 (defn perc [total value]
   (* 100 (/ value total)))
 
 (defn roles-bar [rolesMap]
   (let [count (->> rolesMap
-                  (vals)
-                  (reduce +))]
+                   (vals)
+                   (reduce +))]
     [:div {:class "progress-md"}
      (roles (perc count (:dev rolesMap)) "bg-dev" "DEV")
      (roles (perc count (:devops rolesMap)) "bg-devops" "DEV OPS")
@@ -45,8 +45,10 @@
      (roles (perc count (:other rolesMap)) "bg-other" "OTHER")]))
 
 (defn display-overall-rating [conference]
-  (let [ratings-key (conference-util/ratings-key-for conference)]
-    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"}
+  (let [ratings-key (conference-util/ratings-key-for conference)
+        has-ratings? (> (get-in conference [ratings-key :number-of-ratings]) 0)
+        base-classes "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"]
+    [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (overall-rating (get-in conference [ratings-key :overall]))]))
 
 (defn display-vote [conference]
@@ -55,8 +57,10 @@
      (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
-  (let [ratings-key (conference-util/ratings-key-for conference)]
-    [:div {:class "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"}
+  (let [ratings-key (conference-util/ratings-key-for conference)
+        has-ratings? (> (get-in conference [ratings-key :number-of-ratings]) 0)
+        base-classes "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"]
+    [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (panel/mini-panel-recommendations (get-in conference [ratings-key :recommendations]) nil)
      (panel/mini-panel-voices (get-in conference [ratings-key :number-of-ratings]) nil)]))
 
