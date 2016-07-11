@@ -121,12 +121,22 @@
 
 (defonce edit-conference-data (atom nil))
 
+(defn- convert-to-calendar-date [timestamp]
+  (let [date (util/parse-date timestamp)]
+    {:year (t/year date)
+     :month (t/month date)
+     :day (t/day date)}))
+
 (defn set-edit-conference-data [data]
-  (as-> data $
-        (assoc $ :id (:_id $))
-        (update $ :to util/format-date-to-calendar-format)
-        (update $ :from util/format-date-to-calendar-format)
-        (reset! edit-conference-data $)))
+  (let [from-timestamp (:from data)
+        to-timestamp (:to data)]
+      (as-> data $
+            (assoc $ :id (:_id $))
+            (assoc $ :from (util/format-date-to-calendar-string-format from-timestamp))
+            (assoc $ :from-date (convert-to-calendar-date from-timestamp))
+            (assoc $ :to (util/format-date-to-calendar-string-format to-timestamp))
+            (assoc $ :to-date (convert-to-calendar-date to-timestamp))
+            (reset! edit-conference-data $))))
 
 (defn edit-conference-page []
   (let [confererence-to-edit @edit-conference-data]

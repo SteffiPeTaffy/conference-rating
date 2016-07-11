@@ -40,7 +40,7 @@
 (defn format-to-human-readable-date [date-str]
   (format-date date-str "dd MMMM YYYY"))
 
-(defn format-date-to-calendar-format [date-str]
+(defn format-date-to-calendar-string-format [date-str]
   (format-date date-str "yyyy/MM/dd"))
 
 (defn from-to-dates [from-date to-date]
