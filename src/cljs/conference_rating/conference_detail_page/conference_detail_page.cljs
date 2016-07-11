@@ -26,7 +26,7 @@
   (history/redirect-to (str "/conferences/" (:_id conference) "/edit")))
 
 (defn add-action-bar [conference]
-  [:div {:class "row bg-gray cl-light"}
+  [:div {:class "row cl-light"}
    [:div {:class "action-button-container"}
     [:a {:class "btn btn-sm btn-gray"
          :data-e2e "button-delete-conference"
