@@ -76,14 +76,14 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "This conference might be interesting for"]
    [:div {:class "row"}
-    (role-checkbox :roles.dev "Devs" "with a focus on technical topics")
-    (role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems")
-    (role-checkbox :roles.ux "UX" "that are all about user experience and visual designs")
-    (role-checkbox :roles.qa "QAs" "that are interested in getting input on quality assurance")
-    (role-checkbox :roles.ba "BAs" "which lover to get more insight about stories")
-    (role-checkbox :roles.pm "PMs" "that want to know how to manage creative people")
-    (role-checkbox :roles.sales "Sales" "who want to support our clients even better")
-    (role-checkbox :roles.recruiting "Recruiters" "that are on the hunt to find us the brightest colleagues")
+    (role-checkbox :roles.dev "Devs" "which are always looking for some practical tips and bleeding edge technologies.")
+    (role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems.")
+    (role-checkbox :roles.ux "UX" "that are all about user experience and visual designs.")
+    (role-checkbox :roles.qa "QAs" "that are interested in getting input on quality assurance.")
+    (role-checkbox :roles.ba "BAs" "which love to get more insight about story writing, relationship building and more.")
+    (role-checkbox :roles.pm "PMs" "that want to know how to manage creative people.")
+    (role-checkbox :roles.sales "Sales" "who want to socialize with other sales people to support our clients even better.")
+    (role-checkbox :roles.recruiting "Recruiters" "that are on the hunt to find us the brightest colleagues.")
     (role-checkbox :roles.other "Others" "that have other interests :)")]])
 
 (defn tags-panel []
