@@ -57,7 +57,7 @@
   [:div {:class "conference-search form-group text-lg-right"}
    [:div {:class "action-bar-container"}
     [(search-for-conference-component conference-list)]
-    [:a {:class "btn btn-sm btn-orange mar-bottom" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]])
+    [:a {:class "btn btn-sm btn-orange mar-bottom button-add-conference" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]])
 
 (defn nav-bar [conference-list]
   [:nav {:class "navbar navbar-inverse navbar-fixed-top"}
