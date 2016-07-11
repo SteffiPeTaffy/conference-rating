@@ -2,7 +2,8 @@
   (:require [cljs-time.core :as t]
             [cljs-time.format :as tf]
             [clojure.string :as s]
-            [goog.string :as gstring]))
+            [goog.string :as gstring]
+            [clojure.string :as str]))
 
 (defn- value-true? [[_ v]]
   (true? v))
@@ -44,13 +45,25 @@
     (gstring/unescapeEntities "&nbsp;")
     s))
 
+(def safe-character-mapping
+  {"&quot;" "\""
+   "&apos;" "'"
+   "&lt;"   "<"
+   "&gt;"   ">"
+   "&amp;"  "&"})
+
+(defn- unescape [s]
+  (reduce (fn [x [escaped unescaped]] (str/replace x escaped unescaped)) s safe-character-mapping))
+
 (defn- to-paragraph [s]
   [:p s])
 
 (defn formatted-text [t]
-  (->> (s/split t #"\n")
-       (map add-nbsp)
-       (map to-paragraph)))
+  (as-> t $
+        (unescape $)
+        (s/split $ #"\n")
+        (map add-nbsp $)
+        (map to-paragraph $)))
 
 (defn is-future-conference? [conference]
   (t/after? (parse-string-to-date (:from conference)) (t/now)))
