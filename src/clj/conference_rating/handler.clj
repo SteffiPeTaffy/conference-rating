@@ -44,8 +44,6 @@
       [:p "please run "
        [:b "lein figwheel"]
        " in order to start the compiler"]]
-     (include-js "thirdparty/jquery-2.1.4.min.js")
-     (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
      (include-js "js/app.js")]]))
 
 
