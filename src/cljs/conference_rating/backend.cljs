@@ -8,19 +8,19 @@
 
 (defn load-conference [id success-handler]
   (ajax/GET (str "/api/conferences/" id) {:handler (fn [conference] (success-handler (unsanitize conference)))
-                                          :error-handler #(js/alert (str "conference not found" %1))
+                                          :error-handler #(js/alert "Conference not found.")
                                           :response-format :json
                                           :keywords? true}))
 
 (defn load-conference-ratings [id success-handler]
   (ajax/GET (str "/api/conferences/" id "/ratings") {:handler success-handler
-                                                     :error-handler #(js/alert (str "ratings not found" %1))
+                                                     :error-handler #(js/alert "Ratings not found.")
                                                      :response-format :json
                                                      :keywords? true}))
 
 (defn load-conferences [success-handler]
   (ajax/GET "/api/conferences" {:handler success-handler
-                                :error-handler #(js/alert (str "conferences not found" %1))
+                                :error-handler #(js/alert "Conferences not found.")
                                 :response-format :json
                                 :keywords? true}))
 
@@ -40,7 +40,7 @@
                                   :keywords?       true
                                   :handler         #(let [conference-id (:_id %)]
                                                      (history/redirect-to (str "/conferences/" conference-id)))
-                                  :error-handler   #(js/alert (str "could not create conference" %1))
+                                  :error-handler   #(js/alert "Could not create conference. Please make sure to be logged into okta and fill in all required fields.")
                                   :headers         {:X-CSRF-Token (anti-forgery-token)}}))
 
 (defn add-conference [conference-data]

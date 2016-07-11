@@ -19,7 +19,7 @@
     (ajax/POST (str "/api/conferences/" conference-id "/ratings") {:params        processed-data
                                                                    :format        :json
                                                                    :handler       #(history/redirect-to (str "/conferences/" conference-id))
-                                                                   :error-handler #(js/alert (str "could not create rating" %1))
+                                                                   :error-handler #(js/alert "Could not create rating. Please make sure to be logged into okta and fill at least one field.")
                                                                    :headers       {:X-CSRF-Token (backend/anti-forgery-token)}})))
 
 (defn recommendation-panel []

@@ -18,7 +18,7 @@
     (if delete
       (ajax/DELETE (str "/api/conferences/" (:_id conference)) {:keywords?       true
                                                                 :handler         #(history/redirect-to "/")
-                                                                :error-handler   #(js/alert (str "could not delete conference" %1))
+                                                                :error-handler   #(js/alert "Could not delete conference.")
                                                                 :headers         {:X-CSRF-Token (backend/anti-forgery-token)}}))))
 
 (defn edit-conference [conference]
@@ -35,7 +35,6 @@
          :data-e2e "button-edit-conference"
          :on-click #(edit-conference conference)}
      "edit"]]])
-
 
 (defn display-conference-detail-page [conference ratings conference-list]
   [:div {:data-e2e "page-conference-detail"}
