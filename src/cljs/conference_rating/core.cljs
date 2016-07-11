@@ -30,6 +30,9 @@
                     (session/put! :current-page #'add-conference/edit-conference-page))
 
 (secretary/defroute "/conferences/:id" [id]
+                    (reset! conference/displayed-conference nil)
+                    (reset! conference/display-ratings nil)
+                    (reset! conference/displayed-conference-list nil)
                     (backend/load-conference id #(reset! conference/displayed-conference %1))
                     (backend/load-conference-ratings id #(reset! conference/display-ratings %1))
                     (backend/load-conferences #(reset! conference/displayed-conference-list %1))
