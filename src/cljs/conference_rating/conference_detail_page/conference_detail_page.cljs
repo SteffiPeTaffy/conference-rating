@@ -15,7 +15,7 @@
    [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"} "give it your voice"]])
 
 (defn delete-conference [conference]
-  (let [delete (js/confirm "If you delete this conference, it will be gone forever!")]
+  (let [delete (js/confirm "If you delete this conference, it will be gone forever including all of its ratings!")]
     (if delete
       (ajax/DELETE (str "/api/conferences/" (:_id conference)) {:keywords?       true
                                                                 :handler         #(history/redirect-to "/")
