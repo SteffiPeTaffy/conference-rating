@@ -110,7 +110,6 @@
        (reverse)
        (map (conference-badge lookup-table))))
 
-
 (defn conference-badges [aggregated-ratings]
   [:div
    (conference-badges-row (badges (:roles aggregated-ratings) roles->badge-label))
@@ -143,6 +142,8 @@
      (if (not has-ratings?)
        [:div {:class "no-ratings-info"} no-ratings-msg])
      [:div {:class (if has-ratings? "" "no-ratings")}
+      (if has-ratings?
+        (panel/coloured-panel nil "Note: This ratings are aggregated from ratings of previous conferences of the same series." "bg-yellow-lightened" "text-lg-center bg-yellow-lightened"))
       (conference-recommendations (:recommendations ratings))
       [:div {:class "row"}
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
