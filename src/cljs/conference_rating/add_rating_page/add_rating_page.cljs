@@ -98,7 +98,7 @@
      (checkbox-description-right :tags.clients "good to meet potential clients" "The business sponsoring or being present at this conference coud be our next client.")]]])
 
 (defn experience-checkbox [id input-label]
-  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-2"}
+  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-4"}
    [:input {:field :checkbox :type "checkbox" :id id}]
    [:label {:for id}
     [:p {:class "text-lg-center"} input-label]
@@ -108,13 +108,13 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I found this conference suitable for ..."]
    [:div {:class "row"}
-    [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]
+    [:div {:class "col-lg-1 col-md-1 col-sm-1 hidden-xs"}]
     (experience-checkbox :experience.rookie "Rookie")
     (experience-checkbox :experience.beginner "Beginner")
     (experience-checkbox :experience.intermediate "Intermediate")
     (experience-checkbox :experience.advanced "Advanced")
     (experience-checkbox :experience.expert "Expert")
-    [:div {:class "col-lg-1 col-md-1 col-sm-1 col-xs-1"}]]])
+    [:div {:class "col-lg-1 col-md-1 col-sm-1 hidden-xs"}]]])
 
 (defn comment-panel []
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}

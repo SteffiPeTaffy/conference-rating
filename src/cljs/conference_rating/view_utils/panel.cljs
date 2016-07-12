@@ -46,7 +46,7 @@
  [:div {:class (str "panel range-panel " panel-classes)}
   [:div {:class "media-container"}
    [:div {:class "media-left"}
-    [:div {:class "media-container icon-wrap icon-md"}
+    [:div {:class "media-container icon-wrap icon-md hidden-xs"}
      [:span {:class (str "glyphicon " icon)}]]]
    [:div {:class "media-body"}
     [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]

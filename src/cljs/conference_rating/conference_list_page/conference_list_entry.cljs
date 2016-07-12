@@ -47,7 +47,7 @@
 (defn display-overall-rating [conference]
   (let [ratings-key (conference-util/ratings-key-for conference)
         has-ratings? (> (get-in conference [ratings-key :number-of-ratings]) 0)
-        base-classes "col-lg-4 col-md-4 col-sm-4 col-xs-12 conference-overall-rating-container"]
+        base-classes "col-lg-4 col-md-4 col-sm-4 col-xs-4 conference-overall-rating-container"]
     [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (overall-rating (get-in conference [ratings-key :overall]))]))
 
@@ -59,7 +59,7 @@
 (defn display-recommendations-votes [conference]
   (let [ratings-key (conference-util/ratings-key-for conference)
         has-ratings? (> (get-in conference [ratings-key :number-of-ratings]) 0)
-        base-classes "col-lg-4 col-md-4 col-sm-4 col-xs-4 recommendations-votes-panel"]
+        base-classes "col-lg-4 col-md-4 col-sm-4 hidden-xs recommendations-votes-panel"]
     [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (panel/mini-panel-recommendations (get-in conference [ratings-key :recommendations]) nil)
      (panel/mini-panel-voices (get-in conference [ratings-key :number-of-ratings]) nil)]))
