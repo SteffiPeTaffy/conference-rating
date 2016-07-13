@@ -91,10 +91,10 @@
    [:span "I found this conference ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-12 col-md-12 col-sm-12 col-xs-12"}
-     (checkbox-description-right :tags.inspiring "inspriring" "This conference had an impact one me.")
+     (checkbox-description-right :tags.inspiring "inspiring" "This conference had an impact on me.")
      (checkbox-description-right :tags.informative "informative" "I learned a lot during the workshops, sessions and talks.")
      (checkbox-description-right :tags.entertaining "entertaining" "The speakers where showmasters and the after party was amazing.")
-     (checkbox-description-right :tags.hires "good to meet potential hires" "I meet amazing people I would like to work with in the future.")
+     (checkbox-description-right :tags.hires "good to meet potential hires" "I met amazing people I would like to work with in the future.")
      (checkbox-description-right :tags.clients "good to meet potential clients" "The business sponsoring or being present at this conference coud be our next client.")]]])
 
 (defn experience-checkbox [id input-label]
@@ -175,4 +175,3 @@
         [forms/bind-fields add-rating-template doc]]
        [:div {:class "col-lg-1 col-md-2 col-sm-12 col-xs-12"}
         [:button {:class "btn btn-lg btn-orange button-add-rating" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add rating"]]]]]))
-
