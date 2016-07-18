@@ -123,8 +123,8 @@
 (defn display-aggregated-ratings [conference]
   (let [ratings                   (get conference (conference-util/ratings-key-for conference))
         has-ratings?              (> (:number-of-ratings ratings) 0)
-        is-future-conference?      conference-util/is-future-conference?
-        no-ratings-msg            (if (conference-util/is-future-conference? conference)
+        is-future-conference?     (conference-util/is-future-conference? conference)
+        no-ratings-msg            (if is-future-conference?
                                     "This conference has not started yet and no conference of this series has been rated yet. Come back later!"
                                     "This conference has not been rated yet. Be the first one to give it your voice!")
         overall-avg               (get-in ratings [:overall :avg])
