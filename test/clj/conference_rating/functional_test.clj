@@ -70,6 +70,7 @@
   (click "conference-voices-brand")
   (wait-for "page-conference-list")
   (taxi/click ".tt-input")
+  (taxi/wait-until (taxi/exists? ".tt-open"))
   (taxi/send-keys ".tt-input" search-string)
   (wait-for "conference-suggestion-template")
   (click "conference-suggestion-template")
@@ -101,7 +102,7 @@
       (fill-past-date "date-conference-to")
       (click "button-create-conference")
 
-      ; detail page of the newly added conference
+      ; detail page of the newly added past conference
       (wait-for "page-conference-detail")
       (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
       (is (= past-conference-name (text "text-conference-name")))
@@ -178,4 +179,3 @@
       (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
       (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
       (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info"))))))
-
