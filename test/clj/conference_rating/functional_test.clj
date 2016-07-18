@@ -66,14 +66,8 @@
 (defn not-contains? [x coll]
   (not (some #{x} coll)))
 
-(defn search-for-and-navigate-to-conference [search-string]
-  (click "conference-voices-brand")
-  (wait-for "page-conference-list")
-  (taxi/click ".tt-input")
-  (taxi/wait-until (taxi/exists? ".tt-open"))
-  (taxi/send-keys ".tt-input" search-string)
-  (wait-for "conference-suggestion-template")
-  (click "conference-suggestion-template")
+(defn navigate-to-conference-by-url [conference-url]
+  (taxi/to conference-url)
   (wait-for "page-conference-detail"))
 
 (deftest ^:functional basic-journey-test
@@ -104,78 +98,79 @@
 
       ; detail page of the newly added past conference
       (wait-for "page-conference-detail")
-      (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
-      (is (= past-conference-name (text "text-conference-name")))
-      (is (not-empty (text "text-conference-from-to-dates")))
-      (is (= past-conference-link (text "text-conference-link")))
-      (is (= past-conference-description (text "text-conference-description")))
-      (is (= "This conference has not been rated yet. Be the first one to give it your voice!" (text "no-ratings-info")))
+      (let [past-conference-url (taxi/current-url)]
+        (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
+        (is (= past-conference-name (text "text-conference-name")))
+        (is (not-empty (text "text-conference-from-to-dates")))
+        (is (= past-conference-link (text "text-conference-link")))
+        (is (= past-conference-description (text "text-conference-description")))
+        (is (= "This conference has not been rated yet. Be the first one to give it your voice!" (text "no-ratings-info")))
 
-      ; adds future conference series
-      (click "btn-add-conference")
-      (wait-for "page-add-conference")
-      (fill-input {"input-conference-series"      conference-series
-                   "input-conference-name"        future-conference-name
-                   "input-conference-link"        "www.some-other-link.org"
-                   "input-conference-description" "some other description."})
-      (fill-future-date "date-conference-from")
-      (fill-future-date "date-conference-to")
-      (click "button-create-conference")
+        ; adds future conference series
+        (click "btn-add-conference")
+        (wait-for "page-add-conference")
+        (fill-input {"input-conference-series"      conference-series
+                     "input-conference-name"        future-conference-name
+                     "input-conference-link"        "www.some-other-link.org"
+                     "input-conference-description" "some other description."})
+        (fill-future-date "date-conference-from")
+        (fill-future-date "date-conference-to")
+        (click "button-create-conference")
 
-      ; detail page of the newly added future conference
-      (wait-for "page-conference-detail")
-      (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
-      (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
-      (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info")))
+        ; detail page of the newly added future conference
+        (wait-for "page-conference-detail")
+        (let [future-conference-url (taxi/current-url)]
+          (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
+          (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
+          (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info")))
 
-      ;search for and navigate to newly created past conference
-      (search-for-and-navigate-to-conference past-conference-name)
+          ; navigate to newly created past conference
+          (navigate-to-conference-by-url past-conference-url)
 
-      ; add rating to newly created past conference
-      (click "button-add-new-rating")
-      (wait-for "page-add-rating")
-      (click "checkbox-rating-voice")
-      (click "button-add-rating")
+          ; add rating to newly created past conference
+          (click "button-add-new-rating")
+          (wait-for "page-add-rating")
+          (click "checkbox-rating-voice")
+          (click "button-add-rating")
 
-      ; checks that the rating is added and visible on the detail page
-      (wait-for "page-conference-detail")
-      (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
+          ; checks that the rating is added and visible on the detail page
+          (wait-for "page-conference-detail")
+          (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
 
-      ; searches for and navigates to the future conference of the series
-      (search-for-and-navigate-to-conference future-conference-name)
+          ; navigates to the future conference of the series
+          (navigate-to-conference-by-url future-conference-url)
 
-      ; checks that the rating is also visible to the future conference of the same series
-      (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
-      (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
-      (is (= (str "Note: This ratings are aggregated from ratings of previous " conference-series " conferences.") (text "aggregated-ratings-info")))
+          ; checks that the rating is also visible to the future conference of the same series
+          (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
+          (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
+          (is (= (str "Note: This ratings are aggregated from ratings of previous " conference-series " conferences.") (text "aggregated-ratings-info")))
 
-      ;search for and navigate to newly created past conference
-      (search-for-and-navigate-to-conference past-conference-name)
+          ; navigate to newly created past conference
+          (navigate-to-conference-by-url past-conference-url)
 
-      ; edits past conference
-      (wait-for "page-conference-detail")
-      (click "button-edit-conference")
-      (wait-for "page-add-conference")
-      (fill-input {"input-conference-description" "some edited description"})
-      (click "button-create-conference")
+          ; edits past conference
+          (click "button-edit-conference")
+          (wait-for "page-add-conference")
+          (fill-input {"input-conference-description" "some edited description"})
+          (click "button-create-conference")
 
-      ; detail page of the edited past conference
-      (wait-for "page-conference-detail")
-      (is (= "some edited description" (text "text-conference-description")))
+          ; detail page of the edited past conference
+          (wait-for "page-conference-detail")
+          (is (= "some edited description" (text "text-conference-description")))
 
-      ; deletes past conference
-      (click "button-delete-conference")
-      (taxi/accept)
+          ; deletes past conference
+          (click "button-delete-conference")
+          (taxi/accept)
 
-      ; back to the conference list page and checks that conference is gone
-      (wait-for "page-conference-list")
-      (is (not-contains? past-conference-name (texts "text-conference-name")))
+          ; back to the conference list page and checks that conference is gone
+          (wait-for "page-conference-list")
+          (is (not-contains? past-conference-name (texts "text-conference-name")))
 
-      ; searches for and navigates to the future conference of the series
-      (search-for-and-navigate-to-conference future-conference-name)
+          ; searches for and navigates to the future conference of the series
+          (navigate-to-conference-by-url future-conference-url)
 
-      ; checks that future conference does not have aggregated ratings anymore
-      (wait-for "page-conference-detail")
-      (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
-      (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
-      (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info"))))))
+          ; checks that future conference does not have aggregated ratings anymore
+          (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
+          (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
+          (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info"))))))))
+
