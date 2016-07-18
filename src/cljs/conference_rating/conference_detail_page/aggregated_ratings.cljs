@@ -127,6 +127,7 @@
         no-ratings-msg            (if is-future-conference?
                                     "This conference has not started yet and no conference of this series has been rated yet. Come back later!"
                                     "This conference has not been rated yet. Be the first one to give it your voice!")
+        aggregated-ratings-msg    (str "Note: This ratings are aggregated from ratings of previous " (:series conference) " conferences.")
         overall-avg               (get-in ratings [:overall :avg])
         overall-avg-percentage    (* (/ overall-avg 4) 100)
         overall-ratings-str       (str (get-in ratings [:overall :count]) " ratings")
@@ -144,7 +145,7 @@
        [:div {:class "no-ratings-info"} no-ratings-msg])
      [:div {:class (if has-ratings? "" "no-ratings")}
       (if (and has-ratings? is-future-conference?)
-        (panel/coloured-panel nil "Note: This ratings are aggregated from ratings of previous conferences of the same series." "bg-yellow-lightened" "text-lg-center bg-yellow-lightened"))
+        (panel/coloured-panel nil aggregated-ratings-msg "bg-yellow-lightened" "text-lg-center bg-yellow-lightened"))
       (conference-recommendations (:recommendations ratings))
       [:div {:class "row"}
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
