@@ -7,6 +7,7 @@
   [:input {:type "text"
            :class "form-control search-for-conference-input"
            :placeholder "search for conference"
+           :data-e2e "conference-search-input"
            :style {:background "transparent"
                    :color "white"
                    :border-color "transparent"}}])
@@ -16,7 +17,7 @@
         name (:name conference)
         from-date (util/format-to-human-readable-date (:from conference))
         to-date (util/format-to-human-readable-date (:to conference))]
-    (str "<div class=\"conference-suggestion-template\">"
+    (str "<div class=\"conference-suggestion-template\" data-e2e=\"conference-suggestion-template\">"
          "<p>" series "</p>"
          "<h4>" name "</h4>"
          "<p>" from-date " - " to-date "</p>"
@@ -53,14 +54,12 @@
                           :templates {:suggestion conference-suggestion-template}})
     #(go-to-conference %2)))
 
-(defn action-bar [conference-list]
- )
 
 (defn nav-bar [conference-list]
   [:nav {:class "navbar navbar-inverse navbar-fixed-top"}
    [:div {:class "container-fluid"}
     [:div {:class "navbar-header"}
-     [:a {:class "navbar-brand" :href "#"}
+     [:a {:class "navbar-brand" :href "#" :data-e2e "conference-voices-brand"}
       [:span {:class "cl-yellow"} "conference"]
       [:span " voices"]
       [:span {:class "glyphicon glyphicon-bullhorn"}]]]

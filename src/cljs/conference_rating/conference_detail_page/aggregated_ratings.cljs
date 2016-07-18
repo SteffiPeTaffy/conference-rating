@@ -142,10 +142,11 @@
         networking-ratings-str    (str (get-in ratings [:community :count]) " ratings")]
     [:div
      (if (not has-ratings?)
-       [:div {:class "no-ratings-info"} no-ratings-msg])
+       [:div {:class "no-ratings-info" :data-e2e "no-ratings-info"} no-ratings-msg])
      [:div {:class (if has-ratings? "" "no-ratings")}
       (if (and has-ratings? is-future-conference?)
-        (panel/coloured-panel nil aggregated-ratings-msg "bg-yellow-lightened" "text-lg-center bg-yellow-lightened"))
+        [:div {:data-e2e "aggregated-ratings-info"}
+         (panel/coloured-panel nil aggregated-ratings-msg "bg-yellow-lightened" "text-lg-center bg-yellow-lightened")])
       (conference-recommendations (:recommendations ratings))
       [:div {:class "row"}
        [:div {:class "col-lg-6 col-md-6 col-sm-6"}
