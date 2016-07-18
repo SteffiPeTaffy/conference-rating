@@ -123,6 +123,7 @@
 (defn display-aggregated-ratings [conference]
   (let [ratings                   (get conference (conference-util/ratings-key-for conference))
         has-ratings?              (> (:number-of-ratings ratings) 0)
+        is-future-conference?      conference-util/is-future-conference?
         no-ratings-msg            (if (conference-util/is-future-conference? conference)
                                     "This conference has not started yet and no conference of this series has been rated yet. Come back later!"
                                     "This conference has not been rated yet. Be the first one to give it your voice!")
@@ -142,7 +143,7 @@
      (if (not has-ratings?)
        [:div {:class "no-ratings-info"} no-ratings-msg])
      [:div {:class (if has-ratings? "" "no-ratings")}
-      (if has-ratings?
+      (if (and has-ratings? is-future-conference?)
         (panel/coloured-panel nil "Note: This ratings are aggregated from ratings of previous conferences of the same series." "bg-yellow-lightened" "text-lg-center bg-yellow-lightened"))
       (conference-recommendations (:recommendations ratings))
       [:div {:class "row"}
