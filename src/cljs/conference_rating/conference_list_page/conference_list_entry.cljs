@@ -20,7 +20,7 @@
 (defn add-rating-button [id]
   [:div {:class "text-lg-right"}
    [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")}
-    [:span {:class "glyphicon glyphicon-bullhorn"}]
+    [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
     "Voice"]])
 
 (defn roles [percentage bg-color role-name]

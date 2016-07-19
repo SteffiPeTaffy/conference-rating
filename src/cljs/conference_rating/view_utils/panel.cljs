@@ -14,7 +14,7 @@
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap glyphicon-mini"}
-      [:span {:class (str "glyphicon " icon " icon-size-sm")}]]]
+      [:span {:class (str "glyphicon " icon " icon-size-sm hidden-sm")}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body text-lg-center"} (str number)]]]
      [:div {:class "media-container media-body text-lg-center"} (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]]))
