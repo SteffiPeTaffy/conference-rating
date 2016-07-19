@@ -3,7 +3,7 @@
             [conference-rating.view-utils.conference :as conference-util]))
 
 (defn conference-recommendations [numberOfRecommendations]
-  (panel/icon-panel "glyphicon-star" numberOfRecommendations "would go again" "bg-yellow cl-light"))
+  (panel/icon-panel "glyphicon-star" numberOfRecommendations "I would go again" "bg-yellow cl-light"))
 
 (defn badge [label classes]
   [:span {:class (str "badge " classes)} label])

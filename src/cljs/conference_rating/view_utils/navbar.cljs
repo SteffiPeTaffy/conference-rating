@@ -6,7 +6,7 @@
 (defn search-for-conference-input []
   [:input {:type "text"
            :class "form-control search-for-conference-input"
-           :placeholder "search for conference"
+           :placeholder "Search for conference"
            :data-e2e "conference-search-input"
            :style {:background "transparent"
                    :color "white"
@@ -66,4 +66,4 @@
     [:div {:class "conference-search form-group text-lg-right"}
      [:div {:class "action-bar-container"}
       [(search-for-conference-component conference-list)]
-      [:a {:class "btn btn-sm btn-orange mar-bottom button-add-conference" :href "#/add-conference" :data-e2e "btn-add-conference"} "add conference"]]]]])
+      [:a {:class "btn btn-sm btn-orange mar-bottom button-add-conference" :href "#/add-conference" :data-e2e "btn-add-conference"} "Add conference"]]]]])
