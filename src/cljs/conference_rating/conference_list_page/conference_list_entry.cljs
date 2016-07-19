@@ -1,8 +1,7 @@
 (ns conference-rating.conference-list-page.conference-list-entry
   (:require [conference-rating.view-utils.panel :as panel]
             [conference-rating.util :as util]
-            [conference-rating.view-utils.conference :as conference-util]
-            [cljs-time.core :as t]))
+            [conference-rating.view-utils.conference :as conference-util]))
 
 (defn series-tag [series-tag]
   (if-not (nil? series-tag)
@@ -23,7 +22,7 @@
    [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "give it your voice"]])
 
 (defn roles [percentage bg-color role-name]
-  [:div {:style {:width (str percentage "%")} :class (str "progressbar progressbar-light roles " bg-color)}
+  [:div {:title role-name :style {:width (str percentage "%")} :class (str "progressbar progressbar-light roles " bg-color)}
    (if (> percentage 15) [:p role-name])])
 
 (defn perc [total value]

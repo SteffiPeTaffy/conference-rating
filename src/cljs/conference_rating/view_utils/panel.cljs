@@ -7,9 +7,6 @@
     [:h3 {:class "panel-title"} heading-label]]
    [:div {:class (str "panel-body " body-classes)} body]])
 
-(defn light-panel [heading-label body]
-  (coloured-panel heading-label body "" ""))
-
 (defn mini-panel [number icon year color]
  (if number
    [:div {:class "col-sm-6 hidden-xs mini-panel-container"}
