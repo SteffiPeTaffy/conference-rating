@@ -12,7 +12,9 @@
 
 (defn add-rating-button [conference-id]
   [:div {:class "text-lg-right voice-btn-container"}
-   [:a {:class "btn btn-md btn-orange" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"} "Give it your voice"]])
+   [:a {:class "btn btn-md btn-orange voice-btn" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"}
+    [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
+    "Give it your voice"]])
 
 (defn delete-conference [conference]
   (let [delete (js/confirm "If you delete this conference, it will be gone forever including all of its ratings!")]
