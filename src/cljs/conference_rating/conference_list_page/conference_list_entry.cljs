@@ -19,7 +19,9 @@
 
 (defn add-rating-button [id]
   [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")} "Give it your voice"]])
+   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")}
+    [:span {:class "glyphicon glyphicon-bullhorn"}]
+    "Voice"]])
 
 (defn roles [percentage bg-color role-name]
   [:div {:title role-name :style {:width (str percentage "%")} :class (str "progressbar progressbar-light roles " bg-color)}
@@ -50,9 +52,9 @@
     [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (overall-rating (get-in conference [ratings-key :overall]))]))
 
-(defn display-vote [conference]
+(defn display-add-rating-button [conference]
   (if (not (conference-util/is-future-conference? conference))
-    [:div {:class "col-lg-4 col-md-4 col-sm-5 conference-overall-rating-container"}
+    [:div {:class "col-lg-3 col-md-3 col-sm-3 conference-overall-rating-container"}
      (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
@@ -67,20 +69,20 @@
   [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
    [:div {:class "panel panel-heading bg-light cl-dark"}
     [:div {:class "row conference-row"}
-     [:div {:class "col-lg-8 col-md-8 col-sm-8 col-xs-8"}
-      (series-tag (:series conference))
-      [:a {:href (str "#/conferences/" (:_id conference))}
+     [:a {:href (str "#/conferences/" (:_id conference))}
+      [:div {:class "col-lg-8 col-md-8 col-sm-8 col-xs-8"}
+       (series-tag (:series conference))
        (title (:name conference))
-       (util/from-to-dates (:from conference) (:to conference))]]
+       (util/from-to-dates (:from conference) (:to conference))]
      (display-recommendations-votes conference)
-     (display-overall-rating conference)]
+     (display-overall-rating conference)]]
     [:div {:class "bottom-line"}]]
    [:div {:class "panel-body  bg-light"}
     [:div {:class "row"}
-     [:div {:class "col-lg-12 col-md-12 col-sm-12"}
+     [:div {:class "col-lg-9 col-md-9 col-sm-9"}
       (description (util/formatted-text (:description conference)))
       (util/link (:link conference))]
-     (display-vote conference)]]
+     (display-add-rating-button conference)]]
    [:div {:class "panel-footer"}
     [:div {:class "row"}
      [:div {:class "col-md-12"}

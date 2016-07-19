@@ -14,7 +14,7 @@
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap glyphicon-mini"}
-      [:span {:class (str "glyphicon " icon)}]]]
+      [:span {:class (str "glyphicon " icon " icon-size-sm")}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body text-lg-center"} (str number)]]]
      [:div {:class "media-container media-body text-lg-center"} (if year [:div {:class "text-lg-center text-semi"}(str "( " year " )")])]]]))
@@ -30,7 +30,7 @@
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap icon-md"}
-      [:span {:class (str "glyphicon " icon)}]]]
+      [:span {:class (str "glyphicon " icon " icon-size")}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
      [:div {:class "text-uppercase"} name]]]
@@ -43,8 +43,8 @@
  [:div {:class (str "panel range-panel " panel-classes)}
   [:div {:class "media-container"}
    [:div {:class "media-left"}
-    [:div {:class "media-container icon-wrap icon-md hidden-xs"}
-     [:span {:class (str "glyphicon " icon)}]]]
+    [:div {:class "media-container icon-wrap hidden-xs"}
+     [:span {:class (str "glyphicon " icon " icon-size")}]]]
    [:div {:class "media-body"}
     [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
     [:div {:class "text-uppercase"} name]]]])
@@ -54,8 +54,8 @@
    [:div {:class (str "panel-body text-lg-center " color)}
     [:div {:class "media-container"}
      [:div {:class "media-center"}
-      [:div {:class "media-container icon-wrap icon-lg"}
-       [:span {:class (str "glyphicon " icon)}]]]
+      [:div {:class "media-container icon-wrap"}
+       [:span {:class (str "glyphicon " icon " icon-size")}]]]
      [:div {:class "media-body"}
       [:h3 {:data-e2e "text-icon-panel-number"} number]
       [:h3 label]]]]])
@@ -66,7 +66,7 @@
     [:div {:class "media-container"}
      [:div {:class "media-left"}
       [:div {:class "media-container icon-wrap icon-md"}
-       [:span {:class (str "glyphicon " icon)}]]]
+       [:span {:class (str "glyphicon " icon " icon-size"n)}]]]
      [:div {:class "media-body"}
       [:h3 title]]]]
    [:div {:class "panel-body text-lg-left"} body-information]
