@@ -77,7 +77,7 @@
     [:div {:class "bottom-line"}]]
    [:div {:class "panel-body  bg-light"}
     [:div {:class "row"}
-     [:div {:class "col-lg-8 col-md-8 col-sm-7"}
+     [:div {:class "col-lg-12 col-md-12 col-sm-12"}
       (description (util/formatted-text (:description conference)))
       (util/link (:link conference))]
      (display-vote conference)]]
