@@ -30,7 +30,7 @@
    [:div {:class "media-container"}
     [:div {:class "media-left"}
      [:div {:class "media-container icon-wrap icon-md"}
-      [:span {:class (str "glyphicon " icon " icon-size")}]]]
+      [:span {:class (str "glyphicon " icon " icon-size-lg")}]]]
     [:div {:class "media-body"}
      [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
      [:div {:class "text-uppercase"} name]]]
@@ -43,7 +43,7 @@
  [:div {:class (str "panel range-panel " panel-classes)}
   [:div {:class "media-container"}
    [:div {:class "media-left"}
-    [:div {:class "media-container icon-wrap hidden-xs"}
+    [:div {:class "media-container icon-wrap hidden-sm hidden-xs"}
      [:span {:class (str "glyphicon " icon " icon-size")}]]]
    [:div {:class "media-body"}
     [:h3 {:class "media-body range-label"} (str (gstring/format "%.1f"  absolute) " / 4")]
@@ -55,7 +55,7 @@
     [:div {:class "media-container"}
      [:div {:class "media-center"}
       [:div {:class "media-container icon-wrap"}
-       [:span {:class (str "glyphicon " icon " icon-size")}]]]
+       [:span {:class (str "glyphicon " icon " icon-size-lg")}]]]
      [:div {:class "media-body"}
       [:h3 {:data-e2e "text-icon-panel-number"} number]
       [:h3 label]]]]])
@@ -66,7 +66,7 @@
     [:div {:class "media-container"}
      [:div {:class "media-left"}
       [:div {:class "media-container icon-wrap icon-md"}
-       [:span {:class (str "glyphicon " icon " icon-size"n)}]]]
+       [:span {:class (str "glyphicon " icon " icon-size-lg")}]]]
      [:div {:class "media-body"}
       [:h3 title]]]]
    [:div {:class "panel-body text-lg-left"} body-information]

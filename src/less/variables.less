@@ -28,6 +28,7 @@
 
 @primary                 : #5fa2dd;
 @blue                    : @primary;
+@blue-muted              : lighten(@blue, 7%);
 @primary-hover-color     : darken(@primary,7%);
 @info                    : #4ebcda;
 @lightblue               : @info;
@@ -39,6 +40,7 @@
 @danger                  : #f76c51;
 @red                     : @danger;
 @mint                    : #50c7a7;
+@mint-muted              : lighten(@mint, 7%);
 @purple                  : #986291;
 @berry                   : #b25e71;
 @pink                    : #e17ca7;
@@ -47,8 +49,8 @@
 
 // PROFESSION COLORS
 //============================================
-@dev: lighten(@blue, 7%);
-@devops: lighten(@mint, 7%);
+@dev: @blue-muted;
+@devops: @mint-muted;
 @ux: lighten(@green, 7%);
 @qa: lighten(@pink, 7%);
 @ba: lighten(@purple, 7%);
