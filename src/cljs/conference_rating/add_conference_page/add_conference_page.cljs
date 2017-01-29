@@ -67,8 +67,10 @@
 (defn- convert-location [place]
   (let [name (get place "name")
         address (get place "formatted_address")
-        location (get-in place ["geometry" "location"])]
-    {:name name
+        location (get-in place ["geometry" "location"])
+        place-id (get place "place_id")]
+    {:place-id place-id
+     :name name
      :address address
      :lat (.lat location)
      :lng (.lng location)}))
@@ -108,7 +110,7 @@
                                                                                                  :inline false
                                                                                                  :auto-close? true
                                                                                                  :required true} :defaultValue (:to @data-atom))])]]
-   (form-input "Location " [location data-atom])
+   (form-input "Location *" [location data-atom])
    (form-input "Link *" [:input {:field :text
                                :id :link
                                :class "form-control"

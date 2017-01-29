@@ -65,10 +65,11 @@
 (def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
 
 (def LocationSchema ; Location is already taken...
-  {:name    s/Str
-   :address s/Str
-   :lat     s/Num
-   :lng     s/Num})
+  {:place-id s/Str
+   :name     s/Str
+   :address  s/Str
+   :lat      s/Num
+   :lng      s/Num})
 
 (def Conference
   {(s/optional-key :_id)      s/Str
