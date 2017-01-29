@@ -47,6 +47,11 @@
                           :display identity
                           :async true
                           :templates {:suggestion conference-series-template}})))
+(def enter-char-code 13)
+
+(defn prevent-form-submit [e]
+  (if (= enter-char-code (.-charCode e))
+    (.preventDefault e)))
 
 (defn location-render [data-atom]
   (fn []
@@ -56,6 +61,7 @@
              :placeholder  "Location of the conference"
              :data-e2e     "input-conference-location"
              :defaultValue (get-in @data-atom [:location :name])
+             :on-key-press prevent-form-submit
              :required     true}]))
 
 (defn- convert-location [place]
