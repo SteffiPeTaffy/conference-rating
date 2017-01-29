@@ -51,9 +51,9 @@
 
 (defn location [l]
   [:div
-   [:p {:data-e2e "text-conference-location-name" }
+   [:p {:class "conference-location" :data-e2e "text-conference-location-name" }
     (or (get l :name) "unknown location")]
-   [:p {:data-e2e "text-conference-location-address" }
+   [:p {:class "conference-location" :data-e2e "text-conference-location-address" }
     (or (get l :address) "unknown address")]])
 
 (defn- add-nbsp [s]
