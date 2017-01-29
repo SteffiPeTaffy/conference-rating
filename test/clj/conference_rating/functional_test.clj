@@ -11,7 +11,7 @@
 
 
 (defn start-server []
-  (server/start-server 4000 false {} nil true))
+  (server/start-server 4000 false {} nil true server/development-api-key))
 
 (defn stop-server [server]
   (.stop server))

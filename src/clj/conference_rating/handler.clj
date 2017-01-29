@@ -24,7 +24,7 @@
 
   (:use ring.middleware.anti-forgery))
 
-(defn home-page []
+(defn home-page [api-key]
   (html
    [:html
     [:head
@@ -46,7 +46,7 @@
        " in order to start the compiler"]]
      (include-js "thirdparty/jquery-2.1.4.min.js")
      (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
-     (include-js "https://maps.googleapis.com/maps/api/js?key=AIzaSyAVDKe5pERAQwk_E8Ayv-dbvbuJZrGLvaY&libraries=places")
+     (include-js (str "https://maps.googleapis.com/maps/api/js?key=" api-key "&libraries=places"))
      (include-js "js/app.js")]]))
 
 
@@ -110,13 +110,13 @@
     handler
     (wrap-anti-forgery handler)))
 
-(defn read-routes [db]
+(defn read-routes [db api-key]
   (routes
     (GET "/api/conferences" [] (response (get-conferences db)))
     (GET "/api/conferences/:id" [id] (response (get-conference id db)))
     (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
     (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
-    (GET "/" [] (home-page))))
+    (GET "/" [] (home-page api-key))))
 
 (defn update-conference [id body db]
   (let [update-result (db/update-conference-by-id id body db)]
@@ -134,19 +134,19 @@
     {:limits [(ip-limit 100)]
      :backend (local-atom-backend (atom {}))}))
 
-(defn all-routes [db]
-  (let [read-routes (read-routes db)
+(defn all-routes [db api-key]
+  (let [read-routes (read-routes db api-key)
         write-routes (write-routes db)]
     (routes
       read-routes
       write-routes)))
 
-(defn anti-forgery-routes [db]
+(defn anti-forgery-routes [db api-key]
   (with-anti-forgery
-    (all-routes db)))
+    (all-routes db api-key)))
 
-(defn create-routes [db]
-  (let [anti-forgery-routes (anti-forgery-routes db)]
+(defn create-routes [db api-key]
+  (let [anti-forgery-routes (anti-forgery-routes db api-key)]
     (routes
       okta/okta-routes
       (GET "/login" [] (redirect "/"))
@@ -180,8 +180,8 @@
         (onelog/error (onelog/throwable e))
         {:status 500 :body "An error occurred" }))))
 
-(defn app [db ssl-redirect-disabled]
-  (let [handler (-> (create-routes db)
+(defn app [db ssl-redirect-disabled api-key]
+  (let [handler (-> (create-routes db api-key)
                     (prevent-open-redirect-through-relay-state)
                     (wrap-defaults (ring-settings ssl-redirect-disabled))
                     (json/wrap-json-response)

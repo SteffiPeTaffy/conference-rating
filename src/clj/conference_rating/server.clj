@@ -12,10 +12,13 @@
             [ring.middleware.okta :refer [wrap-okta okta-routes]])
   (:gen-class))
 
+(def development-api-key "AIzaSyAVDKe5pERAQwk_E8Ayv-dbvbuJZrGLvaY")
+
 (def cli-options
   ;; An option with a required argument
   [["-o" "--okta-active"]
    ["-e" "--environment ENV" "Environment name, e.g. ci" :default "local"]
+   ["-k" "--google-api-key KEY" "Google API Key, defaults to development key" :default development-api-key]
    ["-oh" "--okta-home OKTA_HOME" "URL of Okta" :default "https://dev-133267-admin.oktapreview.com/"]
    ["-sd" "--ssl-redirect-disabled"]
    ["-h" "--help"]])
@@ -36,8 +39,8 @@
       (wrap-okta handler {:okta-home okta-home :okta-config config-res})
       handler)))
 
-(defn start-server [port okta-active env okta-home ssl-redirect-disabled]
-  (let [app (-> (app (db-handler/connect) ssl-redirect-disabled)
+(defn start-server [port okta-active env okta-home ssl-redirect-disabled api-key]
+  (let [app (-> (app (db-handler/connect) ssl-redirect-disabled api-key)
                 (do-wrap-okta okta-active env okta-home)
                 (ring-logger/wrap-with-logger)
                 (session/wrap-session))]
@@ -52,4 +55,9 @@
      (cond
        (:help options) (exit 0 (usage summary))
        errors (exit 1 (error-msg errors)))
-     (start-server port (:okta-active options) (:environment options) (:okta-home options) (:ssl-redirect-disabled options))))
+     (start-server port
+                   (:okta-active options)
+                   (:environment options)
+                   (:okta-home options)
+                   (:ssl-redirect-disabled options)
+                   (:google-api-key options))))
