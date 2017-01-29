@@ -40,10 +40,17 @@ goal_deploy-uberjar() {
   shift
   OPTIONS=$@
 
+  if [ -z "${OPTIONS}" ]; then
+    OPTIONS_ARG="--options \"${OPTIONS}\""
+  else
+    OPTIONS_ARG=""
+  fi
+
+
   JARFILE=${BASEDIR}/target/conference-rating.jar
   heroku plugins:install https://github.com/heroku/heroku-deploy
   cd ~
-  heroku deploy:jar --jar $JARFILE --app $APPNAME --options "$OPTIONS"
+  heroku deploy:jar --jar $JARFILE --app $APPNAME ${OPTIONS_ARG}
   cd -
 }
 
