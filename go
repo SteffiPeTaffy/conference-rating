@@ -41,9 +41,9 @@ goal_deploy-uberjar() {
   OPTIONS=$@
 
   if [ -z "${OPTIONS}" ]; then
-    OPTIONS_ARG="--options \"${OPTIONS}\""
-  else
     OPTIONS_ARG=""
+  else
+    OPTIONS_ARG="--options \"${OPTIONS}\""
   fi
 
 
