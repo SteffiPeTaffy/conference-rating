@@ -1,7 +1,8 @@
 (ns conference-rating.conference-list-page.conference-list-entry
   (:require [conference-rating.view-utils.panel :as panel]
             [conference-rating.util :as util]
-            [conference-rating.view-utils.conference :as conference-util]))
+            [conference-rating.view-utils.conference :as conference-util]
+            [goog.string :as gstring]))
 
 (defn series-tag [series-tag]
   (if-not (nil? series-tag)
@@ -73,7 +74,8 @@
       [:div {:class "col-lg-8 col-md-8 col-sm-8 col-xs-8"}
        (series-tag (:series conference))
        (title (:name conference))
-       (util/from-to-dates (:from conference) (:to conference))]
+       (util/from-to-dates (:from conference) (:to conference))
+       (util/location (:location conference))]
      (display-recommendations-votes conference)
      (display-overall-rating conference)]]
     [:div {:class "bottom-line"}]]

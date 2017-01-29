@@ -48,13 +48,15 @@
                           :async true
                           :templates {:suggestion conference-series-template}})))
 
-(defn location-render []
-  [:input {:field :text
-           :id :location-autocomplete
-           :class "form-control"
-           :placeholder "Location of the conference"
-           :data-e2e "input-conference-location"
-           :required true}])
+(defn location-render [data-atom]
+  (fn []
+    [:input {:field        :text
+             :id           :location-autocomplete
+             :class        "form-control"
+             :placeholder  "Location of the conference"
+             :data-e2e     "input-conference-location"
+             :defaultValue (get-in @data-atom [:location :name])
+             :required     true}]))
 
 (defn- convert-location [place]
   (let [name (get place "name")
@@ -75,7 +77,7 @@
       autocomplete)))
 
 (defn location [data-atom]
-  (reagent/create-class {:reagent-render      location-render
+  (reagent/create-class {:reagent-render      (location-render data-atom)
                          :component-did-mount (location-did-mount data-atom)}))
 
 (defn conference-form-template [data-atom]

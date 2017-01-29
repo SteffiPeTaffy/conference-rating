@@ -49,6 +49,13 @@
     from-date [:p {:class "conference-dates"} (format-to-human-readable-date from-date)]
     :else [:p {:class "conference-dates"} "TBD"]))
 
+(defn location [l]
+  [:div
+   [:p {:data-e2e "text-conference-location-name" }
+    (or (get l :name) "unknown location")]
+   [:p {:data-e2e "text-conference-location-address" }
+    (or (get l :address) "unknown address")]])
+
 (defn- add-nbsp [s]
   (if (= (s/trim s) "")
     (gstring/unescapeEntities "&nbsp;")
