@@ -46,6 +46,7 @@
        " in order to start the compiler"]]
      (include-js "thirdparty/jquery-2.1.4.min.js")
      (include-js "thirdparty/bootstrap-3.3.5/js/bootstrap.min.js")
+     (include-js "https://maps.googleapis.com/maps/api/js?key=AIzaSyAVDKe5pERAQwk_E8Ayv-dbvbuJZrGLvaY&libraries=places")
      (include-js "js/app.js")]]))
 
 

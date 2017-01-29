@@ -9,7 +9,8 @@
             [conference-rating.util :as util :refer [assoc-when]]
             [conference-rating.backend :as backend]
             [conference-rating.view-utils.navbar :as navbar]
-            [conference-rating.view-utils.typeahead :as typeahead]))
+            [conference-rating.view-utils.typeahead :as typeahead]
+            [reagent.core :as reagent]))
 
 (defn form-input [label input]
   [:div {:class "form-group"}
@@ -47,6 +48,36 @@
                           :async true
                           :templates {:suggestion conference-series-template}})))
 
+(defn location-render []
+  [:input {:field :text
+           :id :location-autocomplete
+           :class "form-control"
+           :placeholder "Location of the conference"
+           :data-e2e "input-conference-location"
+           :required true}])
+
+(defn- convert-location [place]
+  (let [name (get place "name")
+        address (get place "formatted_address")
+        location (get-in place ["geometry" "location"])]
+    {:name name
+     :address address
+     :lat (.lat location)
+     :lng (.lng location)}))
+
+(defn location-did-mount [data-atom]
+  (fn [this]
+    (let [input-node (reagent/dom-node this)
+          autocomplete (js/google.maps.places.Autocomplete. input-node)]
+      (.addListener autocomplete "place_changed" (fn []
+                                                   (let [place (js->clj (.getPlace autocomplete))]
+                                                     (swap! data-atom #(assoc % :location (convert-location place))))))
+      autocomplete)))
+
+(defn location [data-atom]
+  (reagent/create-class {:reagent-render      location-render
+                         :component-did-mount (location-did-mount data-atom)}))
+
 (defn conference-form-template [data-atom]
   [:div
    (form-input "Series *" [(conference-series-component data-atom)])
@@ -69,6 +100,7 @@
                                                                                                  :inline false
                                                                                                  :auto-close? true
                                                                                                  :required true} :defaultValue (:to @data-atom))])]]
+   (form-input "Location " [location data-atom])
    (form-input "Link *" [:input {:field :text
                                :id :link
                                :class "form-control"
@@ -91,7 +123,8 @@
                    :name        (:name data)
                    :series      (:series data)
                    :link        (:link data)
-                   :description (:description data)}]
+                   :description (:description data)
+                   :location    (:location data)}]
       (save-to-backend-fn payload))))
 
 (defn add&edit-conference-page [initial-data on-click-function save-button-label]

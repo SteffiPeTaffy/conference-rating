@@ -33,6 +33,7 @@
                  [com.novemberain/monger "3.0.0-rc2"]
                  [cljsjs/typeahead-bundle "0.11.1-1"]
                  [cljsjs/jquery "2.2.2-0"]
+                 [cljsjs/google-maps "3.18-1"]
                  [clj-webdriver "0.7.2"]
                  [org.seleniumhq.selenium/selenium-java "2.47.1"]]
 

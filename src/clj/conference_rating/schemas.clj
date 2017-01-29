@@ -1,6 +1,7 @@
 (ns conference-rating.schemas
   (:require [schema.core :as s]
-            [schema.coerce :as coerce]))
+            [schema.coerce :as coerce])
+  (:import (javax.xml.stream Location)))
 
 (defn max-length [l] (s/pred (fn [x] (<= (count x) l)) (str "max length" l)))
 
@@ -63,12 +64,18 @@
 
 (def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
 
+(def LocationSchema ; Location is already taken...
+  {:name    s/Str
+   :address s/Str
+   :lat     s/Num
+   :lng     s/Num})
 
 (def Conference
-  {(s/optional-key :_id) s/Str
-   :series               (s/both s/Str (max-length 100))
-   :name                 (s/both s/Str (max-length 100))
-   :from                 s/Str
-   :to                   s/Str
-   :link                 (s/both s/Str (max-length 1000))
-   :description          (s/both s/Str (max-length 10000))})
+  {(s/optional-key :_id)      s/Str
+   :series                    (s/both s/Str (max-length 100))
+   :name                      (s/both s/Str (max-length 100))
+   :from                      s/Str
+   :to                        s/Str
+   :link                      (s/both s/Str (max-length 1000))
+   :description               (s/both s/Str (max-length 10000))
+   (s/optional-key :location) LocationSchema})
