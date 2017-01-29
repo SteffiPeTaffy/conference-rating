@@ -4,7 +4,8 @@
             [clojure.test :refer [deftest is testing use-fixtures]]
             [conference-rating.server :as server]
             [clojure.string :as s])
-  (:import (java.util UUID)))
+  (:import (java.util UUID)
+           (org.openqa.selenium Keys)))
 
 (taxi/set-driver! {:browser :chrome})
 
@@ -57,8 +58,17 @@
 (defn fill-future-date [e2e-tag]
   (fill-date e2e-tag ".next"))
 
+(defn fill-location [location]
+  (taxi/send-keys (e2e-selector "input-conference-location") location)
+  (Thread/sleep 1000)
+  (taxi/send-keys (e2e-selector "input-conference-location") Keys/ARROW_DOWN)
+  (taxi/send-keys (e2e-selector "input-conference-location") Keys/ENTER))
+
 (defn text [e2e-tag]
   (taxi/text (e2e-selector e2e-tag)))
+
+(defn value [e2e-tag]
+  (taxi/value (e2e-selector e2e-tag)))
 
 (defn texts [e2e-tag]
   (map core/text (taxi/find-elements {:css (e2e-selector e2e-tag)})))
@@ -74,6 +84,9 @@
   (let [conference-series (str "some unique series" (UUID/randomUUID))
         past-conference-name (str "some unique conference name" (UUID/randomUUID))
         past-conference-link "www.some-link.org"
+        past-conference-location-search-term "CCH - Congress Center"
+        past-conference-location-name "CCH - Congress Center Hamburg"
+        past-conference-location-address "Am Dammtor / Marseiller Straße, 20355 Hamburg, Germany"
         past-conference-description "some really fancy description with a new line.\nAnd here is the new line. Wohooo!"
         future-conference-name (str "some other unique conference name" (UUID/randomUUID))]
 
@@ -92,6 +105,7 @@
                    "input-conference-name"        past-conference-name
                    "input-conference-link"        past-conference-link
                    "input-conference-description" past-conference-description})
+      (fill-location past-conference-location-search-term)
       (fill-past-date "date-conference-from")
       (fill-past-date "date-conference-to")
       (click "button-create-conference")
@@ -102,6 +116,8 @@
         (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
         (is (= past-conference-name (text "text-conference-name")))
         (is (not-empty (text "text-conference-from-to-dates")))
+        (is (= past-conference-location-name (text "text-conference-location-name")))
+        (is (= past-conference-location-address (text "text-conference-location-address")))
         (is (= past-conference-link (text "text-conference-link")))
         (is (= past-conference-description (text "text-conference-description")))
         (is (= "This conference has not been rated yet. Be the first one to give it your voice!" (text "no-ratings-info")))
@@ -113,6 +129,7 @@
                      "input-conference-name"        future-conference-name
                      "input-conference-link"        "www.some-other-link.org"
                      "input-conference-description" "some other description."})
+        (fill-location "Budapest")
         (fill-future-date "date-conference-from")
         (fill-future-date "date-conference-to")
         (click "button-create-conference")
@@ -122,6 +139,8 @@
         (let [future-conference-url (taxi/current-url)]
           (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
           (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
+          (is (= "Budapest" (text "text-conference-location-name")))
+          (is (= "Budapest, Hungary" (text "text-conference-location-address")))
           (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info")))
 
           ; navigate to newly created past conference
@@ -151,6 +170,7 @@
           ; edits past conference
           (click "button-edit-conference")
           (wait-for "page-add-conference")
+          (is (= past-conference-location-name (value "input-conference-location")))
           (fill-input {"input-conference-description" "some edited description"})
           (click "button-create-conference")
 
