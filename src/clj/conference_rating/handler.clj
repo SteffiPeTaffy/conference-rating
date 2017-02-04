@@ -84,13 +84,25 @@
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 
+
+(defn- okta-attribute [request key]
+  (first (get-in request [:session :okta/attributes key])))
+
+(defn- user-identity [request]
+  {:email (get-in request [:session :okta/user])
+   :firstName (okta-attribute request "firstName")
+   :lastName (okta-attribute request "lastName")})
+
 (def parse-rating (coerce/coercer schemas/Rating coerce/json-coercion-matcher))
 
-(defn add-rating [conference-id raw-rating db]
-  (let [complete   (assoc (sanatize raw-rating) :conference-id conference-id)
-        rating     (parse-rating complete)
+(defn add-rating [conference-id request db]
+  (let [complete (assoc (sanatize (:body request))
+                   :conference-id conference-id
+                   :user (user-identity request))
+        rating (parse-rating complete)
+        _ (println "RATING" rating)
         add-result (db/add-rating rating db)
-        id         (:_id add-result)]
+        id (:_id add-result)]
     (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
 
 (defn matches-series [q]
@@ -110,14 +122,6 @@
     handler
     (wrap-anti-forgery handler)))
 
-(defn- okta-attribute [request key]
-  (first (get-in request [:session :okta/attributes key])))
-
-(defn- user-identity [request]
-  {:email (get-in request [:session :okta/user])
-   :firstName (okta-attribute request "firstName")
-   :lastName (okta-attribute request "lastName")})
-
 (defn read-routes [db api-key]
   (routes
     (GET "/api/conferences" [] (response (get-conferences db)))
@@ -135,7 +139,7 @@
 (defn write-routes [db]
   (wrap-ratelimit
     (routes
-      (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id (:body request) db))
+      (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id request db))
       (POST "/api/conferences/" request (add-conference (:body request) db))
       (PUT "/api/conferences/:id/edit" [id :as request] (update-conference id (:body request) db))
       (DELETE "/api/conferences/:id" [id] (do (db/delete-conference-by-id id db) {:status  204

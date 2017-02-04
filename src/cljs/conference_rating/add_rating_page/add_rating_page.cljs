@@ -7,13 +7,15 @@
             [conference-rating.util :as util]
             [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.view-utils.checkboxes :as checkboxes]
-            [conference-rating.backend :as backend]))
+            [conference-rating.backend :as backend]
+            [conference-rating.user-info :as user-info]))
 
 (defn- convert-to-tag-list [m k]
   (update-in m [k] util/checkboxes-to-tag-list))
 
 (defn create-rating [form-data conference-id]
   (let [processed-data (-> @form-data
+                           (util/dissoc-in [:comment :authorLabel])
                            (convert-to-tag-list :roles)
                            (convert-to-tag-list :experience)
                            (convert-to-tag-list :tags))]
@@ -98,7 +100,7 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I want to say ..."]
    [:div {:class "form-group"}
-    [:input {:field :text :id :comment.name :type "text" :placeholder "name" :class "form-control"}]
+    [:input {:field :text :id :comment.authorLabel :type "text" :read-only true :class "form-control"}]
     [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 13}]]])
 
 (def add-rating-template
@@ -116,6 +118,12 @@
      (rating-panel "glyphicon-glass" :rating.networking "Networking" "bg-green cl-light")
      (tags-panel)]]])
 
+(defn propagate-changes-in-user-info [doc]
+  (add-watch user-info/user-info :watch-rating
+             (fn [_ _ _ new]
+               (swap! doc
+                      (fn [d] (assoc-in d [:comment :authorLabel] (util/user-text new) ))))))
+
 (defn add-rating []
   (let [doc (atom {:recommended false
                    :roles       {:dev        false
@@ -132,8 +140,8 @@
                                  :intermediate false
                                  :advanced     false
                                  :expert       false}
-                   :comment     {:name    ""
-                                 :comment ""}
+                   :comment     {:comment ""
+                                 :authorLabel (util/user-text @user-info/user-info)}
                    :rating      {:overall    -1
                                  :talks      -1
                                  :venue      -1
@@ -144,6 +152,7 @@
                                  :hires        false
                                  :clients      false}})
         temporary-broken-nav-bar-empty-list []]
+    (propagate-changes-in-user-info doc)
     [:div {:data-e2e "page-add-rating"}
      (navbar/nav-bar temporary-broken-nav-bar-empty-list)
      [:div {:class "container-fluid content-container pad-top"}

@@ -1,15 +1,20 @@
 (ns conference-rating.conference-detail-page.rating-list
   (:require [conference-rating.util :as util]))
 
+(defn author-text [rating]
+  (if (:name rating)
+    (:name rating)
+    (util/user-text (:user rating))))
+
 (defn display-rating [rating]
    [:div {:class "rating"}
     [:div {:class "row bg-light"}
      [:div {:class "col-lg-12 col-md-12"}
-      [:h5 (get-in rating [:comment :name])]
+      [:p {:class "text-bold"} (author-text rating)]
       [:p (util/formatted-text (get-in rating [:comment :comment]))]]]])
 
-(defn hasComment [rating]
-  (not (and (= (get-in rating [:comment :name]) "") (= (get-in rating [:comment :comment]) ""))))
+(defn has-comment [rating]
+  (not= "" (get-in rating [:comment :comment])))
 
 (defn display-rating-list [conference-ratings]
-  [:div {:class "container-fluid pad-top"} (map display-rating (filter hasComment conference-ratings))])
+  [:div {:class "container-fluid pad-top"} (map display-rating (filter has-comment conference-ratings))])

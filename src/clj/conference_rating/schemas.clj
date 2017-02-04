@@ -1,7 +1,6 @@
 (ns conference-rating.schemas
   (:require [schema.core :as s]
-            [schema.coerce :as coerce])
-  (:import (javax.xml.stream Location)))
+            [schema.coerce :as coerce]))
 
 (defn max-length [l] (s/pred (fn [x] (<= (count x) l)) (str "max length" l)))
 
@@ -42,21 +41,27 @@
 (def Experience (s/enum :rookie :beginner :intermediate :advanced :expert))
 (def Tags (s/enum :inspiring :informative :entertaining :hires :clients))
 
-(def RatingValue s/Int) ; TODO: make this a range?
+(def RatingValue s/Int)                                     ; TODO: make this a range?
+
+(def User
+  {:email                      s/Str
+   (s/optional-key :firstName) (s/maybe s/Str)
+   (s/optional-key :lastName)  (s/maybe s/Str)})
 
 (def Rating
-  {(s/optional-key :_id) s/Str
-   :conference-id        s/Str
-   :recommended          s/Bool
-   :roles                [Role]
-   :experience           [Experience]
-   :comment              {:name    (s/both s/Str (max-length 100))
-                          :comment (s/both s/Str (max-length 10000))}
-   :rating               {:overall    RatingValue
-                          :talks      RatingValue
-                          :venue      RatingValue
-                          :networking RatingValue}
-   :tags                 [Tags]})
+  {(s/optional-key :_id)  s/Str
+   (s/optional-key :user) User
+   :conference-id         s/Str
+   :recommended           s/Bool
+   :roles                 [Role]
+   :experience            [Experience]
+   :comment               {(s/optional-key :name) (s/both s/Str (max-length 100))
+                           :comment               (s/both s/Str (max-length 10000))}
+   :rating                {:overall    RatingValue
+                           :talks      RatingValue
+                           :venue      RatingValue
+                           :networking RatingValue}
+   :tags                  [Tags]})
 
 
 (defn possible-values [enum]
@@ -64,7 +69,7 @@
 
 (def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
 
-(def LocationSchema ; Location is already taken...
+(def LocationSchema                                         ; Location is already taken...
   {:place-id s/Str
    :name     s/Str
    :address  s/Str
