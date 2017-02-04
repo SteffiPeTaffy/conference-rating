@@ -20,7 +20,7 @@
                  [ring "1.4.0"]
                  [org.clojure/tools.cli "0.3.3"]
                  [ring/ring-defaults "0.1.5"]
-                 [ring-okta "0.1.7-SNAPSHOT"]
+                 [ring-okta "0.1.6"]
                  [ring.middleware.logger "0.5.0"]
                  [ring/ring-json "0.4.0"]
                  [ring-ratelimit "0.2.2"]
