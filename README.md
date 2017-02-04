@@ -3,6 +3,8 @@
 ## Status
 [![Build Status](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master/build_image)](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master)
 
+[![Stories in Ready](https://badge.waffle.io/SteffiPeTaffy/conference-rating.png?label=ready&title=Ready)](http://waffle.io/SteffiPeTaffy/conference-rating)
+
 
 ## Development
 
