@@ -50,3 +50,8 @@
   (fn
     [conference-data]
   (add&edit-conference conference-data (str "/api/conferences/" id "/edit") ajax/PUT)))
+
+(defn load-user-info [success-handler]
+  (ajax/GET "/api/user/identity" {:handler         success-handler
+                                  :response-format :json
+                                  :keywords?       true}))

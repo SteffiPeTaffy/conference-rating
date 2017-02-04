@@ -110,12 +110,21 @@
     handler
     (wrap-anti-forgery handler)))
 
+(defn- okta-attribute [request key]
+  (first (get-in request [:session :okta/attributes key])))
+
+(defn- user-identity [request]
+  {:email (get-in request [:session :okta/user])
+   :firstName (okta-attribute request "firstName")
+   :lastName (okta-attribute request "lastName")})
+
 (defn read-routes [db api-key]
   (routes
     (GET "/api/conferences" [] (response (get-conferences db)))
     (GET "/api/conferences/:id" [id] (response (get-conference id db)))
     (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
     (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
+    (GET "/api/user/identity" request (response (user-identity request)))
     (GET "/" [] (home-page api-key))))
 
 (defn update-conference [id body db]

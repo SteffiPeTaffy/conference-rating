@@ -8,6 +8,7 @@
             [conference-rating.conference-detail-page.conference-detail-page :as conference]
             [conference-rating.add-rating-page.add-rating-page :as add-rating]
             [conference-rating.conference-list-page.conference-list-page :as conference-list]
+            [conference-rating.user-info :as user-info]
             [cljsjs.typeahead-bundle])
     (:import goog.History))
 
@@ -49,4 +50,5 @@
 
 (defn init! []
   (history/hook-browser-navigation!)
-  (mount-root))
+  (mount-root)
+  (user-info/load-user-info!))

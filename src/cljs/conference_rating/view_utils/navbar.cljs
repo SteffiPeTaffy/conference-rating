@@ -1,7 +1,8 @@
 (ns conference-rating.view-utils.navbar
   (:require [conference-rating.view-utils.typeahead :as typeahead]
             [conference-rating.history :as history]
-            [conference-rating.util :as util]))
+            [conference-rating.util :as util]
+            [conference-rating.user-info :as user-info]))
 
 (defn search-for-conference-input []
   [:input {:type "text"
@@ -54,6 +55,11 @@
                           :templates {:suggestion conference-suggestion-template}})
     #(go-to-conference %2)))
 
+(defn user-info-text [user-info]
+  (if (and (:firstName user-info)
+           (:lastName user-info))
+    (str "Hey " (:firstName user-info) " " (:lastName user-info) "!")
+    (str "Hey " (:email user-info) "!")))
 
 (defn nav-bar [conference-list]
   [:nav {:class "navbar navbar-inverse navbar-fixed-top"}
@@ -62,7 +68,8 @@
      [:a {:class "navbar-brand" :href "#" :data-e2e "conference-voices-brand"}
       [:span {:class "cl-yellow"} "conference"]
       [:span " voices"]
-      [:span {:class "glyphicon glyphicon-bullhorn"}]]]
+      [:span {:class "glyphicon glyphicon-bullhorn"}]
+      [:span {:class "navbar-user-info"} (user-info-text @user-info/user-info)]]]
     [:div {:class "conference-search form-group text-lg-right"}
      [:div {:class "action-bar-container"}
       [(search-for-conference-component conference-list)]

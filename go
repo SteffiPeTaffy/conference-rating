@@ -4,7 +4,11 @@ set -x
 set -e
 
 goal_serve-backend() {
-  lein run -- --ssl-redirect-disabled
+  lein run -- --ssl-redirect-disabled $*
+}
+
+goal_serve-backend-local-okta() {
+  goal_serve-backend "-o --okta-home https://thoughtworks.oktapreview.com"
 }
 
 goal_serve-frontend() {
