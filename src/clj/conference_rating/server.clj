@@ -32,16 +32,16 @@
   (System/exit status))
 
 
-(defn do-wrap-okta [handler okta-active env okta-home]
+(defn do-wrap-okta [handler env okta-home forced-test-user]
   (let [config-res (io/resource (str "okta-" env "-config.xml"))]
-    (println "initialize okta?" okta-active " config location: " config-res)
-    (if okta-active
-      (wrap-okta handler {:okta-home okta-home :okta-config config-res})
-      handler)))
+    (println "initialize okta?" (nil? forced-test-user) " config location: " config-res)
+    (wrap-okta handler {:okta-home okta-home
+                        :okta-config config-res
+                        :force-user forced-test-user})))
 
-(defn start-server [port okta-active env okta-home ssl-redirect-disabled api-key]
+(defn start-server [port env okta-home ssl-redirect-disabled api-key forced-test-user]
   (let [app (-> (app (db-handler/connect) ssl-redirect-disabled api-key)
-                (do-wrap-okta okta-active env okta-home)
+                (do-wrap-okta env okta-home forced-test-user)
                 (ring-logger/wrap-with-logger)
                 (session/wrap-session))]
     (run-jetty app {:port port :join? false})))
@@ -56,8 +56,8 @@
        (:help options) (exit 0 (usage summary))
        errors (exit 1 (error-msg errors)))
      (start-server port
-                   (:okta-active options)
                    (:environment options)
                    (:okta-home options)
                    (:ssl-redirect-disabled options)
-                   (:google-api-key options))))
+                   (:google-api-key options)
+                   (if (:okta-active options) nil "some@testuser.com"))))

@@ -23,25 +23,35 @@
   (let [fongo (Fongo. "some mock mongodb")]
     (.getDB fongo "crdb")))
 
+(defn with-okta-data [request]
+  (-> request
+      (assoc-in [:session :okta/user] "some@user.com")
+      (assoc-in [:session :okta/attributes] {"firstName" ["SomeFirstName"]
+                                             "lastName"  ["SomeLastName"]})))
+
 (deftest acceptance-test
   (testing "should have an index-page"
     (is (= 200 (:status ((app (create-mock-db) true some-api-key) (request :get "/"))))))
   (testing "should return all ratings of a conference as json"
     (let [db (create-mock-db)
-          response ((app db true some-api-key) (-> (request :post "/api/conferences/someConferenceId/ratings")
-                                 (body (json/write-str
-                                         (some-rating-with :comment {:name "Bob" :comment "some comment with a <p>p tag</p>"}
-                                                           :rating {:overall 5
-                                                                    :talks 1
-                                                                    :venue 2
-                                                                    :networking 3})))
-                                 (header :content-type "application/json")))]
+          response ((app db true some-api-key)
+                     (-> (request :post "/api/conferences/someConferenceId/ratings")
+                         (with-okta-data)
+                         (body (json/write-str
+                                 (some-rating-with :comment {:comment "some comment with a <p>p tag</p>"}
+                                                   :rating {:overall    5
+                                                            :talks      1
+                                                            :venue      2
+                                                            :networking 3})))
+                         (header :content-type "application/json")))]
       (is (= 201 (:status response)))
       (let [ratings-response ((app db true some-api-key) (request :get "/api/conferences/someConferenceId/ratings"))
             rating-list (json/read-str (:body ratings-response) :key-fn keyword) ]
         (is (= 200 (:status ratings-response) ))
         (is (= 1 (count rating-list)))
-        (is (= "Bob" (:name (:comment (first rating-list)))))
+        (is (= "some@user.com" (:email (:user (first rating-list)))))
+        (is (= "SomeFirstName" (:firstName (:user (first rating-list)))))
+        (is (= "SomeLastName" (:lastName (:user (first rating-list)))))
         (is (= "some comment with a &lt;p&gt;p tag&lt;/p&gt;" (:comment (:comment (first rating-list)))))
         (is (= 5 (:overall (:rating (first rating-list))))))))
   (testing "rate limiting"

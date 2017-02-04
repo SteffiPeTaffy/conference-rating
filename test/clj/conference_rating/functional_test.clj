@@ -11,7 +11,7 @@
 
 
 (defn start-server []
-  (server/start-server 4000 false {} nil true server/development-api-key))
+  (server/start-server 4000 {} "no-okta-home" true server/development-api-key "some@okta-user.com"))
 
 (defn stop-server [server]
   (.stop server))

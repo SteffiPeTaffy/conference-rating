@@ -14,12 +14,14 @@
 
 (defn some-rating []
   {:_id           (str (UUID/randomUUID))
+   :user          {:email "some@user.com"
+                   :firstName "someFirstName"
+                   :lastName "someLastName"}
    :conference-id "some-conference-id"
    :recommended   false
    :roles         [:dev :devops :qa :ux :pm :ba :sales :recruiting :other]
    :experience    [:rookie :beginner :intermediate :advanced :expert]
-   :comment       {:name    "some-name"
-                   :comment "some-comment"}
+   :comment       {:comment "some-comment"}
    :rating        (some-rating-values)
    :tags          [:inspiring :informative :entertaining :hires :clients]})
 

@@ -100,7 +100,6 @@
                    :conference-id conference-id
                    :user (user-identity request))
         rating (parse-rating complete)
-        _ (println "RATING" rating)
         add-result (db/add-rating rating db)
         id (:_id add-result)]
     (created (str "/api/conferences/" conference-id "/ratings/" id) add-result)))
