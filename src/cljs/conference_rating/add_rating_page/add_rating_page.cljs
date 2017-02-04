@@ -6,6 +6,7 @@
             [conference-rating.history :as history]
             [conference-rating.util :as util]
             [conference-rating.view-utils.navbar :as navbar]
+            [conference-rating.view-utils.checkboxes :as checkboxes]
             [conference-rating.backend :as backend]))
 
 (defn- convert-to-tag-list [m k]
@@ -56,64 +57,41 @@
     [:div {:class "col-lg-3 col-md-3 col-sm-3 col-xs-3"}
      (rating-panel-radio-input (str panel-label "-4") data-key "awesome" 4)]]])
 
-(defn checkbox-description-right [id input-label input-label-description]
-  [:div {:class "row role-checkbox-container"}
-   [:div {:class "col-lg-2 col-md-2 col-sm-2 col-xs-2"}
-    [:input {:field :checkbox :type "checkbox" :id id}]
-    [:label {:for id}
-     [:span {:class "checkbox"}]]]
-   [:label {:for id :class "block-label"}
-    [:div {:class "col-lg-10 col-md-10 col-sm-10 col-xs-10"}
-     [:p {:class "text-lg-left role-label"} input-label]
-     [:p {:class "text-lg-left role-description"} input-label-description]]]])
-
-(defn role-checkbox [id input-label input-label-description]
-  [:div {:class "col-lg-4 col-md-6 col-sm-6 col-xs-12"}
-   (checkbox-description-right id input-label input-label-description)
-   ])
-
 (defn roles-panel []
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "This conference might be interesting for"]
    [:div {:class "row"}
-    (role-checkbox :roles.dev "Devs" "which are always looking for some practical tips and bleeding edge technologies.")
-    (role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems.")
-    (role-checkbox :roles.ux "UX" "that are all about user experience and visual designs.")
-    (role-checkbox :roles.qa "QAs" "that are interested in getting input on quality assurance.")
-    (role-checkbox :roles.ba "BAs" "which love to get more insight about story writing, relationship building and more.")
-    (role-checkbox :roles.pm "PMs" "that want to know how to manage creative people.")
-    (role-checkbox :roles.sales "Sales" "who want to socialize with other sales people to support our clients even better.")
-    (role-checkbox :roles.recruiting "Recruiters" "that are on the hunt to find us the brightest colleagues.")
-    (role-checkbox :roles.other "Others" "that have other interests :)")]])
+    (checkboxes/role-checkbox :roles.dev "Devs" "which are always looking for some practical tips and bleeding edge technologies.")
+    (checkboxes/role-checkbox :roles.devops "Dev Ops" "which like to learn about the administration of systems.")
+    (checkboxes/role-checkbox :roles.ux "UX" "that are all about user experience and visual designs.")
+    (checkboxes/role-checkbox :roles.qa "QAs" "that are interested in getting input on quality assurance.")
+    (checkboxes/role-checkbox :roles.ba "BAs" "which love to get more insight about story writing, relationship building and more.")
+    (checkboxes/role-checkbox :roles.pm "PMs" "that want to know how to manage creative people.")
+    (checkboxes/role-checkbox :roles.sales "Sales" "who want to socialize with other sales people to support our clients even better.")
+    (checkboxes/role-checkbox :roles.recruiting "Recruiters" "that are on the hunt to find us the brightest colleagues.")
+    (checkboxes/role-checkbox :roles.other "Others" "that have other interests :)")]])
 
 (defn tags-panel []
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I found this conference ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-12 col-md-12 col-sm-12 col-xs-12"}
-     (checkbox-description-right :tags.inspiring "inspiring" "This conference had an impact on me.")
-     (checkbox-description-right :tags.informative "informative" "I learned a lot during the workshops, sessions and talks.")
-     (checkbox-description-right :tags.entertaining "entertaining" "The speakers where showmasters and the after party was amazing.")
-     (checkbox-description-right :tags.hires "good to meet potential hires" "I met amazing people I would like to work with in the future.")
-     (checkbox-description-right :tags.clients "good to meet potential clients" "The business sponsoring or being present at this conference coud be our next client.")]]])
-
-(defn experience-checkbox [id input-label]
-  [:div {:class "col-lg-2 col-md-2 col-sm-3 col-xs-4"}
-   [:input {:field :checkbox :type "checkbox" :id id}]
-   [:label {:for id}
-    [:p {:class "text-lg-center"} input-label]
-    [:span {:class "checkbox"}]]])
+     (checkboxes/checkbox-description-right :tags.inspiring "inspiring" "This conference had an impact on me.")
+     (checkboxes/checkbox-description-right :tags.informative "informative" "I learned a lot during the workshops, sessions and talks.")
+     (checkboxes/checkbox-description-right :tags.entertaining "entertaining" "The speakers where showmasters and the after party was amazing.")
+     (checkboxes/checkbox-description-right :tags.hires "good to meet potential hires" "I met amazing people I would like to work with in the future.")
+     (checkboxes/checkbox-description-right :tags.clients "good to meet potential clients" "The business sponsoring or being present at this conference coud be our next client.")]]])
 
 (defn experience-panel []
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I found this conference suitable for ..."]
    [:div {:class "row"}
     [:div {:class "col-lg-1 col-md-1 col-sm-1 hidden-xs"}]
-    (experience-checkbox :experience.rookie "Rookie")
-    (experience-checkbox :experience.beginner "Beginner")
-    (experience-checkbox :experience.intermediate "Intermediate")
-    (experience-checkbox :experience.advanced "Advanced")
-    (experience-checkbox :experience.expert "Expert")
+    (checkboxes/experience-checkbox :experience.rookie "Rookie")
+    (checkboxes/experience-checkbox :experience.beginner "Beginner")
+    (checkboxes/experience-checkbox :experience.intermediate "Intermediate")
+    (checkboxes/experience-checkbox :experience.advanced "Advanced")
+    (checkboxes/experience-checkbox :experience.expert "Expert")
     [:div {:class "col-lg-1 col-md-1 col-sm-1 hidden-xs"}]]])
 
 (defn comment-panel []

@@ -1,11 +1,9 @@
 (ns conference-rating.conference-list-page.conference-list-page
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [reagent.core :refer [atom]]
             [conference-rating.view-utils.navbar :as navbar]
             [conference-rating.conference-list-page.conference-list-entry :as list-entry]
             [conference-rating.util :as util]
-            [cljs-time.core :as t]
-            [conference-rating.history :as history]
-            [conference-rating.view-utils.typeahead :as typeahead]))
+            [cljs-time.core :as t]))
 
 
 (defn- upcoming-conference? [conference]
