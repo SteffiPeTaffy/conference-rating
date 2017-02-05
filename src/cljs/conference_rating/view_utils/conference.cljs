@@ -24,7 +24,7 @@
 (defn add-rating-button [conference styles label]
   (if (not (is-future-conference? conference))
     [:div {:class "text-lg-right"}
-     [:a {:class (str "btn btn-orange voice-btn " styles) :href (str "#/conferences/" (:_id conference) "/add-rating")}
+     [:a {:class (str "btn btn-orange voice-btn " styles) :data-e2e "button-add-new-rating" :href (str "#/conferences/" (:_id conference) "/add-rating")}
       [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
       label]]))
 
