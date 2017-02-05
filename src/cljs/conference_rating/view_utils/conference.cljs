@@ -34,15 +34,22 @@
         (if (is-future-conference? conference)
           "I am going"
           "I was here")]
-    [:div {:class "text-lg-right"}
-     [:a {:class (str "btn btn-attending " styles) :on-click #(backend/attend-conference (:_id conference) reload-attendance-fn)}
-      [:span {:class "glyphicon glyphicon-map-marker"}]
-      attending-btn-label]]))
+    (if (not (is-attending? conference))
+      [:div {:class "text-lg-right"}
+       [:a {:class (str "btn btn-attending " styles) :on-click #(backend/attend-conference (:_id conference) reload-attendance-fn)}
+        [:span {:class "glyphicon glyphicon-map-marker"}]
+        attending-btn-label]])))
+
+(defn attending-label [conference]
+  (let [number-of-attendees (number-of-attendees conference)]
+    (if (is-future-conference? conference)
+      (if (= 0 number-of-attendees)
+        "No one is going, yet."
+        (str "You and " (- 1 number-of-attendees) " others are going."))
+      (if (= 0 number-of-attendees)
+        "No one was here."
+        (str "You and " (- 1 number-of-attendees) " others were here.")))))
 
 (defn attending-summary-label [conference]
-  (let [attending-summary-text
-        (if (is-future-conference? conference)
-            " are going"
-            " were here")]
     [:div
-     [:p (str (number-of-attendees conference) attending-summary-text)]]))
+     [:p (attending-label conference)]])
