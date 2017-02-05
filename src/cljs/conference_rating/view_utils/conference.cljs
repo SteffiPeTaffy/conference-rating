@@ -1,7 +1,6 @@
 (ns conference-rating.view-utils.conference
   (:require [conference-rating.util :as util]
             [cljs-time.core :as t]
-            [reagent.session :as session]
             [conference-rating.backend :as backend]))
 
 (defn- is-future-conference? [conference]
