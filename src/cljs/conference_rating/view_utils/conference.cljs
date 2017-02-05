@@ -35,7 +35,7 @@
           "I was here")]
     (if (not (is-attending? conference))
       [:div {:class "text-lg-right"}
-       [:a {:class (str "btn btn-attending " styles) :on-click #(backend/attend-conference (:_id conference) reload-attendance-fn)}
+       [:a {:class (str "btn btn-attending " styles) :data-e2e "button-attend-conference" :on-click #(backend/attend-conference (:_id conference) reload-attendance-fn)}
         [:span {:class "glyphicon glyphicon-map-marker"}]
         attending-btn-label]])))
 
@@ -51,4 +51,4 @@
 
 (defn attending-summary-label [conference]
     [:div
-     [:p (attending-label conference)]])
+     [:p {:data-e2e "text-attendees"} (attending-label conference)]])

@@ -33,6 +33,15 @@
 (defn find-element [e2e-tag]
   (taxi/find-element {:css (e2e-selector e2e-tag)}))
 
+(defn find-text [text]
+  (taxi/find-element {:text text}))
+
+(defn wait-for-text [text]
+  (taxi/wait-until #(find-text text) 10000))
+
+(defn exists [e2e-tag]
+  (taxi/exists? (str "[data-e2e=" e2e-tag "]")))
+
 (defn wait-for [e2e-tag]
   (taxi/wait-until #(find-element e2e-tag) 10000))
 
@@ -95,7 +104,7 @@
       (taxi/to "http://localhost:4000/#")
       (taxi/window-maximize)
 
-      ; shows a list os conferences
+      ; shows a list of conferences
       (wait-for "page-conference-list")
       (click "btn-add-conference")
 
@@ -120,6 +129,7 @@
         (is (= past-conference-location-address (text "text-conference-location-address")))
         (is (= past-conference-link (text "text-conference-link")))
         (is (= past-conference-description (text "text-conference-description")))
+        (is (= "No one was here." (text "text-attendees")))
         (is (= "This conference has not been rated yet. Be the first one to give it your voice!" (text "no-ratings-info")))
 
         ; adds future conference series
@@ -141,10 +151,16 @@
           (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
           (is (= "Budapest" (text "text-conference-location-name")))
           (is (= "Budapest, Hungary" (text "text-conference-location-address")))
+          (is (= "No one is going, yet." (text "text-attendees")))
           (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info")))
 
           ; navigate to newly created past conference
           (navigate-to-conference-by-url past-conference-url)
+
+          ;attends past conference
+          (click "button-attend-conference")
+          (wait-for-text "You and 0 others were here.")
+          (is (= false (exists "button-attend-conference")))
 
           ; add rating to newly created past conference
           (click "button-add-new-rating")
@@ -192,5 +208,10 @@
           ; checks that future conference does not have aggregated ratings anymore
           (is (= conference-series (s/lower-case (text "text-conference-series")))) ; different chromedrivers treat css transform differently
           (is (= future-conference-name (s/lower-case (text "text-conference-name"))))
-          (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info"))))))))
+          (is (= "This conference has not started yet and no conference of this series has been rated yet. Come back later!" (text "no-ratings-info")))
+
+          ;attends future conference
+          (click "button-attend-conference")
+          (wait-for-text "You and 0 others are going.")
+          (is (= false (exists "button-attend-conference"))))))))
 
