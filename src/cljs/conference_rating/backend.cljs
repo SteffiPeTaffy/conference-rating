@@ -1,7 +1,8 @@
 (ns conference-rating.backend
   (:require [ajax.core :as ajax]
             [conference-rating.history :as history]
-            [conference-rating.util :as util]))
+            [conference-rating.util :as util]
+            [conference-rating.conference-list-page.conference-list-page :as conference-list]))
 
 (defn- unsanitize [conference-data]
   (assoc conference-data :description (util/unescape (:description conference-data))))
@@ -55,3 +56,8 @@
   (ajax/GET "/api/user/identity" {:handler         success-handler
                                   :response-format :json
                                   :keywords?       true}))
+
+(defn attend-conference [conference-id success-handler]
+  (ajax/POST (str "/api/conferences/" conference-id "/attendance/self") {:handler       success-handler
+                                                                         :error-handler #(js/alert "Attending did not work.")
+                                                                         :headers       {:X-CSRF-Token (anti-forgery-token)}}))

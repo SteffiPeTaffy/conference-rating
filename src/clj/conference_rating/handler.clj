@@ -54,11 +54,13 @@
   (let [conference-info   (db/get-conference conference-id db)
         ratings           (db/get-ratings conference-id db)
         aggregate-ratings (aggregator/aggregate-ratings ratings)
-        ratings-of-series (db/get-average-rating-for-series (:series conference-info) db)]
+        ratings-of-series (db/get-average-rating-for-series (:series conference-info) db)
+        attendances       (db/get-attendances conference-id db)]
     (->
       conference-info
       (assoc  :aggregated-ratings aggregate-ratings)
-      (assoc :average-series-rating ratings-of-series))))
+      (assoc :average-series-rating ratings-of-series)
+      (assoc :attendees (map :user attendances)))))
 
 (defn get-conference-ratings [conference-id db]
   (response
@@ -134,12 +136,19 @@
   (let [update-result (db/update-conference-by-id id body db)]
     (response update-result)))
 
+(defn add-attendance [conference-id request db]
+  (let [attendance {:user          (user-identity request)
+                    :conference-id conference-id}]
+  (db/add-attendance attendance db)
+  {:status  201
+   :body    "OK"}))
 
 (defn write-routes [db]
   (wrap-ratelimit
     (routes
       (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id request db))
       (POST "/api/conferences/" request (add-conference (:body request) db))
+      (POST "/api/conferences/:id/attendance/self" [id :as request] (add-attendance id request db))
       (PUT "/api/conferences/:id/edit" [id :as request] (update-conference id (:body request) db))
       (DELETE "/api/conferences/:id" [id] (do (db/delete-conference-by-id id db) {:status  204
                                                                                   :headers {}})))

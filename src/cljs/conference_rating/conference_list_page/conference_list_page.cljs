@@ -12,6 +12,8 @@
 (defn- past-conference? [conference]
   (not (upcoming-conference? conference)))
 
+(defonce displayed-conferences (atom nil))
+
 (defn display-conference-list [conference-list]
   (let [upcoming-conferences (filter upcoming-conference? conference-list)
         past-conferences (filter past-conference? conference-list)]
@@ -19,11 +21,9 @@
      (navbar/nav-bar conference-list)
      [:div {:class "container-fluid content-container pad-top"}
       [:h3 "Upcoming conferences"]
-      [:div {:class "row"} (map #(list-entry/display-conference-list-item %) (sort-by :to upcoming-conferences))]
+      [:div {:class "row"} (map #(list-entry/display-conference-list-item % displayed-conferences) (sort-by :to upcoming-conferences))]
       [:h3 "Past conferences"]
-      [:div {:class "row"} (map #(list-entry/display-conference-list-item %) (reverse (sort-by :to past-conferences)))]]]))
-
-(defonce displayed-conferences (atom nil))
+      [:div {:class "row"} (map #(list-entry/display-conference-list-item % displayed-conferences) (reverse (sort-by :to past-conferences)))]]]))
 
 (defn conferences-page []
   (let [conference-list @displayed-conferences]

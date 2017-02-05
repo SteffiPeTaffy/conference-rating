@@ -14,6 +14,12 @@
 (defn clear-id-in-doc [doc]
   (assoc doc :_id (.toHexString (:_id doc))))
 
+(defn- only-valid [rating]
+  (let [valid (not (schema-utils/error? rating))]
+    (if-not valid
+      (println "ignoring " rating))
+    valid))
+
 (defn connect []
   (if mongolab-uri
     (:db (mg/connect-via-uri mongolab-uri))
@@ -28,6 +34,21 @@
   (let [document (assoc rating :_id (ObjectId.))]
     (mc/insert db "ratings" document)
     (clear-id-in-doc document)))
+
+(s/defn add-attendance [attendance :- schemas/Attendance db]
+  (let [document (assoc attendance :_id (ObjectId.))]
+    (mc/update db "attendances" {:user (:user document) :conference-id (:conference-id document)} {$set {:user (:user document)}} {:upsert true})
+    (clear-id-in-doc document)))
+
+(defn get-attendances [conference-id db]
+  (let [attendance-list (mq/with-collection db "attendances"
+                                            (mq/find {:conference-id conference-id})
+                                            (mq/limit 100))
+        cleared-attandances (->> attendance-list
+                             (map clear-id-in-doc)
+                             (map schemas/coerce-attendance)
+                             (filter only-valid))]
+    cleared-attandances))
 
 (defn get-conferences-list [db]
   (let [list (mq/with-collection db "conferences"
@@ -48,12 +69,6 @@
         document (assoc conference :_id object-id)]
     (mc/update-by-id db "conferences" object-id document)
     (clear-id-in-doc document)))
-
-(defn- only-valid [rating]
-  (let [valid (not (schema-utils/error? rating))]
-    (if-not valid
-      (println "ignoring " rating))
-    valid))
 
 (s/defn ^:always-validate get-ratings :- [schemas/Rating] [conference-id db]
   (let [rating-list (mq/with-collection db "ratings"

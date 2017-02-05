@@ -2,7 +2,7 @@
   (:require [conference-rating.view-utils.panel :as panel]
             [conference-rating.util :as util]
             [conference-rating.view-utils.conference :as conference-util]
-            [goog.string :as gstring]))
+            [conference-rating.backend :as backend]))
 
 (defn series-tag [series-tag]
   (if-not (nil? series-tag)
@@ -17,12 +17,6 @@
 
 (defn overall-rating [overall-rating]
   [:div {:class "conference-overall-rating"} (panel/range-panel-small (:avg overall-rating) "Overall" "bg-dark-lightened" "glyphicon-thumbs-up")])
-
-(defn add-rating-button [id]
-  [:div {:class "text-lg-right"}
-   [:a {:class "btn btn-sm btn-orange voice-btn" :href (str "#/conferences/" id "/add-rating")}
-    [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
-    "Voice"]])
 
 (defn roles [percentage bg-color role-name]
   [:div {:title role-name :style {:width (str percentage "%")} :class (str "progressbar progressbar-light roles " bg-color)}
@@ -53,10 +47,6 @@
     [:div {:class (if has-ratings? base-classes (str base-classes " no-ratings"))}
      (overall-rating (get-in conference [ratings-key :overall]))]))
 
-(defn display-add-rating-button [conference]
-  (if (not (conference-util/is-future-conference? conference))
-    [:div {:class "col-lg-3 col-md-3 col-sm-3 conference-overall-rating-container"}
-     (add-rating-button (:_id conference))]))
 
 (defn display-recommendations-votes [conference]
   (let [ratings-key (conference-util/ratings-key-for conference)
@@ -66,7 +56,7 @@
      (panel/mini-panel-recommendations (get-in conference [ratings-key :recommendations]) nil)
      (panel/mini-panel-voices (get-in conference [ratings-key :number-of-ratings]) nil)]))
 
-(defn display-conference-list-item [conference]
+(defn display-conference-list-item [conference conference-list-atom]
   [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
    [:div {:class "panel panel-heading bg-light cl-dark"}
     [:div {:class "row conference-row"}
@@ -84,7 +74,12 @@
      [:div {:class "col-lg-9 col-md-9 col-sm-9"}
       (description (util/formatted-text (:description conference)))
       (util/link (:link conference))]
-     (display-add-rating-button conference)]]
+     [:div {:class "col-lg-3 col-md-3 col-sm-3 conference-overall-rating-container"}
+      (conference-util/add-rating-button conference "btn-sm" "Voice")]
+     [:div {:class "col-lg-3 col-md-3 col-sm-3"}
+      (conference-util/attending-button conference "btn-sm btn-gray" (fn [_] (backend/load-conferences #(reset! conference-list-atom %1))))]
+     [:div {:class "col-lg-3 col-md-3 col-sm-3 text-lg-center"}
+      (conference-util/attending-summary-label conference)]]]
    [:div {:class "panel-footer"}
     [:div {:class "row"}
      [:div {:class "col-md-12"}

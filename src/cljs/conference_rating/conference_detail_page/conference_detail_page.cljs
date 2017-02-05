@@ -10,11 +10,6 @@
             [conference-rating.history :as history]
             [conference-rating.view-utils.conference :as conference-util]))
 
-(defn add-rating-button [conference-id]
-  [:div {:class "text-lg-right voice-btn-container"}
-   [:a {:class "btn btn-md btn-orange voice-btn" :href (str "#/conferences/" conference-id "/add-rating") :data-e2e "button-add-new-rating"}
-    [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
-    "Give it your voice"]])
 
 (defn delete-conference [conference]
   (let [delete (js/confirm "If you delete this conference, it will be gone forever including all of its ratings!")]
@@ -23,7 +18,6 @@
                                                                 :handler         #(history/redirect-to "/")
                                                                 :error-handler   #(js/alert "Could not delete conference.")
                                                                 :headers         {:X-CSRF-Token (backend/anti-forgery-token)}}))))
-
 (defn edit-conference [conference]
   (history/redirect-to (str "/conferences/" (:_id conference) "/edit")))
 
@@ -39,6 +33,8 @@
          :on-click #(edit-conference conference)}
      "Edit"]]])
 
+(defonce displayed-conference (atom nil))
+
 (defn display-conference-detail-page [conference ratings conference-list]
   [:div {:data-e2e "page-conference-detail"}
    (navbar/nav-bar conference-list)
@@ -48,11 +44,13 @@
      [:div {:class "col-lg-6 col-md-6"}
       (conference-information/display-conference-information conference)
       (add-action-bar conference)
-      (if (not (conference-util/is-future-conference? conference))
-        (add-rating-button (:_id conference)))]
-
-
-      [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
+      [:div {:class "btn-container"}
+       (conference-util/add-rating-button conference "btn-md" "Give it your voice")]
+      [:div {:class "btn-container"}
+       (conference-util/attending-button conference "btn-md btn-adrk-gray" (fn [] (backend/load-conference (:_id conference) #(reset! displayed-conference %1))))]
+      [:div {:class "text-lg-right"}
+       (conference-util/attending-summary-label conference)]]
+     [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
        (aggregated-ratings/display-aggregated-ratings conference)]
      [:div {:class "col-lg-1 col-md-1"}]]
     [:div {:class "row"}
@@ -60,7 +58,6 @@
      [:div {:class "col-lg-10 col-md-10"}
       (rating-list/display-rating-list ratings)]]]])
 
-(defonce displayed-conference (atom nil))
 (defonce display-ratings (atom nil))
 (defonce displayed-conference-list (atom []))
 

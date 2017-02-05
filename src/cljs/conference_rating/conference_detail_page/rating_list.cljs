@@ -2,7 +2,7 @@
   (:require [conference-rating.util :as util]))
 
 (defn author-text [rating]
-  (if (:name rating)
+  (if (not= "" (:name rating))
     (:name rating)
     (util/user-text (:user rating))))
 
@@ -17,4 +17,4 @@
   (not= "" (get-in rating [:comment :comment])))
 
 (defn display-rating-list [conference-ratings]
-  [:div {:class "container-fluid pad-top"} (map display-rating (filter has-comment conference-ratings))])
+  [:div {:class "container-fluid"} (map display-rating (filter has-comment conference-ratings))])

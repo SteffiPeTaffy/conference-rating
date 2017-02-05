@@ -19,7 +19,7 @@
        (map first)))
 
 (def roles->sentence-fragment {:dev        "a developer"
-                               :devops     "a devops aka admin :)"
+                               :devops     "a devops person"
                                :ux         "a user experience designer"
                                :qa         "a quality analyst"
                                :ba         "a business analyst"

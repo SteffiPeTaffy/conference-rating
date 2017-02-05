@@ -8,7 +8,7 @@
     padding: 15px;
   }
 
-  .voice-btn-container {
+  .btn-container {
     padding: 0 0 15px 0;
   }
 
@@ -44,6 +44,17 @@
     margin-left: 15px;
     font-size: 18px;
     text-align: center;
+  }
+
+  .btn-attending {
+    background-color: darken(@gray, 5%);
+    border-color: darken(@gray, 10%);
+    color: @dark;
+  }
+
+  .btn-attending:hover {
+    background-color: darken(@gray, 15%);
+    color: @dark;
   }
 }
 
@@ -127,6 +138,17 @@
     padding: 0;
     border: 0;
     background-color: @light;
+  }
+
+  .btn-attending {
+    background-color: @gray ;
+    border-color: @gray ;
+    color: @dark;
+  }
+
+  .btn-attending:hover {
+    background-color: darken(@gray, 5%);
+    color: @dark;
   }
 
   .conference-description {
@@ -253,6 +275,10 @@
 }
 
 .voice-btn span {
+  margin-right: 5px;
+}
+
+.btn-attending span {
   margin-right: 5px;
 }
 

@@ -48,6 +48,11 @@
    (s/optional-key :firstName) (s/maybe s/Str)
    (s/optional-key :lastName)  (s/maybe s/Str)})
 
+(def Attendance
+  {(s/optional-key :_id) s/Str
+   :user                 User
+   :conference-id        s/Str})
+
 (def Rating
   {(s/optional-key :_id)  s/Str
    (s/optional-key :user) User
@@ -69,7 +74,10 @@
 
 (def coerce-rating (coerce/coercer Rating coerce/json-coercion-matcher))
 
-(def LocationSchema                                         ; Location is already taken...
+(def coerce-attendance (coerce/coercer Attendance coerce/json-coercion-matcher))
+
+
+(def LocationSchema ; Location is already taken...
   {:place-id s/Str
    :name     s/Str
    :address  s/Str
@@ -84,4 +92,5 @@
    :to                        s/Str
    :link                      (s/both s/Str (max-length 1000))
    :description               (s/both s/Str (max-length 10000))
-   (s/optional-key :location) LocationSchema})
+   (s/optional-key :location) LocationSchema
+   (s/optional-key :attendees) [User]})
