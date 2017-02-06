@@ -20,18 +20,25 @@
 (defn- number-of-attendees [conerence]
   (count (:attendees conerence)))
 
+(defn- has-already-voted? [conference]
+  (some is-identical-user? (:voters conference)))
 
 (defn add-rating-button [conference styles label]
   (if (not (is-future-conference? conference))
-    [:div {:class "text-lg-right"}
-     [:a {:class (str "btn btn-orange voice-btn " styles) :data-e2e "button-add-new-rating" :href (str "#/conferences/" (:_id conference) "/add-rating")}
-      [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
-      label]]))
+    (if (has-already-voted? conference)
+      [:div {:class "text-lg-right"}
+       [:button {:class (str "btn btn-orange voice-btn " styles) :disabled "disabled" :title "You already voted." :data-e2e "button-already-voted"}
+        [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
+        label]]
+      [:div {:class "text-lg-right"}
+       [:a {:class (str "btn btn-orange voice-btn " styles) :data-e2e "button-add-new-rating" :href (str "#/conferences/" (:_id conference) "/add-rating")}
+        [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
+        label]])))
 
 (defn attending-button [conference styles reload-attendance-fn]
   (if (is-attending? conference)
     [:div
-     [:a {:class (str "btn btn-attending " styles) :data-e2e "button-unattend-conference" :on-click #(backend/unattend-conference (:_id conference) reload-attendance-fn)}
+     [:a {:class (str "btn btn-attending " styles) :title "unattend conference" :data-e2e "button-unattend-conference" :on-click #(backend/unattend-conference (:_id conference) reload-attendance-fn)}
       [:span {:class "glyphicon glyphicon-map-marker"}]
       "undo"]]
     (let [attending-btn-label

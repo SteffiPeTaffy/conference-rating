@@ -60,7 +60,8 @@
       conference-info
       (assoc  :aggregated-ratings aggregate-ratings)
       (assoc :average-series-rating ratings-of-series)
-      (assoc :attendees (map :user attendances)))))
+      (assoc :attendees (map :user attendances))
+      (assoc :voters (map :user ratings)))))
 
 (defn get-conference-ratings [conference-id db]
   (response

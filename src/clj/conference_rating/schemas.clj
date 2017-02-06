@@ -85,12 +85,13 @@
    :lng      s/Num})
 
 (def Conference
-  {(s/optional-key :_id)      s/Str
-   :series                    (s/both s/Str (max-length 100))
-   :name                      (s/both s/Str (max-length 100))
-   :from                      s/Str
-   :to                        s/Str
-   :link                      (s/both s/Str (max-length 1000))
-   :description               (s/both s/Str (max-length 10000))
-   (s/optional-key :location) LocationSchema
-   (s/optional-key :attendees) [User]})
+  {(s/optional-key :_id)       s/Str
+   :series                     (s/both s/Str (max-length 100))
+   :name                       (s/both s/Str (max-length 100))
+   :from                       s/Str
+   :to                         s/Str
+   :link                       (s/both s/Str (max-length 1000))
+   :description                (s/both s/Str (max-length 10000))
+   (s/optional-key :location)  LocationSchema
+   (s/optional-key :attendees) [User]
+   (s/optional-key :voters)    [User]})

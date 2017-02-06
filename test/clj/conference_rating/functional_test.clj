@@ -179,6 +179,8 @@
           ; checks that the rating is added and visible on the detail page
           (wait-for "page-conference-detail")
           (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
+          (is (= false (exists "button-add-new-rating")))
+          (is (= true (exists "button-already-voted")))
 
           ; navigates to the future conference of the series
           (navigate-to-conference-by-url future-conference-url)

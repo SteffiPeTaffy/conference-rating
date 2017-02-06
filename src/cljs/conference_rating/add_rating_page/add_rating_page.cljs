@@ -161,4 +161,5 @@
        [:div {:class "col-lg-10 col-md-9"}
         [forms/bind-fields add-rating-template doc]]
        [:div {:class "col-lg-1 col-md-2 col-sm-12 col-xs-12"}
-        [:button {:class "btn btn-lg btn-orange button-add-rating" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add rating"]]]]]))
+        [:button {:class "btn btn-lg btn-orange button-add-rating" :on-click #(create-rating doc (session/get! :conference-id-to-rate)) :data-e2e "button-add-rating"} "add vote"]
+        [:p {:class "cl-orange text-bold label-add-rating"} "Please note that you can only vote once for this conference!"]]]]]))
