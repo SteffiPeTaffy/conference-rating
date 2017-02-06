@@ -29,12 +29,16 @@
       label]]))
 
 (defn attending-button [conference styles reload-attendance-fn]
-  (let [attending-btn-label
-        (if (is-future-conference? conference)
-          "I am going"
-          "I was here")]
-    (if (not (is-attending? conference))
-      [:div {:class "text-lg-right"}
+  (if (is-attending? conference)
+    [:div
+     [:a {:class (str "btn btn-attending " styles) :data-e2e "button-unattend-conference" :on-click #(backend/unattend-conference (:_id conference) reload-attendance-fn)}
+      [:span {:class "glyphicon glyphicon-map-marker"}]
+      "undo"]]
+    (let [attending-btn-label
+          (if (is-future-conference? conference)
+            "I am going"
+            "I was here")]
+      [:div
        [:a {:class (str "btn btn-attending " styles) :data-e2e "button-attend-conference" :on-click #(backend/attend-conference (:_id conference) reload-attendance-fn)}
         [:span {:class "glyphicon glyphicon-map-marker"}]
         attending-btn-label]])))

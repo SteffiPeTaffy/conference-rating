@@ -60,3 +60,8 @@
   (ajax/POST (str "/api/conferences/" conference-id "/attendance/self") {:handler       success-handler
                                                                          :error-handler #(js/alert "Attending did not work.")
                                                                          :headers       {:X-CSRF-Token (anti-forgery-token)}}))
+
+(defn unattend-conference [conference-id success-handler]
+  (ajax/POST (str "/api/conferences/" conference-id "/unattendance/self") {:handler       success-handler
+                                                                         :error-handler #(js/alert "Unattending did not work.")
+                                                                         :headers       {:X-CSRF-Token (anti-forgery-token)}}))

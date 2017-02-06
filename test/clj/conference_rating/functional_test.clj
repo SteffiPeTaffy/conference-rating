@@ -161,6 +161,13 @@
           (click "button-attend-conference")
           (wait-for-text "You and 0 others were here.")
           (is (= false (exists "button-attend-conference")))
+          (is (= true (exists "button-unattend-conference")))
+
+          ;unattends past conference
+          (click "button-unattend-conference")
+          (wait-for-text "No one was here.")
+          (is (= false (exists "button-unattend-conference")))
+          (is (= true (exists "button-attend-conference")))
 
           ; add rating to newly created past conference
           (click "button-add-new-rating")
@@ -213,5 +220,6 @@
           ;attends future conference
           (click "button-attend-conference")
           (wait-for-text "You and 0 others are going.")
-          (is (= false (exists "button-attend-conference"))))))))
+          (is (= false (exists "button-attend-conference")))
+          (is (= true (exists "button-unattend-conference"))))))))
 

@@ -40,6 +40,10 @@
     (mc/update db "attendances" {:user (:user document) :conference-id (:conference-id document)} {$set {:user (:user document)}} {:upsert true})
     (clear-id-in-doc document)))
 
+(s/defn remove-attendance [attendance :- schemas/Attendance db]
+  (let [document (assoc attendance :_id (ObjectId.))]
+    (mc/remove db "attendances" {:user (:user document) :conference-id (:conference-id document)})))
+
 (defn get-attendances [conference-id db]
   (let [attendance-list (mq/with-collection db "attendances"
                                             (mq/find {:conference-id conference-id})

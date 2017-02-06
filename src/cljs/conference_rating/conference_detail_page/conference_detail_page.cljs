@@ -46,7 +46,7 @@
       (add-action-bar conference)
       [:div {:class "btn-container"}
        (conference-util/add-rating-button conference "btn-md" "Give it your voice")]
-      [:div {:class "btn-container"}
+      [:div {:class "btn-container text-lg-right"}
        (conference-util/attending-button conference "btn-md btn-adrk-gray" (fn [] (backend/load-conference (:_id conference) #(reset! displayed-conference %1))))]
       [:div {:class "text-lg-right"}
        (conference-util/attending-summary-label conference)]]

@@ -143,12 +143,21 @@
   {:status  201
    :body    "OK"}))
 
+(defn remove-attendance [conference-id request db]
+  (let [attendance {:user          (user-identity request)
+                    :conference-id conference-id}]
+    (db/remove-attendance attendance db)
+    {:status  204
+     :body    "OK"}))
+
+
 (defn write-routes [db]
   (wrap-ratelimit
     (routes
       (POST "/api/conferences/:id/ratings" [id :as request] (add-rating id request db))
       (POST "/api/conferences/" request (add-conference (:body request) db))
       (POST "/api/conferences/:id/attendance/self" [id :as request] (add-attendance id request db))
+      (POST "/api/conferences/:id/unattendance/self" [id :as request] (remove-attendance id request db))
       (PUT "/api/conferences/:id/edit" [id :as request] (update-conference id (:body request) db))
       (DELETE "/api/conferences/:id" [id] (do (db/delete-conference-by-id id db) {:status  204
                                                                                   :headers {}})))
