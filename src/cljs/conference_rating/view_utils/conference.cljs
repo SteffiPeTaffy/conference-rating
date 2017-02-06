@@ -55,10 +55,10 @@
     (if (is-future-conference? conference)
       (if (= 0 number-of-attendees)
         "No one is going, yet."
-        (str "You and " (- 1 number-of-attendees) " others are going."))
+        (str "You and " (- number-of-attendees 1) " others are going."))
       (if (= 0 number-of-attendees)
         "No one was here."
-        (str "You and " (- 1 number-of-attendees) " others were here.")))))
+        (str "You and " (- number-of-attendees 1) " others were here.")))))
 
 (defn attending-summary-label [conference]
     [:div
