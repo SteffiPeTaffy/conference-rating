@@ -51,14 +51,19 @@
         attending-btn-label]])))
 
 (defn attending-label [conference]
-  (let [number-of-attendees (number-of-attendees conference)]
+  (let [number-of-attendees (number-of-attendees conference)
+        is-attending (is-attending? conference)]
     (if (is-future-conference? conference)
       (if (= 0 number-of-attendees)
         "No one is going, yet."
-        (str "You and " (- number-of-attendees 1) " others are going."))
+        (if is-attending
+          (str "You and " (- number-of-attendees 1) " others are going.")
+          (str number-of-attendees " others are going.")))
       (if (= 0 number-of-attendees)
         "No one was here."
-        (str "You and " (- number-of-attendees 1) " others were here.")))))
+        (if is-attending
+          (str "You and " (- number-of-attendees 1) " others were here.")
+          (str number-of-attendees " others were here."))))))
 
 (defn attending-summary-label [conference]
     [:div
