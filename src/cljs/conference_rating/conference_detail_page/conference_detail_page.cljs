@@ -56,7 +56,7 @@
      [:div {:class "col-lg-1 col-md-1"}]]
     [:div {:class "row"}
      [:div {:class "col-lg-1 col-md-1"}]
-     [:div {:class "col-lg-10 col-md-10"}
+     [:div {:class "col-lg-10 col-md-10 marg-top-20"}
       (rating-list/display-rating-list ratings)]]]])
 
 (defonce display-ratings (atom nil))

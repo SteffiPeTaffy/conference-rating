@@ -104,6 +104,9 @@
       (taxi/to "http://localhost:4000/#")
       (taxi/window-maximize)
 
+      ;shows welcome in navbar
+      (wait-for-text "Hey some@okta-user.com!")
+
       ; shows a list of conferences
       (wait-for "page-conference-list")
       (click "btn-add-conference")
@@ -174,11 +177,15 @@
           (click "button-add-new-rating")
           (wait-for "page-add-rating")
           (click "checkbox-rating-voice")
+          (is "some@okta-user.com" (text "add-rating-author"))
+          (fill-input {"add-rating-comment" "some comment about this conference"})
           (click "button-add-rating")
 
           ; checks that the rating is added and visible on the detail page
           (wait-for "page-conference-detail")
           (taxi/wait-until #(= "1" (text "text-icon-panel-number")))
+          (is "some@okta-user.com" (text "rating-author"))
+          (is "some comment about this conference" (text "rating-comment"))
           (is (= false (exists "button-add-new-rating")))
           (is (= true (exists "button-already-voted")))
 

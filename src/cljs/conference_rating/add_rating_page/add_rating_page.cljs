@@ -100,8 +100,8 @@
   [:div {:class (str "panel rating-panel-container bg-light cl-dark")}
    [:span "I want to say ..."]
    [:div {:class "form-group"}
-    [:input {:field :text :id :comment.authorLabel :type "text" :read-only true :class "form-control"}]
-    [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 13}]]])
+    [:input {:field :text :id :comment.authorLabel :type "text" :read-only true :class "form-control" :data-e2e "add-rating-author"}]
+    [:textarea {:field :textarea :id :comment.comment :placeholder "comment" :class "form-control" :rows 13 :data-e2e "add-rating-comment"}]]])
 
 (def add-rating-template
   [:div
