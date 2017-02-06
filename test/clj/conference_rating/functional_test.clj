@@ -160,6 +160,7 @@
           ;attends past conference
           (click "button-attend-conference")
           (wait-for-text "You and 0 others were here.")
+          (wait-for-text "some@okta-user.com")
           (is (= false (exists "button-attend-conference")))
           (is (= true (exists "button-unattend-conference")))
 

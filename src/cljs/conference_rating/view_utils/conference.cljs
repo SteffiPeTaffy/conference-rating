@@ -56,3 +56,10 @@
 (defn attending-summary-label [conference]
     [:div
      [:p {:data-e2e "text-attendees"} (attending-label conference)]])
+
+(defn attendee-label [user]
+  [:div
+   [:a {:href (str "mailto:" (:email user))} (str (:email user) )]])
+
+(defn attendees-list-label [conference]
+  [:div (map attendee-label (:attendees conference))])

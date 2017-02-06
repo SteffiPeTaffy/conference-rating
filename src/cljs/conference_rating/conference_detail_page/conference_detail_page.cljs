@@ -49,7 +49,8 @@
       [:div {:class "btn-container text-lg-right"}
        (conference-util/attending-button conference "btn-md btn-adrk-gray" (fn [] (backend/load-conference (:_id conference) #(reset! displayed-conference %1))))]
       [:div {:class "text-lg-right"}
-       (conference-util/attending-summary-label conference)]]
+       (conference-util/attending-summary-label conference)
+       (conference-util/attendees-list-label conference)]]
      [:div {:class "col-lg-4 col-md-4 aggregated-ratings-container"}
        (aggregated-ratings/display-aggregated-ratings conference)]
      [:div {:class "col-lg-1 col-md-1"}]]
