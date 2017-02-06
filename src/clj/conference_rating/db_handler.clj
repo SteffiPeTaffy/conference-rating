@@ -37,7 +37,7 @@
 
 (s/defn add-attendance [attendance :- schemas/Attendance db]
   (let [document (assoc attendance :_id (ObjectId.))]
-    (mc/update db "attendances" {:user (:user document) :conference-id (:conference-id document)} {$set {:user (:user document)}} {:upsert true})
+    (mc/insert db "attendances" document)
     (clear-id-in-doc document)))
 
 (s/defn remove-attendance [attendance :- schemas/Attendance db]
