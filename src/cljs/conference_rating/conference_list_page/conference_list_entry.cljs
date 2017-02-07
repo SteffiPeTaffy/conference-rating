@@ -75,7 +75,7 @@
       (description (util/formatted-text (:description conference)))
       (util/link (:link conference))]
      [:div {:class "col-lg-3 col-md-3 col-sm-3 conference-overall-rating-container"}
-      (conference-util/add-rating-button conference "btn-sm" "Voice")]
+      (conference-util/add-voice-button conference "btn-sm" "Voice")]
      [:div {:class "col-lg-3 col-md-3 col-sm-3 text-lg-center"}
       (conference-util/attending-button conference "btn-sm btn-gray" (fn [_] (backend/load-conferences #(reset! conference-list-atom %1))))]
      [:div {:class "col-lg-3 col-md-3 col-sm-3 text-lg-center"}

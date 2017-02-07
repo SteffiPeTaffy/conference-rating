@@ -31,7 +31,13 @@
                                                                    :attendees [{:email "notmy@email.com"} {:email "alsonotmy@email.com"}]})))))
 
 (deftest conference-attending-summary-label-tootltip
-         (testing "should show tooltip with attendees email"
-                  (is (= "notmy@email.com\nalsonotmy@email.com" (c/get-conference-attendees-tooltip {:from      "2016-02-06T16:31:03.679"
+         (testing "should have tooltip text with attendees email"
+                  (is (= "notmy@email.com\nalsonotmy@email.com" (c/conference-attendees-tooltip {:from         "2016-02-06T16:31:03.679"
                                                                                                     :to        "2016-02-06T16:31:03.679"
                                                                                                     :attendees [{:email "notmy@email.com"} {:email "alsonotmy@email.com"}]})))))
+
+(deftest conference-voicers-button-tooltip
+         (testing "should have tooltip text with voicers email"
+                  (is (= "notmy@email.com\nalsonotmy@email.com" (c/conference-attendees-tooltip {:from         "2016-02-06T16:31:03.679"
+                                                                                                 :to        "2016-02-06T16:31:03.679"
+                                                                                                 :attendees [{:email "notmy@email.com"} {:email "alsonotmy@email.com"}]})))))

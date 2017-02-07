@@ -24,14 +24,24 @@
 (defn- has-already-voted? [conference]
   (some is-identical-user? (:voters conference)))
 
-(defn add-rating-button [conference styles label]
+(defn- attendee-label [user]
+  [:div
+   [:a {:href (str "mailto:" (:email user))} (str (:email user) )]])
+
+(defn- conference-attendees-tooltip [conference]
+  (string/join "\n" (map :email (:attendees  conference))))
+
+(defn conference-voicers-label [conference]
+  (string/join "\n" (map :email (:voters conference))))
+
+(defn add-voice-button [conference styles label]
   (if (not (is-future-conference? conference))
     (if (has-already-voted? conference)
       [:div {:class "text-lg-right"}
        [:button {:class (str "btn btn-orange voice-btn " styles) :disabled "disabled" :title "You already voted." :data-e2e "button-already-voted"}
         [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
         label]]
-      [:div {:class "text-lg-right"}
+      [:div {:title (conference-voicers-label conference) :class "text-lg-right"}
        [:a {:class (str "btn btn-orange voice-btn " styles) :data-e2e "button-add-new-rating" :href (str "#/conferences/" (:_id conference) "/add-rating")}
         [:span {:class "glyphicon glyphicon-bullhorn hidden-sm"}]
         label]])))
@@ -66,16 +76,9 @@
           (str "You and " (- number-of-attendees 1) " others were here.")
           (str number-of-attendees " others were here."))))))
 
-(defn- get-conference-attendees-tooltip [conference]
-  (string/join "\n" (map :email (:attendees  conference))))
-
 (defn attending-summary-label [conference]
     [:div
-     [:p {:title (get-conference-attendees-tooltip conference) :data-e2e "text-attendees"} (attending-label conference)]])
-
-(defn attendee-label [user]
-  [:div
-   [:a {:href (str "mailto:" (:email user))} (str (:email user) )]])
+     [:p {:title (conference-attendees-tooltip conference) :data-e2e "text-attendees"} (attending-label conference)]])
 
 (defn attendees-list-label [conference]
   [:div (map attendee-label (:attendees conference))])
