@@ -29,3 +29,9 @@
                   (is (= "2 others are going." (c/attending-label {:from      "2111-02-06T16:31:03.679"
                                                                    :to        "2111-02-06T16:31:03.679"
                                                                    :attendees [{:email "notmy@email.com"} {:email "alsonotmy@email.com"}]})))))
+
+(deftest conference-attending-summary-label-tootltip
+         (testing "should show tooltip with attendees email"
+                  (is (= "notmy@email.com\nalsonotmy@email.com" (c/get-conference-attendees-tooltip {:from      "2016-02-06T16:31:03.679"
+                                                                                                    :to        "2016-02-06T16:31:03.679"
+                                                                                                    :attendees [{:email "notmy@email.com"} {:email "alsonotmy@email.com"}]})))))

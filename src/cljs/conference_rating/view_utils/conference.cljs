@@ -1,7 +1,8 @@
 (ns conference-rating.view-utils.conference
   (:require [conference-rating.util :as util]
             [cljs-time.core :as t]
-            [conference-rating.backend :as backend]))
+            [conference-rating.backend :as backend]
+            [clojure.string :as string]))
 
 (defn- is-future-conference? [conference]
   (t/after? (util/parse-string-to-date (:from conference)) (t/now)))
@@ -65,9 +66,12 @@
           (str "You and " (- number-of-attendees 1) " others were here.")
           (str number-of-attendees " others were here."))))))
 
+(defn- get-conference-attendees-tooltip [conference]
+  (string/join "\n" (map :email (:attendees  conference))))
+
 (defn attending-summary-label [conference]
     [:div
-     [:p {:data-e2e "text-attendees"} (attending-label conference)]])
+     [:p {:title (get-conference-attendees-tooltip conference) :data-e2e "text-attendees"} (attending-label conference)]])
 
 (defn attendee-label [user]
   [:div
