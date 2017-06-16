@@ -13,3 +13,5 @@ data
 .DS_Store
 
 screenshot-after-test.png
+
+lib/saml-toolkit.jar
