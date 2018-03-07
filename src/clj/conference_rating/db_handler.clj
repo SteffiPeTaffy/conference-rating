@@ -47,7 +47,7 @@
 (defn get-attendances [conference-id db]
   (let [attendance-list (mq/with-collection db "attendances"
                                             (mq/find {:conference-id conference-id})
-                                            (mq/limit 100))
+                                            (mq/limit 200))
         cleared-attandances (->> attendance-list
                              (map clear-id-in-doc)
                              (map schemas/coerce-attendance)
@@ -57,7 +57,7 @@
 (defn get-conferences-list [db]
   (let [list (mq/with-collection db "conferences"
                                  (mq/find {:deleted {$ne true}})
-                                 (mq/limit 100))]
+                                 (mq/limit 200))]
     (map clear-id-in-doc list)))
 
 (defn get-conference [id db]
@@ -77,7 +77,7 @@
 (s/defn ^:always-validate get-ratings :- [schemas/Rating] [conference-id db]
   (let [rating-list (mq/with-collection db "ratings"
                                         (mq/find {:conference-id conference-id})
-                                        (mq/limit 100))
+                                        (mq/limit 200))
         cleared-ratings (->> rating-list
                              (map clear-id-in-doc)
                              (map schemas/coerce-rating)
