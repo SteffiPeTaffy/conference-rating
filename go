@@ -45,7 +45,7 @@ goal_deploy-uberjar() {
   OPTIONS=$@
 
   JARFILE=${BASEDIR}/target/conference-rating.jar
-  heroku plugins:install https://github.com/heroku/heroku-deploy
+#  heroku plugins:install https://github.com/heroku/heroku-deploy
   cd ~
   heroku deploy:jar --jar $JARFILE --app $APPNAME --options "${OPTIONS}"
   cd -
