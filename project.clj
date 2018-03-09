@@ -37,6 +37,8 @@
                  [clj-webdriver "0.7.2"]
                  [org.seleniumhq.selenium/selenium-java "2.47.1"]]
 
+  :repositories [["localrepo" "https://raw.githubusercontent.com/Hendrick/ring-okta/master/maven_repository"]]
+
 
   :plugins [[lein-environ "1.0.0"]
             [lein-asset-minifier "0.2.2"]]
