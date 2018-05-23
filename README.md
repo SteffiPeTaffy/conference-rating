@@ -1,22 +1,17 @@
 # Conference-Tracking
 
 ## Status
-[![Build Status](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master/build_image)](https://snap-ci.com/SteffiPeTaffy/conference-rating/branch/master)
 
 [![Stories in Ready](https://badge.waffle.io/SteffiPeTaffy/conference-rating.png?label=ready&title=Ready)](http://waffle.io/SteffiPeTaffy/conference-rating)
 
 
 ## Development
 
-Install [Leiningen](http://leiningen.org/), if you don't already have it.
+Install [Leiningen](http://leiningen.org/), if you don't already have it. Development tasks are wrapped in the `./go` script, e.g.:
 
-* `lein run` starts server ([http://localhost:3000](http://localhost:3000))
-* `lein figwheel` starts cljs autocompiler
-* `lein less auto` starts the less compiler
+* `./go serve-backend`, `./go serve-frontend`, `./go serve-styles` launches development servers for the respective parts of the app. Run these in separate shells in parallel for the best development experience. The app listens on  [http://localhost:3000](http://localhost:3000)
+* `./go test` runs all tests
 
-* `lein cljsbuild test` to run tests
-
-(you may need the first three running for development)
 
 ## Links
 
