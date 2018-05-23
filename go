@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-set -x
 set -e
 
 goal_serve-backend() {
