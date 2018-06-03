@@ -8,8 +8,8 @@
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.logger :as ring-logger]
             [ring.middleware.session :as session]
-            [ring.middleware.session.cookie :as cookie]
-            [ring.middleware.okta :refer [wrap-okta okta-routes]])
+            [ring.middleware.okta :refer [wrap-okta okta-routes]]
+            [monger.ring.session-store :refer [session-store]])
   (:gen-class))
 
 (def development-api-key "AIzaSyAVDKe5pERAQwk_E8Ayv-dbvbuJZrGLvaY")
@@ -40,10 +40,11 @@
                         :force-user forced-test-user})))
 
 (defn start-server [port env okta-home ssl-redirect-disabled api-key forced-test-user]
-  (let [app (-> (app (db-handler/connect) ssl-redirect-disabled api-key)
+  (let [db  (db-handler/connect)
+        app (-> (app db ssl-redirect-disabled api-key)
                 (do-wrap-okta env okta-home forced-test-user)
                 (ring-logger/wrap-with-logger)
-                (session/wrap-session))]
+                (session/wrap-session {:store (session-store db "sessions")}))]
     (run-jetty app {:port port :join? false})))
 
 (defn usage [summary]
