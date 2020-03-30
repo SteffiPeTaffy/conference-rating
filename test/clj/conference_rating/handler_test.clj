@@ -1,4 +1,4 @@
-(ns clj.conference-rating.handler-test
+(ns conference-rating.handler-test
   (:use [conference-rating.handler])
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [ring.mock.request :refer [request body header]]
