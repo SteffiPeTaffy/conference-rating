@@ -69,10 +69,10 @@
 
 (defn get-conferences [db]
   (let [conferences (db/get-conferences-list db)
-        complete-confernces (->> conferences
+        complete-conferences (->> conferences
                                 (map :_id)
                                 (map #(get-conference % db)))]
-    complete-confernces))
+    complete-conferences))
 
 (defn- escape-string [x]
   (if (string? x)
