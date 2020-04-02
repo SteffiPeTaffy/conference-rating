@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [GET POST PUT DELETE context defroutes routes]]
             [compojure.route :refer [not-found resources]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults secure-api-defaults]]
-            [ring.util.response :refer [created response redirect]]
+            [ring.util.response :refer [created response redirect content-type charset]]
             [hiccup.core :refer [html]]
             [hiccup.util :refer [escape-html]]
             [ring.middleware.json :as json]
@@ -63,16 +63,12 @@
       (assoc :attendees (map :user attendances))
       (assoc :voters (map :user ratings)))))
 
-(defn get-conference-ratings [conference-id db]
-  (response
-    (db/get-ratings conference-id db)))
-
 (defn get-conferences [db]
   (let [conferences (db/get-conferences-list db)
-        complete-confernces (->> conferences
+        complete-conferences (->> conferences
                                 (map :_id)
                                 (map #(get-conference % db)))]
-    complete-confernces))
+    complete-conferences))
 
 (defn- escape-string [x]
   (if (string? x)
@@ -124,18 +120,25 @@
     handler
     (wrap-anti-forgery handler)))
 
+(defn- utf-json-response [original-response]
+  (charset (content-type (response original-response) "application/json") "UTF-8"))
+
+(defn get-conference-ratings [conference-id db]
+  (utf-json-response
+    (db/get-ratings conference-id db)))
+
 (defn read-routes [db api-key]
   (routes
-    (GET "/api/conferences" [] (response (get-conferences db)))
-    (GET "/api/conferences/:id" [id] (response (get-conference id db)))
+    (GET "/api/conferences" [] (utf-json-response (get-conferences db)))
+    (GET "/api/conferences/:id" [id] (utf-json-response (get-conference id db)))
     (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
-    (GET "/api/series/suggestions" {params :params} (response (series-suggestions  db (:q params))))
-    (GET "/api/user/identity" request (response (user-identity request)))
+    (GET "/api/series/suggestions" {params :params} (utf-json-response (series-suggestions  db (:q params))))
+    (GET "/api/user/identity" request (utf-json-response (user-identity request)))
     (GET "/" [] (home-page api-key))))
 
 (defn update-conference [id body db]
   (let [update-result (db/update-conference-by-id id body db)]
-    (response update-result)))
+    (utf-json-response update-result)))
 
 (defn add-attendance [conference-id request db]
   (let [attendance {:user          (user-identity request)
