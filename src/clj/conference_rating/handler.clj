@@ -75,11 +75,11 @@
     (escape-html x)
     x))
 
-(defn- sanatize [m]
+(defn- sanitize [m]
   (walk/postwalk escape-string m))
 
 (s/defn add-conference [conference :- schemas/Conference db]
-  (let [add-result (db/add-conference (sanatize conference) db)
+  (let [add-result (db/add-conference (sanitize conference) db)
         id         (:_id add-result)]
     (created (str "/api/conferences/" id) add-result)))
 
@@ -95,7 +95,7 @@
 (def parse-rating (coerce/coercer schemas/Rating coerce/json-coercion-matcher))
 
 (defn add-rating [conference-id request db]
-  (let [complete (assoc (sanatize (:body request))
+  (let [complete (assoc (sanitize (:body request))
                    :conference-id conference-id
                    :user (user-identity request))
         rating (parse-rating complete)
@@ -137,7 +137,7 @@
     (GET "/" [] (home-page api-key))))
 
 (defn update-conference [id conference db]
-  (let [update-result (db/update-conference-by-id id (sanatize conference) db)]
+  (let [update-result (db/update-conference-by-id id (sanitize conference) db)]
     (utf-json-response update-result)))
 
 (defn add-attendance [conference-id request db]
