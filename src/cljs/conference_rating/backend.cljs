@@ -4,13 +4,18 @@
             [conference-rating.util :as util]))
 
 (defn- unsanitize [conference-data]
-  (assoc conference-data :description (util/unescape (:description conference-data))))
+  (assoc conference-data :name (util/unescape (:name conference-data))
+                         :series (util/unescape (:series conference-data))
+                         :description (util/unescape (:description conference-data))))
 
-(defn load-conference [id success-handler]
-  (ajax/GET (str "/api/conferences/" id) {:handler (fn [conference] (success-handler (unsanitize conference)))
+(defn ajaxless-load-conference [id success-handler ajax-fn]
+  (ajax-fn (str "/api/conferences/" id) {:handler (fn [conference] (success-handler (unsanitize conference)))
                                           :error-handler #(js/alert "Conference not found.")
                                           :response-format :json
                                           :keywords? true}))
+
+(defn load-conference [id success-handler]
+  (ajaxless-load-conference id success-handler ajax/GET))
 
 (defn load-conference-ratings [id success-handler]
   (ajax/GET (str "/api/conferences/" id "/ratings") {:handler success-handler
@@ -18,11 +23,14 @@
                                                      :response-format :json
                                                      :keywords? true}))
 
-(defn load-conferences [success-handler]
-  (ajax/GET "/api/conferences" {:handler success-handler
+(defn ajaxless-load-conferences [success-handler ajax-fn]
+  (ajax-fn "/api/conferences" {:handler (fn [conferences] (success-handler (map unsanitize conferences)))
                                 :error-handler #(js/alert "Conferences not found.")
                                 :response-format :json
                                 :keywords? true}))
+
+(defn load-conferences [success-handler]
+  (ajaxless-load-conferences success-handler ajax/GET))
 
 (defn load-series-suggestions [q success-handler]
   (ajax/GET (str "/api/series/suggestions?q=" q)
