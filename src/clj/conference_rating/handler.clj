@@ -136,8 +136,8 @@
     (GET "/api/user/identity" request (utf-json-response (user-identity request)))
     (GET "/" [] (home-page api-key))))
 
-(defn update-conference [id body db]
-  (let [update-result (db/update-conference-by-id id body db)]
+(defn update-conference [id conference db]
+  (let [update-result (db/update-conference-by-id id (sanatize conference) db)]
     (utf-json-response update-result)))
 
 (defn add-attendance [conference-id request db]
