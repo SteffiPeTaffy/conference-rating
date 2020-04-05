@@ -95,7 +95,7 @@
         past-conference-link "www.some-link.org"
         past-conference-location-search-term "CCH - Congress Center"
         past-conference-location-name "CCH - Congress Center Hamburg"
-        past-conference-location-address "Am Dammtor / Marseiller Straße, 20355 Hamburg, Germany"
+        past-conference-location-address "Am Dammtor, Marseiller Str., 20355 Hamburg, Germany"
         past-conference-description "some really fancy description with a new line.\nAnd here is the new line. Wohooo!"
         future-conference-name (str "some other unique conference name" (UUID/randomUUID))]
 
