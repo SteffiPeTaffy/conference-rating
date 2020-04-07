@@ -94,7 +94,7 @@
                   response (create-app-and-call db (-> (request :put (str "/api/conferences/" id "/edit"))
                                                        (body (json/write-str (some-conference-with {
                                                                                            :name "some other name"
-                                                                                           :description "some other description"})))
+                                                                                           :description "some other description with <tag> and &"})))
                                                        (header :content-type "application/json")))]
               (is (= 200 (:status response)))
               (is (= "application/json; charset=UTF-8" (get-content-type response)))
@@ -103,7 +103,7 @@
                 (is (= "application/json; charset=UTF-8" (get-content-type raw-response)))
                 (let [conference (json-body raw-response)]
                   (is (= "some other name" (:name conference)))
-                  (is (= "some other description" (:description conference))))))
+                  (is (= "some other description with &lt;tag&gt; and &amp;" (:description conference))))))
             (let [id (:_id (first conferences))
                   response (create-app-and-call db (request :delete (str "/api/conferences/" id)))]
               (is (= 204 (:status response))))))
