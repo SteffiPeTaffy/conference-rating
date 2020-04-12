@@ -3,8 +3,13 @@
             [conference-rating.history :as history]
             [conference-rating.util :as util]))
 
+(defn- unsanitise-location [conference-data]
+  (if (not (nil? (:location conference-data)))
+    (assoc-in conference-data [:location :name] (util/unescape (:name (:location conference-data))))
+    conference-data))
+
 (defn- unsanitize [conference-data]
-  (let [location-escaped-data (assoc-in conference-data [:location :name] (util/unescape (:name (:location conference-data))))]
+  (let [location-escaped-data (unsanitise-location conference-data)]
     (assoc location-escaped-data :name (util/unescape (:name location-escaped-data))
                          :series (util/unescape (:series location-escaped-data))
                          :description (util/unescape (:description location-escaped-data)))))

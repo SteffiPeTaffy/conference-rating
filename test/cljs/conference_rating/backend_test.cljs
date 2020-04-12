@@ -34,6 +34,10 @@
                                                      :lat 13.7455534,
                                                      :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
                                                      :name "Growth cafe &amp; co."}
+                                          :link "www.com.com"}
+                                         {:description "third &lt; legacy conference without location",
+                                          :series "test &amp; test",
+                                          :name  "third &amp;",
                                           :link "www.com.com"}])
 
 (defn mock-get-conferences [endpoint request]
@@ -59,6 +63,11 @@
                       (is (= "second <" (:description second-conf)))
                       (is (= "test & test" (:series second-conf)))
                       (is (= "Growth cafe & co." (:name (:location second-conf))))
-                      (is (= "second &" (:name second-conf)))))))
+                      (is (= "second &" (:name second-conf))))
+                    (let [third-conf (get response 2)]
+                      (is (= "third < legacy conference without location" (:description third-conf)))
+                      (is (= "test & test" (:series third-conf)))
+                      (is (nil? (:location third-conf)))
+                      (is (= "third &" (:name third-conf)))))))
 
 
