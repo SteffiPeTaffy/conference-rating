@@ -3,16 +3,17 @@
             [conference-rating.history :as history]
             [conference-rating.util :as util]))
 
-(defn- unsanitise-location [conference-data]
-  (if (not (nil? (:location conference-data)))
-    (assoc-in conference-data [:location :name] (util/unescape (:name (:location conference-data))))
-    conference-data))
+(defn- unsanitise-location [location]
+  (if (not (nil? location))
+    (update location :name util/unescape)))
 
 (defn- unsanitize [conference-data]
   (let [location-escaped-data (unsanitise-location conference-data)]
-    (assoc location-escaped-data :name (util/unescape (:name location-escaped-data))
-                         :series (util/unescape (:series location-escaped-data))
-                         :description (util/unescape (:description location-escaped-data)))))
+    (-> location-escaped-data
+        (update :name util/unescape)
+        (update :series util/unescape)
+        (update :description util/unescape)
+        (update :location unsanitise-location))))
 
 (defn ajaxless-load-conference [id success-handler ajax-fn]
   (ajax-fn (str "/api/conferences/" id) {:handler (fn [conference] (success-handler (unsanitize conference)))
