@@ -6,7 +6,8 @@
             [monger.collection :as mc]
             [schema.test]
             [conference-rating.testdata :refer [some-rating-with some-rating some-conference-with]]
-            [clojure.string :as s])
+            [clojure.string :as s]
+            [java-time :as jtime])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
 
@@ -34,6 +35,10 @@
       (assoc-in [:session :okta/user] "some@user.com")
       (assoc-in [:session :okta/attributes] {"firstName" ["SomeFirstName"]
                                              "lastName"  ["SomeLastName"]})))
+(defn- create-conference-test [db conference]
+  (create-app-and-call db (-> (request :post "/api/conferences/")
+                              (body (json/write-str conference))
+                              (header :content-type "application/json"))))
 
 (deftest acceptance-test
   (testing "should have an index-page"
@@ -175,7 +180,30 @@
     (let [db (create-mock-db)]
       (let [response (create-app-and-call db (request :get (str "/api/user/identity")))]
         (is (= 200 (:status response)))
-        (is (= "application/json; charset=UTF-8" (get-content-type response)))))))
+        (is (= "application/json; charset=UTF-8" (get-content-type response))))))
+
+  (deftest acceptance-test-get-conferences
+      (let [db (create-mock-db) today (jtime/local-date-time) one-day (jtime/days 1) five-days (jtime/days 5)]
+        (create-conference-test db (some-conference-with
+                             {:name "past-conf"
+                              :from (jtime/format :iso-date-time (jtime/minus today five-days))
+                              :to (jtime/format :iso-date-time (jtime/minus today one-day))
+                              }))
+        (create-conference-test db (some-conference-with
+                                     {:name "future-conf"
+                                      :from (jtime/format :iso-date-time (jtime/plus today one-day))
+                                      :to (jtime/format :iso-date-time (jtime/plus today five-days))
+                                      }))
+        (testing "get past conferences" (let [raw-response (create-app-and-call db (request :get "/api/conferences/past?current-page=1&per-page=10"))]
+          (let [conferences (json-body raw-response)]
+            (is (= 1 (count conferences)))
+            (is (= "past-conf" (:name (first conferences)))))))
+        (testing "get future conferences" (let [raw-response (create-app-and-call db (request :get "/api/conferences/future?current-page=1&per-page=10"))]
+          (let [conferences (json-body raw-response)]
+            (is (= 1 (count conferences)))
+            (is (= "future-conf" (:name (first conferences)))))))
+        ))
+  )
 
 (deftest backwards-compatibility-test
   (testing "that we get valid ratings even if there is crap in the db"
