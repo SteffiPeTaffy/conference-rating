@@ -1,0 +1,61 @@
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/clj/conference_rating/db_handler.clj:17:
+Consider using:
+  (update-in doc [:_id] .toHexString)
+instead of:
+  (assoc doc :_id (.toHexString (:_id doc)))
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/clj/conference_rating/handler.clj:245:
+Consider using:
+  (wrap-dont-show-error-page handler)
+instead of:
+  (-> handler wrap-dont-show-error-page)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/clj/conference_rating/server.clj:64:
+Consider using:
+  (when-not (:okta-active options) "some@testuser.com")
+instead of:
+  (if (:okta-active options) nil "some@testuser.com")
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/conference_detail_page/aggregated_ratings.cljs:125:
+Consider using:
+  (pos? (:number-of-ratings ratings))
+instead of:
+  (> (:number-of-ratings ratings) 0)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/conference_list_page/conference_list_entry.cljs:45:
+Consider using:
+  (pos? (get-in conference [ratings-key :number-of-ratings]))
+instead of:
+  (> (get-in conference [ratings-key :number-of-ratings]) 0)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/conference_list_page/conference_list_entry.cljs:53:
+Consider using:
+  (pos? (get-in conference [ratings-key :number-of-ratings]))
+instead of:
+  (> (get-in conference [ratings-key :number-of-ratings]) 0)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/view_utils/conference.cljs:68:
+Consider using:
+  (zero? number-of-attendees)
+instead of:
+  (= 0 number-of-attendees)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/view_utils/conference.cljs:71:
+Consider using:
+  (dec number-of-attendees)
+instead of:
+  (- number-of-attendees 1)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/view_utils/conference.cljs:73:
+Consider using:
+  (zero? number-of-attendees)
+instead of:
+  (= 0 number-of-attendees)
+
+At /Users/marcosmercuri/Dev/clojure/conference-rating/src/cljs/conference_rating/view_utils/conference.cljs:76:
+Consider using:
+  (dec number-of-attendees)
+instead of:
+  (- number-of-attendees 1)
+
+

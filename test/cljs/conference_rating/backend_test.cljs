@@ -53,7 +53,7 @@
 
 (deftest load-several-conferences
          (testing "should return unsanitized fields for several conferences"
-                  (let [response (into [] (backend/ajaxless-load-conferences just-return-it mock-get-conferences))]
+                  (let [response (into [] (backend/ajaxless-load-conferences just-return-it "/api/conferences" mock-get-conferences))]
                     (let [first-conf (get response 0)]
                       (is (= "<tag>" (:description first-conf)))
                       (is (= "test & test" (:series first-conf)))

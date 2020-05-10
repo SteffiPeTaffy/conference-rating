@@ -42,6 +42,9 @@
 (defn exists [e2e-tag]
   (taxi/exists? (str "[data-e2e=" e2e-tag "]")))
 
+(defn enabled? [e2e-tag]
+  (taxi/enabled? (str "[data-e2e=" e2e-tag "]")))
+
 (defn wait-for [e2e-tag]
   (taxi/wait-until #(find-element e2e-tag) 10000))
 
@@ -88,6 +91,18 @@
 (defn navigate-to-conference-by-url [conference-url]
   (taxi/to conference-url)
   (wait-for "page-conference-detail"))
+
+(defn go-create-new-random-future-conference []
+  (click "btn-add-conference")
+  (wait-for "page-add-conference")
+  (fill-input {"input-conference-series"      (str "some future unique series" (UUID/randomUUID))
+               "input-conference-name"        (str "some future unique conference name" (UUID/randomUUID))
+               "input-conference-link"        "www.some-link.org"
+               "input-conference-description" "future-conference-description"})
+  (fill-location "Am Dammtor, Marseiller Str., 20355 Hamburg, Germany")
+  (fill-future-date "date-conference-from")
+  (fill-future-date "date-conference-to")
+  (click "button-create-conference"))
 
 (deftest ^:functional basic-journey-test
   (let [conference-series (str "some unique series" (UUID/randomUUID))
@@ -231,5 +246,21 @@
           (click "button-attend-conference")
           (wait-for-text "You and 0 others are going.")
           (is (= false (exists "button-attend-conference")))
-          (is (= true (exists "button-unattend-conference"))))))))
+          (is (= true (exists "button-unattend-conference"))))
+        )
+
+      (repeatedly 11 go-create-new-random-future-conference)
+
+      (taxi/to "http://localhost:4000/#")
+      (wait-for-text "Page: 1")
+      (is (= false (enabled? "button-previous-page-future-conferences")))
+      (is (= true (exists "button-next-page-future-conferences")))
+
+      (click "button-next-page-future-conferences")
+      (wait-for-text "Page: 2")
+      (is (= true (exists "button-previous-page-future-conferences")))
+      (is (= true (exists "button-next-page-future-conferences")))
+      )
+    )
+  )
 
