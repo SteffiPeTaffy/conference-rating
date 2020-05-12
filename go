@@ -38,6 +38,14 @@ goal_build-uberjar() {
   lein uberjar
 }
 
+goal_start() {
+  DOCKER_VOLUME_PATH=$1
+  docker run -d -v $DOCKER_VOLUME_PATH:/data/db -p 27017:27017 mongo
+  goal_serve-backend
+  goal_serve-styles
+  goal_serve-frontend
+}
+
 goal_deploy-uberjar() {
   APPNAME=$1
   shift
@@ -61,6 +69,7 @@ goal:
     test                                   -- run tests
     check-codestyle                        -- run code style recommendations
     build-uberjar                          -- build self contained jar file
+    start <docker-volume-path>             -- start docker image and backend and frontend
     deploy-uberjar <appname> <options>     -- deploys the uberjar to heroku with the given app name and options like --environment and --okta-active
     "
 
