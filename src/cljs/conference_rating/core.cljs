@@ -20,7 +20,7 @@
 
 (secretary/defroute "/" []
                     (backend/load-future-conferences 1 #(reset! conference-list/displayed-future-conferences %1))
-                    (backend/load-past-conferences #(reset! conference-list/displayed-past-conferences %1))
+                    (backend/load-past-conferences 1 #(reset! conference-list/displayed-past-conferences %1))
                     (session/put! :current-page #'conference-list/conferences-page))
 
 (secretary/defroute "/add-conference" []

@@ -7,7 +7,7 @@
   (if (not (nil? location))
     (update location :name util/unescape)))
 
-(defonce CONFERENCES-PER-PAGE 10)
+(defonce CONFERENCES-PER-PAGE 9)
 
 (defn- unsanitize [conference-data]
   (let [location-escaped-data (unsanitise-location conference-data)]
@@ -42,10 +42,10 @@
   (ajaxless-load-conferences success-handler "/api/conferences" ajax/GET))
 
 (defn load-future-conferences [current-page success-handler]
-    (ajaxless-load-conferences success-handler (str "/api/conferences/future?current-page=" current-page "&per-page=" CONFERENCES-PER-PAGE) ajax/GET))
+  (ajaxless-load-conferences success-handler (str "/api/conferences/future?current-page=" current-page "&per-page=" CONFERENCES-PER-PAGE) ajax/GET))
 
-(defn load-past-conferences [success-handler]
-  (ajaxless-load-conferences success-handler "/api/conferences/past?current-page=1&per-page=2" ajax/GET))
+(defn load-past-conferences [current-page success-handler]
+  (ajaxless-load-conferences success-handler (str "/api/conferences/past?current-page=" current-page "&per-page=" CONFERENCES-PER-PAGE) ajax/GET))
 
 (defn load-series-suggestions [q success-handler]
   (ajax/GET (str "/api/series/suggestions?q=" q)

@@ -42,8 +42,8 @@
 (defn exists [e2e-tag]
   (taxi/exists? (str "[data-e2e=" e2e-tag "]")))
 
-(defn enabled? [e2e-tag]
-  (taxi/enabled? (str "[data-e2e=" e2e-tag "]")))
+(defn disabled? [e2e-tag]
+  (= "disabled" (taxi/attribute (str "[data-e2e=" e2e-tag "]") :disabled)))
 
 (defn wait-for [e2e-tag]
   (taxi/wait-until #(find-element e2e-tag) 10000))
@@ -102,6 +102,18 @@
   (fill-location "Am Dammtor, Marseiller Str., 20355 Hamburg, Germany")
   (fill-future-date "date-conference-from")
   (fill-future-date "date-conference-to")
+  (click "button-create-conference"))
+
+(defn go-create-new-random-past-conference []
+  (click "btn-add-conference")
+  (wait-for "page-add-conference")
+  (fill-input {"input-conference-series"      (str "some past unique series" (UUID/randomUUID))
+               "input-conference-name"        (str "some past unique conference name" (UUID/randomUUID))
+               "input-conference-link"        "www.some-link.org"
+               "input-conference-description" "future-conference-description"})
+  (fill-location "Am Dammtor, Marseiller Str., 20355 Hamburg, Germany")
+  (fill-past-date "date-conference-from")
+  (fill-past-date "date-conference-to")
   (click "button-create-conference"))
 
 (deftest ^:functional basic-journey-test
@@ -248,19 +260,44 @@
           (is (= false (exists "button-attend-conference")))
           (is (= true (exists "button-unattend-conference"))))
         )
-
-      (repeatedly 11 go-create-new-random-future-conference)
-
-      (taxi/to "http://localhost:4000/#")
-      (wait-for-text "Page: 1")
-      (is (= false (enabled? "button-previous-page-future-conferences")))
-      (is (= true (exists "button-next-page-future-conferences")))
-
-      (click "button-next-page-future-conferences")
-      (wait-for-text "Page: 2")
-      (is (= true (exists "button-previous-page-future-conferences")))
-      (is (= true (exists "button-next-page-future-conferences")))
       )
     )
   )
 
+
+(deftest ^:functional pagination-journey-test
+  (testing "pagination for future conferences"
+    (taxi/to "http://localhost:4000/#")
+    (taxi/window-maximize)
+
+    (repeatedly 11 go-create-new-random-future-conference)
+
+    (taxi/to "http://localhost:4000/#")
+    (wait-for-text "Page: 1")
+
+    (is (= true (disabled? "button-previous-page-conferences-future")))
+    (is (= false (disabled? "button-next-page-conferences-future")))
+
+    (click "button-next-page-conferences-future")
+    (wait-for-text "Page: 2")
+    (is (= false (disabled? "button-previous-page-conferences-future")))
+    (is (= false (disabled? "button-next-page-conferences-future")))
+    )
+
+  (testing "pagination for past conferences"
+    (taxi/to "http://localhost:4000/#")
+    (taxi/window-maximize)
+
+    (repeatedly 11 go-create-new-random-past-conference)
+
+    (taxi/to "http://localhost:4000/#")
+    (wait-for-text "Page: 1")
+
+    (is (= true (disabled? "button-previous-page-conferences-past")))
+    (is (= false (disabled? "button-next-page-conferences-past")))
+
+    (click "button-next-page-conferences-past")
+    (wait-for-text "Page: 2")
+    (is (= false (disabled? "button-previous-page-conferences-past")))
+    (is (= false (disabled? "button-next-page-conferences-past"))))
+  )
