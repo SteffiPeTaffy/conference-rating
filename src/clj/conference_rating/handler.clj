@@ -20,8 +20,7 @@
             [clojure.string :as string]
             [onelog.core :as onelog]
             [conference-rating.schemas :as schemas]
-            [clojure.walk :as walk]
-            [java-time :as jtime])
+            [clojure.walk :as walk])
 
   (:use ring.middleware.anti-forgery))
 
@@ -64,27 +63,19 @@
       (assoc :attendees (map :user attendances))
       (assoc :voters (map :user ratings)))))
 
-(defn get-conferences [db]
-  (let [conferences (db/get-conferences-list db)
-        complete-conferences (->> conferences
-                                (map :_id)
-                                (map #(get-conference % db)))]
-    complete-conferences))
+(defn- complete-conferences [db conferences]
+  (->> conferences
+       (map :_id)
+       (map #(get-conference % db))))
 
-(defn get-paginated-conferences [db current-page per-page from-date to-date]
-  (let [conferences (db/get-paginated-conferences-list db current-page per-page from-date to-date)
-        complete-conferences (->> conferences
-                                  (map :_id)
-                                  (map #(get-conference % db)))]
-    complete-conferences))
+(defn get-conferences [db]
+  (complete-conferences db (db/get-all-conferences db)))
 
 (defn get-past-conferences [db current-page per-page]
-  (let [today (jtime/local-date)]
-    (get-paginated-conferences db current-page per-page nil today)))
+  (complete-conferences db (db/get-past-conferences db current-page per-page)))
 
 (defn get-future-conferences [db current-page per-page]
-  (let [today (jtime/local-date)]
-    (get-paginated-conferences db current-page per-page today nil)))
+  (complete-conferences db (db/get-future-conferences db current-page per-page)))
 
 (defn- escape-string [x]
   (if (string? x)
@@ -125,7 +116,7 @@
                (string/lower-case q))))
 
 (defn series-suggestions [db q]
-  (->> (db/get-conferences-list db)
+  (->> (db/get-all-conferences db)
        (map :series)
        (filter (complement string/blank?))
        (filter (matches-series q))

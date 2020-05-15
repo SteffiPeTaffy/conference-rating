@@ -1,7 +1,7 @@
 (ns conference-rating.db-handler-test
   (:require [monger.collection :as mc]
             [clojure.test :refer :all]
-            [conference-rating.db-handler :as dh :refer [delete-conference-by-id get-conferences-list update-conference-by-id]]
+            [conference-rating.db-handler :as dh :refer [delete-conference-by-id get-all-conferences update-conference-by-id]]
             [conference-rating.testdata :refer :all])
   (:import (com.github.fakemongo Fongo)
            (org.bson.types ObjectId)))
@@ -93,7 +93,7 @@
     (mc/insert fake-db "conferences" {:_id id})
     (mc/insert fake-db "conferences" {:_id id-deleted :deleted true})
 
-    (let [conference-list (get-conferences-list fake-db)
+    (let [conference-list (get-all-conferences fake-db)
           ids (map :_id conference-list)]
       (testing "that it should get a list of not deleted conferences"
         (is (= [(.toHexString id)] ids))))))

@@ -7,7 +7,6 @@
             [conference-rating.schemas :as schemas]
             [schema.utils :as schema-utils]
             [conference-rating.aggregator :as ag]
-            [clojure.core.match :refer [match]]
             [java-time :as jtime])
   (:import (org.bson.types ObjectId)))
 
@@ -56,27 +55,29 @@
                              (filter only-valid))]
     cleared-attandances))
 
-(defn get-conferences-list [db]
-  (let [list (mq/with-collection db "conferences"
-                                 (mq/find {:deleted {$ne true}})
-                                 (mq/limit 200))]
-    (map clear-id-in-doc list)))
-
-(defn- get-conferences-with-condition [db page-number per-page date-condition]
-  (let [list (mq/with-collection db "conferences"
-                                 (mq/find {:deleted {$ne true} :to date-condition})
-                                 (mq/paginate :page page-number :per-page per-page)
-                                 )]
+(defn get-all-conferences [db]
+  (let [list (mq/with-collection db "conferences" (mq/find {:deleted {$ne true}}))]
     (map clear-id-in-doc list)))
 
 (defn- format-date [date]
   (jtime/format "yyyy-MM-dd" date))
 
-(defn get-paginated-conferences-list [db current-page per-page from-date to-date]
-  (match [from-date to-date]
-         [from-date nil] (get-conferences-with-condition db current-page per-page {$gte (format-date from-date)})
-         [nil to-date] (get-conferences-with-condition db current-page per-page {$lt (format-date to-date)})))
+(defn- get-paginated-conferences [db page-number per-page future-conferences?]
+  (let [today (format-date (jtime/local-date))
+        date-condition (if future-conferences? {$gte today} {$lt today})
+        sort-date (if future-conferences? 1 -1)
+        list (mq/with-collection db "conferences"
+                                 (mq/find {:deleted {$ne true} :to date-condition})
+                                 (mq/sort (array-map :to (int sort-date)))
+                                 (mq/paginate :page page-number :per-page per-page)
+                                 )]
+    (map clear-id-in-doc list)))
 
+(defn get-future-conferences [db page-number per-page]
+  (get-paginated-conferences db page-number per-page true))
+
+(defn get-past-conferences [db page-number per-page]
+  (get-paginated-conferences db page-number per-page false))
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]

@@ -182,7 +182,7 @@
         (is (= 200 (:status response)))
         (is (= "application/json; charset=UTF-8" (get-content-type response))))))
 
-  (deftest acceptance-test-get-conferences
+  (testing "acceptance test get conferences"
       (let [db (create-mock-db) today (jtime/local-date-time) one-day (jtime/days 1) five-days (jtime/days 5)]
         (create-conference-test db (some-conference-with
                              {:name "past-conf"
