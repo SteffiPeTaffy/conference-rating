@@ -6,7 +6,9 @@
                                                          get-all-conferences
                                                          update-conference-by-id
                                                          get-future-conferences
-                                                         get-past-conferences]]
+                                                         get-past-conferences
+                                                         get-count-future-conferences
+                                                         get-count-past-conferences]]
             [conference-rating.testdata :refer :all]
             [java-time :as jtime])
   (:import (com.github.fakemongo Fongo)
@@ -143,4 +145,10 @@
         (is (= [(.toHexString id-past-1)
                 (.toHexString id-past-2)
                 (.toHexString id-past-3)]
-               ids))))))
+               ids))))
+    (testing "should return count future conferences"
+      (let [count (get-count-future-conferences fake-db)]
+        (is (= count 4))))
+    (testing "should return count past conferences"
+      (let [count (get-count-past-conferences fake-db)]
+        (is (= count 3))))))

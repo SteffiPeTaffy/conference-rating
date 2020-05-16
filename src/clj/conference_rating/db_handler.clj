@@ -62,12 +62,15 @@
 (defn- format-date [date]
   (jtime/format "yyyy-MM-dd" date))
 
+(defn- get-date-filter [future-conferences?]
+  (let [today (format-date (jtime/local-date)) ]
+    (if future-conferences? {$gte today} {$lt today})))
+
 (defn- get-paginated-conferences [db page-number per-page future-conferences?]
-  (let [today (format-date (jtime/local-date))
-        date-condition (if future-conferences? {$gte today} {$lt today})
+  (let [date-filter (get-date-filter future-conferences?)
         sort-date (if future-conferences? 1 -1)
         list (mq/with-collection db "conferences"
-                                 (mq/find {:deleted {$ne true} :to date-condition})
+                                 (mq/find {:deleted {$ne true} :to date-filter})
                                  (mq/sort (array-map :to (int sort-date)))
                                  (mq/paginate :page page-number :per-page per-page)
                                  )]
@@ -78,6 +81,15 @@
 
 (defn get-past-conferences [db page-number per-page]
   (get-paginated-conferences db page-number per-page false))
+
+(defn- get-count-conferences [db get-date-filter]
+  (mc/count db "conferences" {:deleted {$ne true} :to get-date-filter}))
+
+(defn get-count-past-conferences [db]
+  (get-count-conferences db (get-date-filter false)))
+
+(defn get-count-future-conferences [db]
+  (get-count-conferences db (get-date-filter true)))
 
 (defn get-conference [id db]
   (let [item (mc/find-one-as-map db "conferences" {:_id (ObjectId. ^String id)})]
