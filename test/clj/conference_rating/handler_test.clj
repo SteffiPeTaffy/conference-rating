@@ -195,11 +195,18 @@
                                       :to (jtime/format :iso-date-time (jtime/plus today five-days))
                                       }))
         (testing "get past conferences" (let [raw-response (create-app-and-call db (request :get "/api/conferences/past?current-page=1&per-page=10"))]
-          (let [conferences (json-body raw-response)]
+          (let [conferences-response (json-body raw-response)
+                conferences (:items conferences-response)
+                total (:total-items conferences-response)]
+            (is (= 1 total))
             (is (= 1 (count conferences)))
             (is (= "past-conf" (:name (first conferences)))))))
+
         (testing "get future conferences" (let [raw-response (create-app-and-call db (request :get "/api/conferences/future?current-page=1&per-page=10"))]
-          (let [conferences (json-body raw-response)]
+          (let [conferences-response (json-body raw-response)
+                conferences (:items conferences-response)
+                total (:total-items conferences-response)]
+            (is (= 1 total))
             (is (= 1 (count conferences)))
             (is (= "future-conf" (:name (first conferences)))))))
         ))

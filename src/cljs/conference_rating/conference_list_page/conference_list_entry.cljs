@@ -57,7 +57,7 @@
      (panel/mini-panel-voices (get-in conference [ratings-key :number-of-ratings]) nil)]))
 
 (defn display-conference-list-item [conference conference-list-atom]
-  [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container"}
+  [:div {:key (:_id conference) :class "col-lg-4 col-md-6 col-sm-6 col-xs-12 conference-item-container" :data-e2e "conference-item-container"}
    [:div {:class "panel panel-heading bg-light cl-dark"}
     [:div {:class "row conference-row"}
      [:a {:href (str "#/conferences/" (:_id conference))}

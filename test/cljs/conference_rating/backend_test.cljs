@@ -2,43 +2,44 @@
   (:require [cemerick.cljs.test :refer-macros [is are deftest testing use-fixtures done]]
             [conference-rating.backend :as backend]))
 
-(defn just-return-it [returned-conference] returned-conference)
+(defn just-return-it [response] response)
 
 (def sanitized-get-conference-response {:description "&lt;tag&gt;",
-                         :series "test &amp; test",
-                         :name  "/ / &amp; &amp;",
-                         :location {
-                               :lng 100.532159,
-                               :lat 13.7455534,
-                               :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
-                               :name "Growth cafe &amp; co."}
-                         :link "www.com.com"})
+                                        :series      "test &amp; test",
+                                        :name        "/ / &amp; &amp;",
+                                        :location    {
+                                                      :lng     100.532159,
+                                                      :lat     13.7455534,
+                                                      :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
+                                                      :name    "Growth cafe &amp; co."}
+                                        :link        "www.com.com"})
 
 (defn mock-get-conference [endpoint request]
   ((:handler request) sanitized-get-conference-response))
 
-(def sanitized-get-conferences-response [{:description "&lt;tag&gt;",
-                                        :series "test &amp; test",
-                                        :name  "/ / &amp; &amp;",
-                                        :location {
-                                                   :lng 100.532159,
-                                                   :lat 13.7455534,
-                                                   :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
-                                                   :name "Growth cafe &amp; co."}
-                                        :link "www.com.com"}
-                                         {:description "second &lt;",
-                                          :series "test &amp; test",
-                                          :name  "second &amp;",
-                                          :location {
-                                                     :lng 100.532159,
-                                                     :lat 13.7455534,
-                                                     :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
-                                                     :name "Growth cafe &amp; co."}
-                                          :link "www.com.com"}
-                                         {:description "third &lt; legacy conference without location",
-                                          :series "test &amp; test",
-                                          :name  "third &amp;",
-                                          :link "www.com.com"}])
+(def sanitized-get-conferences-response {:total-items 3
+                                         :items       [{:description "&lt;tag&gt;",
+                                                        :series      "test &amp; test",
+                                                        :name        "/ / &amp; &amp;",
+                                                        :location    {
+                                                                      :lng     100.532159,
+                                                                      :lat     13.7455534,
+                                                                      :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
+                                                                      :name    "Growth cafe &amp; co."}
+                                                        :link        "www.com.com"}
+                                                       {:description "second &lt;",
+                                                        :series      "test &amp; test",
+                                                        :name        "second &amp;",
+                                                        :location    {
+                                                                      :lng     100.532159,
+                                                                      :lat     13.7455534,
+                                                                      :address "236/8-9 ซอย สยามสแควร์ 2 Khwaeng Pathum Wan, Khet Pathum Wan, Krung Thep Maha Nakhon 10330, Tailandia",
+                                                                      :name    "Growth cafe &amp; co."}
+                                                        :link        "www.com.com"}
+                                                       {:description "third &lt; legacy conference without location",
+                                                        :series      "test &amp; test",
+                                                        :name        "third &amp;",
+                                                        :link        "www.com.com"}]})
 
 (defn mock-get-conferences [endpoint request]
   ((:handler request) sanitized-get-conferences-response))
@@ -53,7 +54,10 @@
 
 (deftest load-several-conferences
          (testing "should return unsanitized fields for several conferences"
-                  (let [response (into [] (backend/ajaxless-load-conferences just-return-it "/api/conferences" mock-get-conferences))]
+                  (let [success-handler-args (atom nil)
+                        mocked-success-handler (fn [conferences count-conferences] (reset! success-handler-args [conferences count-conferences]) conferences)
+                        response (into [] (backend/ajaxless-load-conferences mocked-success-handler "/api/conferences" mock-get-conferences))]
+                    (is (= 3 (nth @success-handler-args 1)))
                     (let [first-conf (get response 0)]
                       (is (= "<tag>" (:description first-conf)))
                       (is (= "test & test" (:series first-conf)))

@@ -33,8 +33,8 @@
                                                      :keywords? true}))
 
 (defn ajaxless-load-conferences [success-handler relative-path ajax-fn]
-  (ajax-fn relative-path {:handler (fn [conferences] (success-handler (map unsanitize conferences)))
-                                :error-handler #(js/alert "Conferences not found.")
+  (ajax-fn relative-path {:handler (fn [{:keys [items, total-items]}] (success-handler (map unsanitize items) total-items))
+                                :error-handler #(js/alert "There were problems loading the conferences")
                                 :response-format :json
                                 :keywords? true}))
 

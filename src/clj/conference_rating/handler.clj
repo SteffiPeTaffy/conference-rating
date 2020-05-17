@@ -134,11 +134,19 @@
   (utf-json-response
     (db/get-ratings conference-id db)))
 
+(defn- get-past-conferences-handler [db params]
+ {:items (get-past-conferences db (Long/parseLong (:current-page params)) (Long/parseLong (:per-page params)))
+   :total-items (db/get-count-past-conferences db)})
+
+(defn- get-future-conferences-handler [db params]
+ {:items (get-future-conferences db (Long/parseLong (:current-page params)) (Long/parseLong (:per-page params)))
+   :total-items (db/get-count-future-conferences db)})
+
 (defn read-routes [db api-key]
   (routes
     (GET "/api/conferences" [] (utf-json-response (get-conferences db)))
-    (GET "/api/conferences/past" {params :params} (utf-json-response (get-past-conferences db (Long/parseLong (:current-page params)) (Long/parseLong (:per-page params)))))
-    (GET "/api/conferences/future" {params :params} (utf-json-response (get-future-conferences db (Long/parseLong (:current-page params)) (Long/parseLong (:per-page params)))))
+    (GET "/api/conferences/past" {params :params} (utf-json-response (get-past-conferences-handler db params)))
+    (GET "/api/conferences/future" {params :params} (utf-json-response (get-future-conferences-handler db params)))
     (GET "/api/conferences/:id" [id] (utf-json-response (get-conference id db)))
     (GET "/api/conferences/:id/ratings" [id] (get-conference-ratings id db))
     (GET "/api/series/suggestions" {params :params} (utf-json-response (series-suggestions  db (:q params))))
