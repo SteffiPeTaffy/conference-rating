@@ -284,8 +284,7 @@
     (taxi/to "http://localhost:4000/#")
     (taxi/window-maximize)
 
-    (repeatedly go-create-new-random-past-conference)
-
+    (go-create-new-random-past-conference)
     (click "conference-voices-brand")
     (wait-for "conference-item-container")
 
