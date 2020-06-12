@@ -107,7 +107,7 @@
   (wait-for "page-conference-detail"))
 
 (defn go-create-new-random-past-conference []
-  (taxi/to "http://localhost:3000/#/add-conference")
+  (taxi/to "http://localhost:4000/#/add-conference")
   (wait-for "page-add-conference")
   (fill-input {"input-conference-series"      (str "some past unique series" (UUID/randomUUID))
                "input-conference-name"        (str "some past unique conference name" (UUID/randomUUID))
