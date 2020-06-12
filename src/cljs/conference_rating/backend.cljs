@@ -7,6 +7,8 @@
   (if (not (nil? location))
     (update location :name util/unescape)))
 
+(defonce CONFERENCES-PER-PAGE 9)
+
 (defn- unsanitize [conference-data]
   (let [location-escaped-data (unsanitise-location conference-data)]
     (-> location-escaped-data
@@ -30,14 +32,20 @@
                                                      :response-format :json
                                                      :keywords? true}))
 
-(defn ajaxless-load-conferences [success-handler ajax-fn]
-  (ajax-fn "/api/conferences" {:handler (fn [conferences] (success-handler (map unsanitize conferences)))
-                                :error-handler #(js/alert "Conferences not found.")
+(defn ajaxless-load-conferences [success-handler relative-path ajax-fn]
+  (ajax-fn relative-path {:handler (fn [{:keys [items, total-items]}] (success-handler (map unsanitize items) total-items))
+                                :error-handler #(js/alert "There were problems loading the conferences")
                                 :response-format :json
                                 :keywords? true}))
 
 (defn load-conferences [success-handler]
-  (ajaxless-load-conferences success-handler ajax/GET))
+  (ajaxless-load-conferences success-handler "/api/conferences" ajax/GET))
+
+(defn load-future-conferences [current-page success-handler]
+  (ajaxless-load-conferences success-handler (str "/api/conferences/future?current-page=" current-page "&per-page=" CONFERENCES-PER-PAGE) ajax/GET))
+
+(defn load-past-conferences [current-page success-handler]
+  (ajaxless-load-conferences success-handler (str "/api/conferences/past?current-page=" current-page "&per-page=" CONFERENCES-PER-PAGE) ajax/GET))
 
 (defn load-series-suggestions [q success-handler]
   (ajax/GET (str "/api/series/suggestions?q=" q)

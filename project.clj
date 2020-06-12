@@ -35,7 +35,9 @@
                  [cljsjs/jquery "2.2.2-0"]
                  [cljsjs/google-maps "3.18-1"]
                  [clj-webdriver "0.7.2"]
-                 [org.seleniumhq.selenium/selenium-java "2.47.1"]]
+                 [org.seleniumhq.selenium/selenium-java "2.47.1"]
+                 [clojure.java-time "0.3.2"]
+                 [org.clojure/core.match "1.0.0"]]
 
   :repositories [["localrepo" "https://raw.githubusercontent.com/Hendrick/ring-okta/master/maven_repository"]]
 

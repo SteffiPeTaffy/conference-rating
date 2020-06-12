@@ -18,8 +18,17 @@
 (defn current-page []
   [:div [(session/get :current-page)]])
 
+(defn load-future-conferences-success-handler [conferences total-conferences]
+  (reset! conference-list/displayed-future-conferences conferences)
+  (reset! conference-list/total-future-conferences total-conferences))
+
+(defn load-past-conferences-success-handler [conferences total-conferences]
+  (reset! conference-list/displayed-past-conferences conferences)
+  (reset! conference-list/total-past-conferences total-conferences))
+
 (secretary/defroute "/" []
-                    (backend/load-conferences #(reset! conference-list/displayed-conferences %1))
+                    (backend/load-future-conferences 1 load-future-conferences-success-handler)
+                    (backend/load-past-conferences 1 load-past-conferences-success-handler)
                     (session/put! :current-page #'conference-list/conferences-page))
 
 (secretary/defroute "/add-conference" []
